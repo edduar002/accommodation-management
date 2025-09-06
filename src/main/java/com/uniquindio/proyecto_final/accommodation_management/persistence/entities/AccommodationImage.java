@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Table(name="accommodations_images")
-public class AccommodationsImage {
+public class AccommodationImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ public class AccommodationsImage {
     private int accommodationsId;
     private int imagesId;
 
-    public AccommodationsImage() {
+    public AccommodationImage() {
     }
 
     public int getId() {

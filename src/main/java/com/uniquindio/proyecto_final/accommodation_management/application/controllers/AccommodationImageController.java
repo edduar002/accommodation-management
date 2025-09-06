@@ -1,8 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.application.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.application.services.AccommodationServiceService;
+import com.uniquindio.proyecto_final.accommodation_management.application.services.AccommodationImageService;
 import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.Accommodation;
-import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.AccommodationService;
+import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.AccommodationImage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,15 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/accomodationsservices")
-public class AccommodationServiceController {
+@RequestMapping("/api/accomodationsimages")
+public class AccommodationImageController {
 
     @Autowired
-    private AccommodationServiceService service;
+    private AccommodationImageService service;
 
     @PostMapping
-    public ResponseEntity<AccommodationService> create(@RequestBody AccommodationService accommodationService){
-        return service.create(accommodationService);
+    public ResponseEntity<AccommodationImage> create(@RequestBody AccommodationImage accommodationImage){
+        return service.save(accommodationImage);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistence.respositories;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.AccommodationsImage;
+import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.AccommodationImage;
 import org.springframework.data.repository.CrudRepository;
 
-public interface AccommodationImageRepository extends CrudRepository<AccommodationsImage, Integer> {
+public interface AccommodationImageRepository extends CrudRepository<AccommodationImage, Integer> {
 }
