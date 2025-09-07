@@ -3,7 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.application.servi
 import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.Accommodation;
 import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.Comment;
 import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.Qualification;
-import com.uniquindio.proyecto_final.accommodation_management.persistence.respositories.AccommodationServiceRepository;
+import com.uniquindio.proyecto_final.accommodation_management.business.respositories.AccommodationServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.application.services;
 
 import com.uniquindio.proyecto_final.accommodation_management.persistence.entities.Image;
-import com.uniquindio.proyecto_final.accommodation_management.persistence.respositories.ImageRepository;
+import com.uniquindio.proyecto_final.accommodation_management.business.respositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
