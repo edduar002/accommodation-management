@@ -1,6 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ServiceEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ public class ServiceServiceImpl implements ServiceService{
     private ServiceRepository repository;
 
     @Override
-    public ResponseEntity<ServiceEntity> save(ServiceEntity service) {
+    public ResponseEntity<ServiceDTO> save(ServiceDTO service) {
         return null;
     }
 }

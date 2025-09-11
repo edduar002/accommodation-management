@@ -1,8 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,62 +18,62 @@ public class AccommodationServiceImpl implements AccommodationService {
     private AccommodationServiceRepository repository;
 
     @Override
-    public ResponseEntity<AccommodationEntity> save(AccommodationEntity accommodation) {
+    public ResponseEntity<AccommodationDTO> save(AccommodationDTO accommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<List<AccommodationEntity>> searchAvailableAccommodations(int ciudad, LocalDate fechaInicio, LocalDate fechaFin) {
+    public ResponseEntity<List<AccommodationDTO>> searchAvailableAccommodations(int ciudad, LocalDate fechaInicio, LocalDate fechaFin) {
         return null;
     }
 
     @Override
-    public ResponseEntity<List<AccommodationEntity>> ownAccommodationList(int idHost) {
+    public ResponseEntity<List<AccommodationDTO>> ownAccommodationList(int idHost) {
         return null;
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> edit(int idAccommodation) {
+    public ResponseEntity<AccommodationDTO> edit(int idAccommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> delete(int idAccommodation) {
+    public ResponseEntity<AccommodationDTO> delete(int idAccommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> detail(int accommodation) {
+    public ResponseEntity<AccommodationDTO> detail(int accommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> viewMetrics(int accommodation) {
+    public ResponseEntity<AccommodationDTO> viewMetrics(int accommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<List<AccommodationEntity>> viewAccommodationReservations(int idReservation) {
+    public ResponseEntity<List<AccommodationDTO>> viewAccommodationReservations(int idReservation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> acceptReservationRequests(int idAccommodation) {
+    public ResponseEntity<AccommodationDTO> acceptReservationRequests(int idAccommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation) {
+    public ResponseEntity<AccommodationDTO> rejectReservationRequests(int idAccommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<List<CommentEntity>> commentsList(int idAccommodation) {
+    public ResponseEntity<List<CommentDTO>> commentsList(int idAccommodation) {
         return null;
     }
 
     @Override
-    public ResponseEntity<List<QualificationEntity>> averageGrades(int idAccommodation) {
+    public ResponseEntity<List<QualificationDTO>> averageGrades(int idAccommodation) {
         return null;
     }
 }

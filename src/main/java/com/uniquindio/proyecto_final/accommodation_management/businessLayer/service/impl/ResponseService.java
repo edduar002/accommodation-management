@@ -1,8 +1,9 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseEntity;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
+import org.springframework.http.ResponseEntity;
 
 public interface ResponseService {
 
-    org.springframework.http.ResponseEntity<ResponseEntity> save(ResponseEntity response);
+    ResponseEntity<ResponseDTO> save(ResponseDTO response);
 }

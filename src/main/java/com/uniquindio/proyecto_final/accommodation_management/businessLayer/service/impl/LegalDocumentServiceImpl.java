@@ -1,6 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.LegalDocumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ public class LegalDocumentServiceImpl implements LegalDocumentService{
     private LegalDocumentRepository repository;
 
     @Override
-    public ResponseEntity<LegalDocumentEntity> save(LegalDocumentEntity legalDocument) {
+    public ResponseEntity<LegalDocumentDTO> save(LegalDocumentDTO legalDocument) {
         return null;
     }
 }

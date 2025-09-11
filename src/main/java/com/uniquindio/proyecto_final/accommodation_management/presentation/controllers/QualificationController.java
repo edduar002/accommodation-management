@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.QualificationService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class QualificationController {
     private QualificationService service;
 
     @PostMapping("/create")
-    public ResponseEntity<QualificationEntity> create(@RequestBody QualificationEntity qualification){
+    public ResponseEntity<QualificationDTO> create(@RequestBody QualificationDTO qualification){
         return service.save(qualification);
     }
 

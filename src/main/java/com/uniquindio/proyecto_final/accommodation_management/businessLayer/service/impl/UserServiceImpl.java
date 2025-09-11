@@ -1,6 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,27 +13,27 @@ public class UserServiceImpl implements UserService{
     private UserRepository repository;
 
     @Override
-    public ResponseEntity<UserEntity> create(UserEntity user) {
+    public ResponseEntity<UserDTO> create(UserDTO user) {
         return null;
     }
 
     @Override
-    public ResponseEntity<UserEntity> register(UserEntity user) {
+    public ResponseEntity<UserDTO> register(UserDTO user) {
         return null;
     }
 
     @Override
-    public ResponseEntity<UserEntity> login(String email, String password) {
+    public ResponseEntity<UserDTO> login(String email, String password) {
         return null;
     }
 
     @Override
-    public ResponseEntity<UserEntity> edit(int idUser) {
+    public ResponseEntity<UserDTO> edit(int idUser) {
         return null;
     }
 
     @Override
-    public ResponseEntity<UserEntity> changePassword(int idUser) {
+    public ResponseEntity<UserDTO> changePassword(int idUser) {
         return null;
     }
 }

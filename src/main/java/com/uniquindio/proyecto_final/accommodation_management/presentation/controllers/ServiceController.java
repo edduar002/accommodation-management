@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.ServiceService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ServiceEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ServiceDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class ServiceController {
     private ServiceService serviceService;
 
     @PostMapping("/create")
-    public ResponseEntity<ServiceEntity> create(@RequestBody ServiceEntity service){
+    public ResponseEntity<ServiceDTO> create(@RequestBody ServiceDTO service){
         return serviceService.save(service);
     }
 

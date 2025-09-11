@@ -1,6 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +13,12 @@ public class CommentServiceImpl implements CommentService{
     private CommentRepository repository;
 
     @Override
-    public ResponseEntity<CommentEntity> save(CommentEntity comment) {
+    public ResponseEntity<CommentDTO> save(CommentDTO comment) {
         return null;
     }
 
     @Override
-    public ResponseEntity<CommentEntity> respondComments(int idComent, CommentEntity comment) {
+    public ResponseEntity<CommentDTO> respondComments(int idComent, CommentDTO comment) {
         return null;
     }
 }

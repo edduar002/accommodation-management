@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.HostService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,17 +17,17 @@ public class HostController {
     private HostService service;
 
     @PostMapping("/create")
-    public ResponseEntity<HostEntity> create(@RequestBody HostEntity host){
+    public ResponseEntity<HostDTO> create(@RequestBody HostDTO host){
         return service.save(host);
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<HostEntity> edit(@RequestParam int idHost){
+    public ResponseEntity<HostDTO> edit(@RequestParam int idHost){
         return service.edit(idHost);
     }
 
     @PutMapping("/changePassword")
-    public ResponseEntity<HostEntity> changePassword(@RequestParam int idHost){
+    public ResponseEntity<HostDTO> changePassword(@RequestParam int idHost){
         return service.changePassword(idHost);
     }
 

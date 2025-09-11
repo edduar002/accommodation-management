@@ -1,8 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.CityService;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.FavoriteAccommodationService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.FavoriteAccommodationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.FavoriteAccommodationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +17,7 @@ public class FavoriteAccommodationController {
     private FavoriteAccommodationService service;
 
     @PostMapping("/create")
-    public ResponseEntity<FavoriteAccommodationEntity> create(@RequestBody FavoriteAccommodationEntity favoriteAccommodation){
+    public ResponseEntity<FavoriteAccommodationDTO> create(@RequestBody FavoriteAccommodationDTO favoriteAccommodation){
         return service.save(favoriteAccommodation);
     }
 

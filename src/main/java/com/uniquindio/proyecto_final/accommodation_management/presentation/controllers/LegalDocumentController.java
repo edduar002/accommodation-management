@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.LegalDocumentService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class LegalDocumentController {
     private LegalDocumentService service;
 
     @PostMapping("/create")
-    public ResponseEntity<LegalDocumentEntity> create(@RequestBody LegalDocumentEntity legalDocument){
+    public ResponseEntity<LegalDocumentDTO> create(@RequestBody LegalDocumentDTO legalDocument){
         return service.save(legalDocument);
     }
 

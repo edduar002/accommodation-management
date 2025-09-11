@@ -5,18 +5,17 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="cities")
-public class CityEntity {
+@Table(name="roles")
+public class RoleDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private int departmentsId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public CityEntity() {
+    public RoleDTO() {
     }
 
     public int getId() {
@@ -33,14 +32,6 @@ public class CityEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getDepartmentsId() {
-        return departmentsId;
-    }
-
-    public void setDepartmentsId(int departmentsId) {
-        this.departmentsId = departmentsId;
     }
 
     public LocalDate getCreatedAt() {

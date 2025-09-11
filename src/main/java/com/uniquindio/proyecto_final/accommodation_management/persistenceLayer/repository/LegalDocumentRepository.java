@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface LegalDocumentRepository extends JpaRepository<LegalDocumentEntity, Integer> {
+public interface LegalDocumentRepository extends JpaRepository<LegalDocumentDTO, Integer> {
 }

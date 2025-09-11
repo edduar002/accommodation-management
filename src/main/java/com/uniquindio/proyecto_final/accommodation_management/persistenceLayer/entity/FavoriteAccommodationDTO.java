@@ -5,17 +5,20 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="qualifications")
-public class QualificationEntity {
+@Table(name="favorite_accommodation")
+public class FavoriteAccommodationDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int numberStars;
+    private boolean active;
+    private Integer favoritesId;
+    private Integer accommodationsId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public QualificationEntity() {
+    public FavoriteAccommodationDTO(){
+
     }
 
     public int getId() {
@@ -26,12 +29,28 @@ public class QualificationEntity {
         this.id = id;
     }
 
-    public int getNumberStars() {
-        return numberStars;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setNumberStars(int numberStars) {
-        this.numberStars = numberStars;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Integer getFavoritesId() {
+        return favoritesId;
+    }
+
+    public void setFavoritesId(Integer favoritesId) {
+        this.favoritesId = favoritesId;
+    }
+
+    public Integer getAccommodationsId() {
+        return accommodationsId;
+    }
+
+    public void setAccommodationsId(Integer accommodationsId) {
+        this.accommodationsId = accommodationsId;
     }
 
     public LocalDate getCreatedAt() {

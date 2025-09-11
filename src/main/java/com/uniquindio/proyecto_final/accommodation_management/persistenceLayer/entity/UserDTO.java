@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="administrators")
-public class AdministratorEntity {
+@Table(name="users")
+public class UserDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,10 +15,17 @@ public class AdministratorEntity {
     private String surname;
     private String email;
     private String password;
+    private Integer phone;
+    private LocalDate birthday;
+    private String imgUrl;
+    private Integer rolesId;
+    private Integer departmentsId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private boolean active;
 
-    public AdministratorEntity(){}
+    public UserDTO() {
+    }
 
     public int getId() {
         return id;
@@ -60,6 +67,46 @@ public class AdministratorEntity {
         this.password = password;
     }
 
+    public Integer getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Integer phone) {
+        this.phone = phone;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Integer getRolesId() {
+        return rolesId;
+    }
+
+    public void setRolesId(Integer rolesId) {
+        this.rolesId = rolesId;
+    }
+
+    public Integer getDepartmentsId() {
+        return departmentsId;
+    }
+
+    public void setDepartmentsId(Integer departmentsId) {
+        this.departmentsId = departmentsId;
+    }
+
     public LocalDate getCreatedAt() {
         return createdAt;
     }
@@ -74,5 +121,13 @@ public class AdministratorEntity {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

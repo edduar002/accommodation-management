@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="services")
-public class ServiceEntity {
+@Table(name="departments")
+public class DepartmentDTO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +15,7 @@ public class ServiceEntity {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public ServiceEntity() {
+    public DepartmentDTO() {
     }
 
     public int getId() {
