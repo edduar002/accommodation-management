@@ -1,0 +1,235 @@
+DROP TABLE IF EXISTS accommodation_service;
+DROP TABLE IF EXISTS accommodations_images;
+DROP TABLE IF EXISTS responses;
+DROP TABLE IF EXISTS comments;
+DROP TABLE IF EXISTS reservations;
+DROP TABLE IF EXISTS favorite_accommodation;
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS legal_documents;
+DROP TABLE IF EXISTS accommodations;
+DROP TABLE IF EXISTS hosts;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS cities;
+DROP TABLE IF EXISTS departments;
+DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS images;
+DROP TABLE IF EXISTS qualifications;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS administrators;
+
+CREATE TABLE departments (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(75) NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE roles (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE services (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(75) NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE images (
+    id INT AUTO_INCREMENT,
+    img_url VARCHAR(150) NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE qualifications (
+    id INT AUTO_INCREMENT,
+    number_stars INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE administrators (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(75) NOT NULL,
+    surname VARCHAR(75) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(50) NOT NULL,
+    created_at DATETIME,
+    updated_at DATETIME,
+    PRIMARY KEY (id)
+);
+
+CREATE TABLE hosts (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    surname VARCHAR(75) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(50) NOT NULL,
+    phone INT NOT NULL,
+    birthday DATETIME NOT NULL,
+    img_url LONGBLOB NOT NULL,
+    roles_id INT NOT NULL,
+    personal_description LONGTEXT NOT NULL,
+    departments_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    active CHAR(1) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (departments_id) REFERENCES departments(id),
+    FOREIGN KEY (roles_id) REFERENCES roles(id)
+);
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(150) NOT NULL,
+    surname VARCHAR(75) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(50) NOT NULL,
+    phone INT NOT NULL,
+    birthday DATETIME NOT NULL,
+    img_url LONGBLOB NOT NULL,
+    roles_id INT NOT NULL,
+    departments_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    active CHAR(1) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (departments_id) REFERENCES departments(id),
+    FOREIGN KEY (roles_id) REFERENCES roles(id)
+);
+
+CREATE TABLE accommodations (
+    id INT AUTO_INCREMENT,
+    detailed_description LONGTEXT NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    direction VARCHAR(150) NOT NULL,
+    exact_location VARCHAR(150) NOT NULL,
+    price INT NOT NULL,
+    maximum_capacity INT NOT NULL,
+    hosts_id INT NOT NULL,
+    available CHAR(1) NOT NULL,
+    qualifications_id INT NOT NULL,
+    departments_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    active CHAR(1) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (departments_id) REFERENCES departments(id),
+    FOREIGN KEY (hosts_id) REFERENCES hosts(id),
+    FOREIGN KEY (qualifications_id) REFERENCES qualifications(id)
+);
+
+CREATE TABLE cities (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(75) NOT NULL,
+    departments_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (departments_id) REFERENCES departments(id)
+);
+
+CREATE TABLE favorites (
+    id INT AUTO_INCREMENT,
+    active CHAR(1) NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    accommodations_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id)
+);
+
+CREATE TABLE legal_documents (
+    id INT AUTO_INCREMENT,
+    url_document VARCHAR(150) NOT NULL,
+    hosts_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (hosts_id) REFERENCES hosts(id)
+);
+
+CREATE TABLE accommodation_service (
+    id INT AUTO_INCREMENT,
+    accommodations_id INT NOT NULL,
+    services_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
+    FOREIGN KEY (services_id) REFERENCES services(id)
+);
+
+CREATE TABLE accommodations_images (
+    id INT AUTO_INCREMENT,
+    accommodations_id INT NOT NULL,
+    images_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
+    FOREIGN KEY (images_id) REFERENCES images(id)
+);
+
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT,
+    content TEXT NOT NULL,
+    accommodations_id INT NOT NULL,
+    users_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
+    FOREIGN KEY (users_id) REFERENCES users(id)
+);
+
+CREATE TABLE responses (
+    id INT AUTO_INCREMENT,
+    content TEXT NOT NULL,
+    hosts_id INT NOT NULL,
+    comments_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (comments_id) REFERENCES comments(id),
+    FOREIGN KEY (hosts_id) REFERENCES hosts(id)
+);
+
+CREATE TABLE reservations (
+    id INT AUTO_INCREMENT,
+    check_in DATETIME NOT NULL,
+    check_out DATETIME NOT NULL,
+    number_guests INT NOT NULL,
+    state VARCHAR(50) NOT NULL,
+    confirmed LONGBLOB NOT NULL,
+    accommodations_id INT NOT NULL,
+    hosts_id INT NOT NULL,
+    users_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
+    FOREIGN KEY (hosts_id) REFERENCES hosts(id),
+    FOREIGN KEY (users_id) REFERENCES users(id)
+);
+
+CREATE TABLE favorite_accommodation (
+    id INT AUTO_INCREMENT,
+    active CHAR(1) NOT NULL,
+    favorites_id INT NOT NULL,
+    accommodations_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
+    FOREIGN KEY (favorites_id) REFERENCES favorites(id)
+);
