@@ -5,18 +5,17 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="cities")
-public class CityDTO {
+@Table(name="images")
+public class ImageEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    private int departmentsId;
+    private String imgUrl;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public CityDTO() {
+    public ImageEntity() {
     }
 
     public int getId() {
@@ -27,20 +26,12 @@ public class CityDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getDepartmentsId() {
-        return departmentsId;
-    }
-
-    public void setDepartmentsId(int departmentsId) {
-        this.departmentsId = departmentsId;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public LocalDate getCreatedAt() {

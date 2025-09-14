@@ -1,0 +1,603 @@
+openapi: 3.1.0
+info:
+  title: API Plataforma Alojamiento
+  description: Documentación generada de todos los endpoints recopilados
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081/api
+
+paths:
+  /accommodationsimages/create:
+    post:
+      summary: Creación de la imagen del alojamiento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                accommodations_id: { type: integer }
+                city: { type: string }
+                images_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Alojamiento guardado con éxito }
+        "400": { description: Error al crear el alojamiento }
+        "500": { description: Error interno del servidor }
+
+  /accomodationsservices/create:
+    post:
+      summary: Creación del servicio del alojamiento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                accommodations_id: { type: integer }
+                services_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Servicio del alojamiento guardado con éxito }
+        "400": { description: Error al crear el servicio del alojamiento }
+        "500": { description: Error interno del servidor }
+
+  /administrators/create:
+    post:
+      summary: Creación de administrador (ciudad)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                name: { type: string }
+                surname: { type: string }
+                email: { type: string }
+                password: { type: string }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Administrador guardado con éxito }
+        "400": { description: Error al crear la ciudad }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /comments/create:
+    post:
+      summary: Creación de comentario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                content: { type: string }
+                accommodations_id: { type: integer }
+                users_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Comentario guardado con éxito }
+        "400": { description: Error al crear el comentario }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /comments/respondComments/{idComment}:
+    post:
+      summary: Creación de respuesta a un comentario
+      parameters:
+        - name: idComment
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content: { type: string }
+      responses:
+        "201": { description: Respuesta guardada con éxito }
+        "400": { description: Error al crear la respuesta }
+        "500": { description: Error interno del servidor }
+
+  /department/create:
+    post:
+      summary: Creación de departamento
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                active: { type: string }
+                name: { type: string }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Departamento guardado con éxito }
+        "400": { description: Error al crear el departamento }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /favoriteaccommodation/create/{idFavorite}/{accommodations_id}:
+    post:
+      summary: Creación de la relación entre favorito y alojamiento
+      parameters:
+        - name: idFavorite
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: accommodations_id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        "201": { description: Alojamiento favorito guardado con éxito }
+        "400": { description: Error al crear el alojamiento favorito }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /favorite/create/{idFavorite}:
+    post:
+      summary: Creación de favorito
+      parameters:
+        - name: idFavorite
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                active: { type: string }
+                accommodations_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Favorito guardado con éxito }
+        "400": { description: Error al crear el favorito }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /hosts/create:
+    post:
+      summary: Creación de anfitrión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                name: { type: string }
+                surname: { type: string }
+                email: { type: string }
+                password: { type: string }
+                phone: { type: string }
+                birthday: { type: string, format: date }
+                img_url: { type: string }
+                roles_id: { type: integer }
+                personal_description: { type: string }
+                departments_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+                active: { type: boolean }
+      responses:
+        "201": { description: Anfitrión creado con éxito }
+        "400": { description: Error al crear el anfitrión }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /hosts/edit:
+    put:
+      summary: Editar datos de anfitrión
+      parameters:
+        - name: idHost
+          in: query
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { description: Anfitrión editado con éxito }
+        "400": { description: Error al editar el anfitrión }
+
+  /hosts/changePassword:
+    put:
+      summary: Cambio de contraseña de anfitrión
+      parameters:
+        - name: idHost
+          in: query
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword: { type: string }
+                newPassword: { type: string }
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { description: Contraseña cambiada con éxito }
+        "400": { description: La contraseña no cumple los parámetros de seguridad }
+
+  /hosts/register:
+    post:
+      summary: Login de anfitrión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        "200": { description: Ingreso exitoso }
+        "400": { description: Error al ingresar }
+        "401": { description: Credenciales incorrectas }
+
+  /hosts/recoveryPassword:
+    post:
+      summary: Recuperación de contraseña de anfitrión
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                newPassword: { type: string }
+      responses:
+        "200": { description: Contraseña recuperada }
+        "400": { description: Error al recuperar contraseña }
+
+  /images/create/{idAccommodation}:
+    post:
+      summary: Creación de imagen
+      parameters:
+        - name: idAccommodation
+          in: path
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                img_url: { type: string }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Imagen creada con éxito }
+        "400": { description: Error al crear la imagen }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /legaldocuments/create/{idHost}:
+    post:
+      summary: Creación de documento legal
+      parameters:
+        - name: idHost
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                url_document: { type: string }
+                hosts_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Documento legal creado con éxito }
+        "400": { description: Error al crear el documento legal }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /qualifications/create:
+    post:
+      summary: Creación de calificación
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                number_stars: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Calificación creada con éxito }
+        "400": { description: Error al crear calificación }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /reservations/create/{idAccommodation}/{idHost}/{idUser}:
+    post:
+      summary: Creación de reserva
+      parameters:
+        - name: idAccommodation
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: idHost
+          in: path
+          required: true
+          schema: { type: integer }
+        - name: idUser
+          in: path
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                check_in: { type: string, format: date }
+                check_out: { type: string, format: date }
+                number_guests: { type: integer }
+                state: { type: string }
+                confirmed: { type: boolean }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Reserva guardada con éxito }
+        "400": { description: Error al guardar la reserva }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /reservations/cancelReservations/{idReservation}:
+    put:
+      summary: Cancelar reserva
+      parameters:
+        - name: idReservation
+          in: path
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { description: Reserva cancelada con éxito }
+        "400": { description: Error al cancelar la reserva }
+        "403": { description: Se acabó el plazo de cancelar la reserva }
+
+  /reservations/viewReservationHistory/{idUser}:
+    get:
+      summary: Ver historial de reservas
+      parameters:
+        - name: idUser
+          in: path
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { description: Lista generada con éxito }
+        "400": { description: Error al mostrar la lista de reservas }
+
+  /reservations/viewReservationDetails/{idReservation}:
+    get:
+      summary: Ver detalles de reserva
+      parameters:
+        - name: idReservation
+          in: path
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { description: Detalle generado con éxito }
+        "400": { description: Error al mostrar el detalle de la reserva }
+
+  /response/create:
+    post:
+      summary: Creación de respuesta
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                content: { type: string }
+                hosts_id: { type: integer }
+                comments_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Respuesta creada con éxito }
+        "400": { description: Error al crear respuesta }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /roles/create:
+    post:
+      summary: Creación de rol
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                name: { type: string }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Rol creado con éxito }
+        "400": { description: Error al crear rol }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /services/create:
+    post:
+      summary: Creación de servicio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                name: { type: string }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+      responses:
+        "201": { description: Servicio creado con éxito }
+        "400": { description: Error al crear servicio }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /users/create:
+    post:
+      summary: Creación de usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer }
+                name: { type: string }
+                surname: { type: string }
+                email: { type: string }
+                password: { type: string }
+                phone: { type: string }
+                birthday: { type: string, format: date }
+                img_url: { type: string }
+                roles_id: { type: integer }
+                departments_id: { type: integer }
+                created_at: { type: string, format: date-time }
+                updated_at: { type: string, format: date-time }
+                active: { type: boolean }
+      responses:
+        "201": { description: Usuario creado con éxito }
+        "400": { description: Error al crear usuario / La contraseña es poco segura / Usuario ya registrado }
+        "404": { description: No encontrado }
+        "500": { description: Error interno del servidor }
+
+  /users/register:
+    post:
+      summary: Login de usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        "200": { description: Ingreso exitoso }
+        "400": { description: Error al ingresar }
+        "401": { description: Credenciales incorrectas }
+
+  /users/login:
+    put:
+      summary: Editar datos de usuario
+      parameters:
+        - name: idUser
+          in: query
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      responses:
+        "200": { description: Usuario editado con éxito }
+        "400": { description: Error al editar usuario }
+
+  /users/edit:
+    put:
+      summary: Cambio de contraseña de usuario
+      parameters:
+        - name: idUser
+          in: query
+          required: true
+          schema: { type: integer }
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                oldPassword: { type: string }
+                newPassword: { type: string }
+      responses:
+        "200": { description: Contraseña cambiada con éxito }
+        "400": { description: La contraseña no cumple parámetros de seguridad }
+
+  /users/changePassword:
+    post:
+      summary: Recuperación de contraseña de usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                newPassword: { type: string }
+      responses:
+        "200": { description: Contraseña recuperada }
+        "400": { description: Error al recuperar contraseña }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

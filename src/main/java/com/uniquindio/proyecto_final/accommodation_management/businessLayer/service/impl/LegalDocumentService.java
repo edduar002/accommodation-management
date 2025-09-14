@@ -1,9 +1,9 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentEntity;
 import org.springframework.http.ResponseEntity;
 
 public interface LegalDocumentService {
 
-    ResponseEntity<LegalDocumentDTO> save(LegalDocumentDTO legalDocument);
+    ResponseEntity<LegalDocumentEntity> save(LegalDocumentEntity legalDocument);
 }

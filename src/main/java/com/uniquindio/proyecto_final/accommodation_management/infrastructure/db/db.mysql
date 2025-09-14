@@ -94,7 +94,7 @@ CREATE TABLE users (
     surname VARCHAR(75) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
-    phone INT NOT NULL,
+    phone VARCHAR(30) NOT NULL,
     birthday DATETIME NOT NULL,
     img_url LONGBLOB NOT NULL,
     roles_id INT NOT NULL,

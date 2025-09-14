@@ -5,19 +5,18 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="legal_documents")
-public class LegalDocumentDTO {
+@Table(name="favorites")
+public class FavoriteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String urlDocument;
-    private int hostsId;
+    private boolean active;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private Integer accommodationsId;
 
-    public LegalDocumentDTO() {
-    }
+    public FavoriteEntity(){}
 
     public int getId() {
         return id;
@@ -27,20 +26,12 @@ public class LegalDocumentDTO {
         this.id = id;
     }
 
-    public String getUrlDocument() {
-        return urlDocument;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setUrlDocument(String urlDocument) {
-        this.urlDocument = urlDocument;
-    }
-
-    public int getHostsId() {
-        return hostsId;
-    }
-
-    public void setHostsId(int hostsId) {
-        this.hostsId = hostsId;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public LocalDate getCreatedAt() {
@@ -57,5 +48,13 @@ public class LegalDocumentDTO {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getAccommodationsId() {
+        return accommodationsId;
+    }
+
+    public void setAccommodationsId(Integer accommodationsId) {
+        this.accommodationsId = accommodationsId;
     }
 }

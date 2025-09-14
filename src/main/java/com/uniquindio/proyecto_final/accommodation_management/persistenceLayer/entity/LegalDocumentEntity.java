@@ -5,17 +5,18 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="qualifications")
-public class QualificationDTO {
+@Table(name="legal_documents")
+public class LegalDocumentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int numberStars;
+    private String urlDocument;
+    private int hostsId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public QualificationDTO() {
+    public LegalDocumentEntity() {
     }
 
     public int getId() {
@@ -26,12 +27,20 @@ public class QualificationDTO {
         this.id = id;
     }
 
-    public int getNumberStars() {
-        return numberStars;
+    public String getUrlDocument() {
+        return urlDocument;
     }
 
-    public void setNumberStars(int numberStars) {
-        this.numberStars = numberStars;
+    public void setUrlDocument(String urlDocument) {
+        this.urlDocument = urlDocument;
+    }
+
+    public int getHostsId() {
+        return hostsId;
+    }
+
+    public void setHostsId(int hostsId) {
+        this.hostsId = hostsId;
     }
 
     public LocalDate getCreatedAt() {

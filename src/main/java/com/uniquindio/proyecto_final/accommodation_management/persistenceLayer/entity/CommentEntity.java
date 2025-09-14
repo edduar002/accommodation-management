@@ -5,18 +5,19 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="accommodations_images")
-public class AccommodationImageDTO {
+@Table(name="comments")
+public class CommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String content;
     private int accommodationsId;
-    private int imagesId;
+    private int usersId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public AccommodationImageDTO() {
+    public CommentEntity() {
     }
 
     public int getId() {
@@ -27,6 +28,14 @@ public class AccommodationImageDTO {
         this.id = id;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
     public int getAccommodationsId() {
         return accommodationsId;
     }
@@ -35,12 +44,12 @@ public class AccommodationImageDTO {
         this.accommodationsId = accommodationsId;
     }
 
-    public int getImagesId() {
-        return imagesId;
+    public int getUsersId() {
+        return usersId;
     }
 
-    public void setImagesId(int imagesId) {
-        this.imagesId = imagesId;
+    public void setUsersId(int usersId) {
+        this.usersId = usersId;
     }
 
     public LocalDate getCreatedAt() {

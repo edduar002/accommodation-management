@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationDTO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -9,13 +9,13 @@ import java.util.List;
 
 public interface ReservationService {
 
-    ResponseEntity<ReservationDTO> save(ReservationDTO reservation);
+    ResponseEntity<ReservationEntity> save(ReservationEntity reservation);
 
-    ResponseEntity<ReservationDTO> makeReservations(LocalDate checkIn, LocalDate checkOut);
+    ResponseEntity<ReservationEntity> makeReservations(LocalDate checkIn, LocalDate checkOut);
 
-    ResponseEntity<ReservationDTO> cancelReservations(int idReservation);
+    ResponseEntity<ReservationEntity> cancelReservations(int idReservation);
 
-    ResponseEntity<List<AccommodationDTO>> viewReservationHistory(int idUser);
+    ResponseEntity<List<AccommodationEntity>> viewReservationHistory(int idUser);
 
-    ResponseEntity<AccommodationDTO> viewAccommodationDetails(int idAccommodation);
+    ResponseEntity<AccommodationEntity> viewAccommodationDetails(int idAccommodation);
 }

@@ -5,20 +5,21 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="administrators")
-public class AdministratorDTO {
+@Table(name="favorite_accommodation")
+public class FavoriteAccommodationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
-    private String surname;
-    private String email;
-    private String password;
+    private boolean active;
+    private Integer favoritesId;
+    private Integer accommodationsId;
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public AdministratorDTO(){}
+    public FavoriteAccommodationEntity(){
+
+    }
 
     public int getId() {
         return id;
@@ -28,36 +29,28 @@ public class AdministratorDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public boolean isActive() {
+        return active;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
-    public String getSurname() {
-        return surname;
+    public Integer getFavoritesId() {
+        return favoritesId;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setFavoritesId(Integer favoritesId) {
+        this.favoritesId = favoritesId;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getAccommodationsId() {
+        return accommodationsId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAccommodationsId(Integer accommodationsId) {
+        this.accommodationsId = accommodationsId;
     }
 
     public LocalDate getCreatedAt() {

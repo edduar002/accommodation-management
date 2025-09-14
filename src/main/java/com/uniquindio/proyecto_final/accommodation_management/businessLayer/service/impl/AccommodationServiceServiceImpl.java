@@ -1,6 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationServiceDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationServiceEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ public class AccommodationServiceServiceImpl implements com.uniquindio.proyecto_
     private AccommodationServiceRepository repository;
 
     @Override
-    public ResponseEntity<AccommodationServiceDTO> create(AccommodationServiceDTO accommodationService) {
+    public ResponseEntity<AccommodationServiceEntity> create(AccommodationServiceEntity accommodationService) {
         return null;
     }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="reservations")
-public class ReservationDTO {
+public class ReservationEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class ReservationDTO {
     private LocalDate createdAt;
     private LocalDate updatedAt;
 
-    public ReservationDTO() {
+    public ReservationEntity() {
     }
 
     public int getId() {

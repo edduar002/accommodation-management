@@ -1,6 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.QualificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ public class QualificationServiceImpl implements QualificationService{
     private QualificationRepository repository;
 
     @Override
-    public ResponseEntity<QualificationDTO> save(QualificationDTO qualification) {
+    public ResponseEntity<QualificationEntity> save(QualificationEntity qualification) {
         return null;
     }
 }
