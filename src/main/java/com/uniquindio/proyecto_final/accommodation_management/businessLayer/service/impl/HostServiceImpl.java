@@ -1,10 +1,12 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.HostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class HostServiceImpl implements HostService{
@@ -13,8 +15,9 @@ public class HostServiceImpl implements HostService{
     private HostRepository repository;
 
     @Override
-    public ResponseEntity<HostEntity> save(HostEntity host) {
-        return null;
+    @Transactional
+    public HostEntity save(HostEntity dto) {
+        return repository.save(dto);
     }
 
     @Override

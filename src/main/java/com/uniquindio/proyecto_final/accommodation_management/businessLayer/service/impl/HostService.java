@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface HostService {
 
-    ResponseEntity<HostEntity> save(HostEntity host);
+    HostEntity save(HostEntity host);
 
     ResponseEntity<HostEntity> edit(int idHost);
 

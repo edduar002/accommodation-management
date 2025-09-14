@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AccommodationService {
 
-    ResponseEntity<AccommodationEntity> save(AccommodationEntity accommodation);
+    AccommodationEntity save(AccommodationEntity accommodation);
 
     ResponseEntity<List<AccommodationEntity>> searchAvailableAccommodations(int ciudad, LocalDate fechaInicio, LocalDate fechaFin);
 

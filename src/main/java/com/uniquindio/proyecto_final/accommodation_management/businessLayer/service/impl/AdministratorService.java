@@ -4,5 +4,5 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.e
 import org.springframework.http.ResponseEntity;
 
 public interface AdministratorService {
-    ResponseEntity<AdministratorEntity> save(AdministratorEntity administrator);
+    AdministratorEntity save(AdministratorEntity administrator);
 }

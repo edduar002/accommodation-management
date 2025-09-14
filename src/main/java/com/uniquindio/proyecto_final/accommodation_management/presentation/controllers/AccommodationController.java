@@ -4,12 +4,17 @@ import com.uniquindio.proyecto_final.accommodation_management.businessLayer.serv
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // IMPORTACIONES PARA SWAGGER
 
@@ -25,15 +30,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @RestController
-@RequestMapping("/api/accomodations")
+@RequestMapping("/api/accommodations")
 public class AccommodationController {
 
     @Autowired
     private AccommodationService service;
 
-    @PostMapping("/create")
-    public ResponseEntity<AccommodationEntity> create(@RequestBody AccommodationEntity accommodation, BindingResult result){
-        return service.save(accommodation);
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody AccommodationEntity acommodation, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(acommodation));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody AccommodationEntity acommodation, BindingResult result){
+        return create(acommodation, result);
     }
 
     @GetMapping("/searchAvailableAccommodations")
@@ -89,6 +102,14 @@ public class AccommodationController {
     @GetMapping("/averageGrades")
     public ResponseEntity<List<QualificationEntity>> averageGrades(@RequestParam int idAccommodation, BindingResult result){
         return service.averageGrades(idAccommodation);
+    }
+
+    private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo " + err.getField() + " no puede ser vacio " + err.getDefaultMessage());
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
 }

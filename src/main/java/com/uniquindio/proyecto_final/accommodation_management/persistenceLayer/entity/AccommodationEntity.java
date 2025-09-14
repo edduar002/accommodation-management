@@ -3,6 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="accommodations")
@@ -12,7 +13,6 @@ public class AccommodationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String detailedDescription;
-    private String city;
     private String direction;
     private String exactLocation;
     private Integer price;
@@ -21,8 +21,8 @@ public class AccommodationEntity {
     private String available;
     private Integer qualificationsId;
     private Integer departmentsId;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private boolean active;
 
     public AccommodationEntity() {}
@@ -41,14 +41,6 @@ public class AccommodationEntity {
 
     public void setDetailedDescription(String detailedDescription) {
         this.detailedDescription = detailedDescription;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
     }
 
     public String getDirection() {
@@ -115,19 +107,19 @@ public class AccommodationEntity {
         this.departmentsId = departmentsId;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -137,5 +129,16 @@ public class AccommodationEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

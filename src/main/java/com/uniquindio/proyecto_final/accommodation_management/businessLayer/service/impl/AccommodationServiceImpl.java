@@ -3,10 +3,12 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationRepository;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,11 +17,12 @@ import java.util.List;
 public class AccommodationServiceImpl implements AccommodationService {
 
     @Autowired
-    private AccommodationServiceRepository repository;
+    private AccommodationRepository repository;
 
     @Override
-    public ResponseEntity<AccommodationEntity> save(AccommodationEntity accommodation) {
-        return null;
+    @Transactional
+    public AccommodationEntity save(AccommodationEntity dto) {
+        return repository.save(dto);
     }
 
     @Override

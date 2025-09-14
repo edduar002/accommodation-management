@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface QualificationService {
 
-    ResponseEntity<QualificationEntity> save(QualificationEntity qualification);
+    QualificationEntity save(QualificationEntity qualification);
 }
