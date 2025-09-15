@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface ServiceService {
 
-    ResponseEntity<ServiceEntity> save(ServiceEntity service);
+    ServiceEntity save(ServiceEntity service);
 }

@@ -19,5 +19,5 @@ public class ImageServiceImpl implements ImageService{
     public ImageEntity save(ImageEntity dto) {
         return repository.save(dto);
     }
-    
+
 }

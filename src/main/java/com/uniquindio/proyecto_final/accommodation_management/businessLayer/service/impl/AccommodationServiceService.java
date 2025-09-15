@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface AccommodationServiceService {
 
-    ResponseEntity<AccommodationServiceEntity> create(AccommodationServiceEntity accommodationService);
+    AccommodationServiceEntity save(AccommodationServiceEntity accommodationService);
 }
