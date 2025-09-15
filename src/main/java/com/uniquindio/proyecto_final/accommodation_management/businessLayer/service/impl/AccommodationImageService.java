@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface AccommodationImageService {
 
-    ResponseEntity<AccommodationImageEntity> save(AccommodationImageEntity accommodationImage);
+    AccommodationImageEntity save(AccommodationImageEntity accommodationImage);
 }

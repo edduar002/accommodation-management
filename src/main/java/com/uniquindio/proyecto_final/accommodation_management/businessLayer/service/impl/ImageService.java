@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface ImageService {
 
-    ResponseEntity<ImageEntity> save(ImageEntity image);
+    ImageEntity save(ImageEntity image);
 }

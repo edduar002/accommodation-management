@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface CityService {
 
-    ResponseEntity<CityEntity> save(CityEntity city);
+    CityEntity save(CityEntity city);
 }
