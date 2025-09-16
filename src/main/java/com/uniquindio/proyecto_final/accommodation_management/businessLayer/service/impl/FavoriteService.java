@@ -4,5 +4,5 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.e
 import org.springframework.http.ResponseEntity;
 
 public interface FavoriteService {
-    ResponseEntity<FavoriteEntity> save(FavoriteEntity administrator);
+    FavoriteEntity save(FavoriteEntity administrator);
 }

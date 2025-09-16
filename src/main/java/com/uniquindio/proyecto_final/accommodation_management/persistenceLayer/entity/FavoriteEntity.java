@@ -3,6 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="favorites")
@@ -12,8 +13,8 @@ public class FavoriteEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private boolean active;
-    private LocalDate createdAt;
-    private LocalDate updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Integer accommodationsId;
 
     public FavoriteEntity(){}
@@ -34,19 +35,19 @@ public class FavoriteEntity {
         this.active = active;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
@@ -56,5 +57,16 @@ public class FavoriteEntity {
 
     public void setAccommodationsId(Integer accommodationsId) {
         this.accommodationsId = accommodationsId;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

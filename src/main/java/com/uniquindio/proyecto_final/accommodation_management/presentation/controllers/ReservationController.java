@@ -3,12 +3,17 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.ReservationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseComentEntity;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // IMPORTACIONES PARA SWAGGER
 
@@ -30,9 +35,17 @@ public class ReservationController {
     @Autowired
     private ReservationService service;
 
-    @PostMapping("/create/{idAccommodation}/{idHost}/{idUser}")
-    public ResponseEntity<ReservationEntity> create(@RequestBody ReservationEntity reservation, @PathVariable int idAccommodation, @PathVariable int idHost, @PathVariable int idUser, BindingResult result){
-        return null;
+    @PostMapping
+    public ResponseEntity<?> create(@RequestBody ReservationEntity reservation, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(reservation));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@Valid @RequestBody ReservationEntity reservation, BindingResult result){
+        return create(reservation, result);
     }
 
     @PutMapping("/cancelReservations/{idReservation}")
@@ -48,6 +61,14 @@ public class ReservationController {
     @GetMapping("/viewReservationDetails/{idReservation}")
     public ResponseEntity<AccommodationEntity> viewAccommodationDetails(@PathVariable int idReservation, BindingResult result){
         return service.viewAccommodationDetails(idReservation);
+    }
+
+    private ResponseEntity<?> validation(BindingResult result) {
+        Map<String, String> errors = new HashMap<>();
+        result.getFieldErrors().forEach(err -> {
+            errors.put(err.getField(), "El campo " + err.getField() + " no puede ser vacio " + err.getDefaultMessage());
+        });
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
 }

@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface ResponseService {
 
-    ResponseEntity<ResponseComentEntity> save(ResponseComentEntity response);
+    ResponseComentEntity save(ResponseComentEntity response);
 }

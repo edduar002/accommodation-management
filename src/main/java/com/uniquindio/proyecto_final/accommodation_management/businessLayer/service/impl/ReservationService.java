@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ReservationService {
 
-    ResponseEntity<ReservationEntity> save(ReservationEntity reservation);
+    ReservationEntity save(ReservationEntity reservation);
 
     ResponseEntity<ReservationEntity> makeReservations(LocalDate checkIn, LocalDate checkOut);
 

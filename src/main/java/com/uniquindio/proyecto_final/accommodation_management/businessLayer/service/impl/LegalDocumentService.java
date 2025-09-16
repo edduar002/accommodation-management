@@ -5,5 +5,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface LegalDocumentService {
 
-    ResponseEntity<LegalDocumentEntity> save(LegalDocumentEntity legalDocument);
+    LegalDocumentEntity save(LegalDocumentEntity legalDocument);
 }
