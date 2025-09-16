@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class CommentServiceImpl implements CommentService{
 
@@ -18,6 +20,11 @@ public class CommentServiceImpl implements CommentService{
     @Transactional
     public CommentEntity save(CommentEntity dto) {
         return repository.save(dto);
+    }
+
+    @Override
+    public ResponseEntity<List<CommentEntity>> commentsList(int idAccommodation) {
+        return null;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.CommentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationServiceEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,6 +59,11 @@ public class CommentController {
     @PostMapping("/respondComments/{idComment}")
     public ResponseEntity<CommentEntity> respondComments(@PathVariable int idComment, @RequestBody CommentEntity comment, BindingResult result){
         return service.respondComments(idComment, comment);
+    }
+
+    @GetMapping("/commentsList")
+    public ResponseEntity<List<CommentEntity>> commentsList(@RequestParam int idAccommodation, BindingResult result){
+        return service.commentsList(idAccommodation);
     }
 
 }

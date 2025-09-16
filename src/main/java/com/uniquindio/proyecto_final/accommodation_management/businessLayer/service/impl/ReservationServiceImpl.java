@@ -25,6 +25,11 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
+    public List<ReservationEntity> viewAccommodationReservations(int idAccommodation) {
+        return repository.viewAccommodationReservations(idAccommodation);
+    }
+
+    @Override
     public ResponseEntity<ReservationEntity> makeReservations(LocalDate checkIn, LocalDate checkOut) {
         return null;
     }

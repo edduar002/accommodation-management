@@ -50,13 +50,21 @@ public class AccommodationController {
     }
 
     @GetMapping("/searchAvailableAccommodations")
-    public ResponseEntity<List<AccommodationEntity>> searchAvailableAccommodations(@RequestParam int ciudad, @RequestParam LocalDate fechaInicio, @RequestParam LocalDate fechaFin, BindingResult result){
-        return service.searchAvailableAccommodations(ciudad, fechaInicio, fechaFin);
+    public ResponseEntity<List<AccommodationEntity>> searchAvailableAccommodations() {
+        List<AccommodationEntity> disponibles = service.searchAvailableAccommodations();
+        if (disponibles.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(disponibles);
     }
 
     @GetMapping("/ownAccommodationList")
-    public ResponseEntity<List<AccommodationEntity>> ownAccommodationList(@RequestParam int idHost, BindingResult result){
-        return service.ownAccommodationList(idHost);
+    public ResponseEntity<List<AccommodationEntity>> ownAccommodationList(@RequestParam int idHost){
+        List<AccommodationEntity> propios = service.ownAccommodationList(idHost);
+        if (propios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(propios);
     }
 
     @PutMapping("/edit")
@@ -69,19 +77,18 @@ public class AccommodationController {
         return service.delete(idAccommodation);
     }
 
-    @GetMapping("/detail")
-    public ResponseEntity<AccommodationEntity> detail(@RequestParam int accommodation, BindingResult result){
-        return service.detail(accommodation);
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<AccommodationEntity> detail(@PathVariable("id") int accommodationId) {
+        AccommodationEntity detalle = service.detail(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
     }
 
     @GetMapping("viewMetrics")
     public ResponseEntity<AccommodationEntity> viewMetrics(@RequestParam int accommodation, BindingResult result){
         return service.viewMetrics(accommodation);
-    }
-
-    @GetMapping("/viewAccommodationReservations")
-    public ResponseEntity<List<AccommodationEntity>> viewAccommodationReservations(@RequestParam int idReservation, BindingResult result){
-        return service.viewAccommodationReservations(idReservation);
     }
 
     @PutMapping("/acceptReservationRequests")
@@ -92,16 +99,6 @@ public class AccommodationController {
     @PutMapping("/rejectReservationRequests")
     public ResponseEntity<AccommodationEntity> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
         return service.rejectReservationRequests(idAccommodation);
-    }
-
-    @GetMapping("/commentsList")
-    public ResponseEntity<List<CommentEntity>> commentsList(@RequestParam int idAccommodation, BindingResult result){
-        return service.commentsList(idAccommodation);
-    }
-
-    @GetMapping("/averageGrades")
-    public ResponseEntity<List<QualificationEntity>> averageGrades(@RequestParam int idAccommodation, BindingResult result){
-        return service.averageGrades(idAccommodation);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

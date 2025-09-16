@@ -18,4 +18,6 @@ public interface ReservationService {
     ResponseEntity<List<AccommodationEntity>> viewReservationHistory(int idUser);
 
     ResponseEntity<AccommodationEntity> viewAccommodationDetails(int idAccommodation);
+
+    List<ReservationEntity> viewAccommodationReservations(int idAccommodation);
 }

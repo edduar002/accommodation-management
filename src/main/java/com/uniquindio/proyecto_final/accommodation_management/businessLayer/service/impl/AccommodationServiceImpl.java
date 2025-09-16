@@ -26,13 +26,13 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public ResponseEntity<List<AccommodationEntity>> searchAvailableAccommodations(int ciudad, LocalDate fechaInicio, LocalDate fechaFin) {
-        return null;
+    public List<AccommodationEntity> searchAvailableAccommodations() {
+        return repository.searchAvailableAccommodations();
     }
 
     @Override
-    public ResponseEntity<List<AccommodationEntity>> ownAccommodationList(int idHost) {
-        return null;
+    public List<AccommodationEntity> ownAccommodationList(int idHost) {
+        return repository.ownAccommodationList(idHost);
     }
 
     @Override
@@ -46,17 +46,12 @@ public class AccommodationServiceImpl implements AccommodationService {
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> detail(int accommodation) {
-        return null;
+    public AccommodationEntity detail(int accommodationId) {
+        return repository.findById(accommodationId).orElse(null);
     }
 
     @Override
     public ResponseEntity<AccommodationEntity> viewMetrics(int accommodation) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<List<AccommodationEntity>> viewAccommodationReservations(int idReservation) {
         return null;
     }
 
@@ -67,16 +62,6 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<List<CommentEntity>> commentsList(int idAccommodation) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<List<QualificationEntity>> averageGrades(int idAccommodation) {
         return null;
     }
 }

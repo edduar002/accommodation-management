@@ -12,25 +12,19 @@ public interface AccommodationService {
 
     AccommodationEntity save(AccommodationEntity accommodation);
 
-    ResponseEntity<List<AccommodationEntity>> searchAvailableAccommodations(int ciudad, LocalDate fechaInicio, LocalDate fechaFin);
+    List<AccommodationEntity> searchAvailableAccommodations();
 
-    ResponseEntity<List<AccommodationEntity>> ownAccommodationList(int idHost);
+    List<AccommodationEntity> ownAccommodationList(int idHost);
 
     ResponseEntity<AccommodationEntity> edit(int idAccommodation);
 
     ResponseEntity<AccommodationEntity> delete(int idAccommodation);
 
-    ResponseEntity<AccommodationEntity> detail(int accommodation);
+    AccommodationEntity detail(int accommodation);
 
     ResponseEntity<AccommodationEntity> viewMetrics(int accommodation);
-
-    ResponseEntity<List<AccommodationEntity>> viewAccommodationReservations(int idReservation);
 
     ResponseEntity<AccommodationEntity> acceptReservationRequests(int idAccommodation);
 
     ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation);
-
-    ResponseEntity<List<CommentEntity>> commentsList(int idAccommodation);
-
-    ResponseEntity<List<QualificationEntity>> averageGrades(int idAccommodation);
 }

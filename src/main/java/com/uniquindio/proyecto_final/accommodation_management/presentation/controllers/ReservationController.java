@@ -58,9 +58,9 @@ public class ReservationController {
         return service.viewReservationHistory(idUser);
     }
 
-    @GetMapping("/viewReservationDetails/{idReservation}")
-    public ResponseEntity<AccommodationEntity> viewAccommodationDetails(@PathVariable int idReservation, BindingResult result){
-        return service.viewAccommodationDetails(idReservation);
+    @GetMapping("/viewReservationDetails/{idAccommodation}")
+    public ResponseEntity<AccommodationEntity> viewAccommodationDetails(@PathVariable int idAccommodation){
+        return service.viewAccommodationDetails(idAccommodation);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {
@@ -69,6 +69,15 @@ public class ReservationController {
             errors.put(err.getField(), "El campo " + err.getField() + " no puede ser vacio " + err.getDefaultMessage());
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+    }
+
+    @GetMapping("/viewAccommodationReservations/{idAccommodation}")
+    public ResponseEntity<List<ReservationEntity>> viewAccommodationReservations(@PathVariable("idAccommodation") int idAccommodation){
+        List<ReservationEntity> reservas = service.viewAccommodationReservations(idAccommodation);
+        if (reservas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(reservas);
     }
 
 }
