@@ -3,6 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
@@ -27,4 +28,7 @@ public interface AccommodationService {
     ResponseEntity<AccommodationEntity> acceptReservationRequests(int idAccommodation);
 
     ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation);
+
+    Double averageGrades(int idAccommodation);
+
 }

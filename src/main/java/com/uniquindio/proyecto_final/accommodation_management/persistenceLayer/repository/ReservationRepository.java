@@ -13,4 +13,7 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
     @Query("SELECT r FROM ReservationEntity r WHERE r.accommodationsId = :idAccommodation")
     List<ReservationEntity> viewAccommodationReservations(@Param("idAccommodation") int idAccommodation);
 
+    @Query("SELECT r FROM ReservationEntity r WHERE r.usersId = :idUser")
+    List<ReservationEntity> viewReservationHistory(@Param("idUser") int idUser);
+
 }

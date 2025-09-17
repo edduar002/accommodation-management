@@ -1,6 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository;
 
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,5 +17,8 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
 
     @Query("SELECT a FROM AccommodationEntity a WHERE a.hostsId = :idHost")
     List<AccommodationEntity> ownAccommodationList(@Param("idHost") int idHost);
+
+    @Query("SELECT q.numberStars FROM QualificationEntity q INNER JOIN AccommodationEntity a ON a.qualificationsId = q.id WHERE a.id = :idAccommodation")
+    Double averageGrades(@Param("idAccommodation") int idAccommodation);
 
 }

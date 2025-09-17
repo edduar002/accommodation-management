@@ -9,7 +9,7 @@ public interface CommentService {
 
     CommentEntity save(CommentEntity comment);
 
-    ResponseEntity<List<CommentEntity>> commentsList(int idAccommodation);
+    List<CommentEntity> commentsList(int idAccommodation);
 
     ResponseEntity<CommentEntity> respondComments(int idComent, CommentEntity comment);
 }

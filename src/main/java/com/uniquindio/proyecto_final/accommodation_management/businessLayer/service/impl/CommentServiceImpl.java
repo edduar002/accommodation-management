@@ -23,8 +23,8 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public ResponseEntity<List<CommentEntity>> commentsList(int idAccommodation) {
-        return null;
+    public List<CommentEntity> commentsList(int idAccommodation) {
+        return repository.commentsList(idAccommodation);
     }
 
     @Override

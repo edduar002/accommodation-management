@@ -40,12 +40,12 @@ public class ReservationServiceImpl implements ReservationService{
     }
 
     @Override
-    public ResponseEntity<List<AccommodationEntity>> viewReservationHistory(int idUser) {
-        return null;
+    public List<ReservationEntity> viewReservationHistory(int idUser) {
+        return repository.viewReservationHistory(idUser);
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> viewAccommodationDetails(int idAccommodation) {
-        return null;
+    public ReservationEntity viewReservationDetails(int idAccommodation) {
+        return repository.findById(idAccommodation).orElse(null);
     }
 }

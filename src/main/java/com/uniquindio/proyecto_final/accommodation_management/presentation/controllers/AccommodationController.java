@@ -109,4 +109,10 @@ public class AccommodationController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
+    @GetMapping("/averageGrades/{idAccommodation}")
+    public ResponseEntity<Double> averageGrades(@PathVariable("idAccommodation") int idAccommodation){
+        Double calificaciones = service.averageGrades(idAccommodation);
+        return ResponseEntity.ok(calificaciones);
+    }
+
 }

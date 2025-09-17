@@ -1,6 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.UserService;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 // IMPORTACIONES PARA SWAGGER
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController

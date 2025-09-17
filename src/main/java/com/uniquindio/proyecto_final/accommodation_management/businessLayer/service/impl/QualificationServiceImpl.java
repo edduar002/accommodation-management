@@ -23,8 +23,4 @@ public class QualificationServiceImpl implements QualificationService{
         return repository.save(dto);
     }
 
-    @Override
-    public ResponseEntity<List<QualificationEntity>> averageGrades(int idAccommodation) {
-        return null;
-    }
 }

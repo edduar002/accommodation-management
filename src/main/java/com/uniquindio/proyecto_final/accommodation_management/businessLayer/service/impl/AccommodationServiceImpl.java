@@ -3,6 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationRepository;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,4 +65,10 @@ public class AccommodationServiceImpl implements AccommodationService {
     public ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation) {
         return null;
     }
+
+    @Override
+    public Double averageGrades(int idAccommodation) {
+        return repository.averageGrades(idAccommodation);
+    }
+
 }

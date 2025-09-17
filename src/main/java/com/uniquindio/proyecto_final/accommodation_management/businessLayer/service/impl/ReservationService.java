@@ -15,9 +15,9 @@ public interface ReservationService {
 
     ResponseEntity<ReservationEntity> cancelReservations(int idReservation);
 
-    ResponseEntity<List<AccommodationEntity>> viewReservationHistory(int idUser);
-
-    ResponseEntity<AccommodationEntity> viewAccommodationDetails(int idAccommodation);
+    ReservationEntity viewReservationDetails(int idAccommodation);
 
     List<ReservationEntity> viewAccommodationReservations(int idAccommodation);
+
+    List<ReservationEntity> viewReservationHistory(int idUser);
 }

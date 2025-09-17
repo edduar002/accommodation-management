@@ -4,6 +4,7 @@ import com.uniquindio.proyecto_final.accommodation_management.businessLayer.serv
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationServiceEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,9 +62,13 @@ public class CommentController {
         return service.respondComments(idComment, comment);
     }
 
-    @GetMapping("/commentsList")
-    public ResponseEntity<List<CommentEntity>> commentsList(@RequestParam int idAccommodation, BindingResult result){
-        return service.commentsList(idAccommodation);
+    @GetMapping("/commentsList/{idAccommodation}")
+    public ResponseEntity<List<CommentEntity>> commentsList(@PathVariable("idAccommodation") int idAccommodation){
+        List<CommentEntity> comentarios = service.commentsList(idAccommodation);
+        if (comentarios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(comentarios);
     }
 
 }

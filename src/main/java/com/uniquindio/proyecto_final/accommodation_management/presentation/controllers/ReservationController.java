@@ -53,14 +53,13 @@ public class ReservationController {
         return service.cancelReservations(idReservation);
     }
 
-    @GetMapping("/viewReservationHistory/{idUser}")
-    public ResponseEntity<List<AccommodationEntity>> viewReservationHistory(@PathVariable int idUser, BindingResult result){
-        return service.viewReservationHistory(idUser);
-    }
-
     @GetMapping("/viewReservationDetails/{idAccommodation}")
-    public ResponseEntity<AccommodationEntity> viewAccommodationDetails(@PathVariable int idAccommodation){
-        return service.viewAccommodationDetails(idAccommodation);
+    public ResponseEntity<ReservationEntity> viewReservationDetails(@PathVariable("idAccommodation") int accommodationId) {
+        ReservationEntity detalle = service.viewReservationDetails(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {
@@ -74,6 +73,15 @@ public class ReservationController {
     @GetMapping("/viewAccommodationReservations/{idAccommodation}")
     public ResponseEntity<List<ReservationEntity>> viewAccommodationReservations(@PathVariable("idAccommodation") int idAccommodation){
         List<ReservationEntity> reservas = service.viewAccommodationReservations(idAccommodation);
+        if (reservas.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(reservas);
+    }
+
+    @GetMapping("/viewReservationHistory")
+    public ResponseEntity<List<ReservationEntity>> viewReservationHistory(@RequestParam int idUser){
+        List<ReservationEntity> reservas = service.viewReservationHistory(idUser);
         if (reservas.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
