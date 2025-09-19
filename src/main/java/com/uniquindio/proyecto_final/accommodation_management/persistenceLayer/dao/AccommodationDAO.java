@@ -19,4 +19,29 @@ public class AccommodationDAO {
         AccommodationEntity savedEntity = accommodationRepository.save(entity);
         return accommodationMapper.toDTO(savedEntity);
     }
+
+    public AccommodationDTO searchAvailableAccommodations(AccommodationDTO dto) {
+        AccommodationEntity entity = accommodationMapper.toEntity(dto);
+        AccommodationEntity savedEntity = accommodationRepository.save(entity);
+        return accommodationMapper.toDTO(savedEntity);
+    }
+
+    public AccommodationDTO ownAccommodationList(AccommodationDTO dto) {
+        AccommodationEntity entity = accommodationMapper.toEntity(dto);
+        AccommodationEntity savedEntity = accommodationRepository.save(entity);
+        return accommodationMapper.toDTO(savedEntity);
+    }
+
+    public AccommodationDTO findById(AccommodationDTO dto) {
+        AccommodationEntity entity = accommodationMapper.toEntity(dto);
+        AccommodationEntity savedEntity = accommodationRepository.save(entity);
+        return accommodationMapper.toDTO(savedEntity);
+    }
+
+    public AccommodationDTO averageGrades(AccommodationDTO dto) {
+        AccommodationEntity entity = accommodationMapper.toEntity(dto);
+        AccommodationEntity savedEntity = accommodationRepository.save(entity);
+        return accommodationMapper.toDTO(savedEntity);
+    }
+
 }

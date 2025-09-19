@@ -19,4 +19,11 @@ public class HostDAO {
         HostEntity savedEntity = hostRepository.save(entity);
         return hostMapper.toDTO(savedEntity);
     }
+
+    public HostDTO findById(HostDTO dto) {
+        HostEntity entity = hostMapper.toEntity(dto);
+        HostEntity savedEntity = hostRepository.save(entity);
+        return hostMapper.toDTO(savedEntity);
+    }
+
 }

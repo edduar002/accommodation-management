@@ -19,4 +19,23 @@ public class ReservationDAO {
         ReservationEntity savedEntity = reservationRepository.save(entity);
         return reservationMapper.toDTO(savedEntity);
     }
+
+    public ReservationDTO viewAccommodationReservations(ReservationDTO dto) {
+        ReservationEntity entity = reservationMapper.toEntity(dto);
+        ReservationEntity savedEntity = reservationRepository.save(entity);
+        return reservationMapper.toDTO(savedEntity);
+    }
+
+    public ReservationDTO viewReservationHistory(ReservationDTO dto) {
+        ReservationEntity entity = reservationMapper.toEntity(dto);
+        ReservationEntity savedEntity = reservationRepository.save(entity);
+        return reservationMapper.toDTO(savedEntity);
+    }
+
+    public ReservationDTO findById(ReservationDTO dto) {
+        ReservationEntity entity = reservationMapper.toEntity(dto);
+        ReservationEntity savedEntity = reservationRepository.save(entity);
+        return reservationMapper.toDTO(savedEntity);
+    }
+
 }

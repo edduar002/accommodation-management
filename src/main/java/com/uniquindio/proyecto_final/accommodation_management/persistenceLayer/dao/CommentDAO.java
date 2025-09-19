@@ -19,4 +19,11 @@ public class CommentDAO {
         CommentEntity savedEntity = commentRepository.save(entity);
         return commentMapper.toDTO(savedEntity);
     }
+
+    public CommentDTO commentsList(CommentDTO dto) {
+        CommentEntity entity = commentMapper.toEntity(dto);
+        CommentEntity savedEntity = commentRepository.save(entity);
+        return commentMapper.toDTO(savedEntity);
+    }
+
 }
