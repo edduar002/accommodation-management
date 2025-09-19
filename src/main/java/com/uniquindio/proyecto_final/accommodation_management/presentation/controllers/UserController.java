@@ -1,8 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.UserService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 // IMPORTACIONES PARA SWAGGER
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -25,7 +23,7 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody UserEntity user, BindingResult result){
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO user, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody UserEntity user, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody UserDTO user, BindingResult result){
         return create(user, result);
     }
 

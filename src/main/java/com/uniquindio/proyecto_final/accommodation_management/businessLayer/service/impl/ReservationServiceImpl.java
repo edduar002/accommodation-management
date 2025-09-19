@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ReservationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class ReservationServiceImpl implements ReservationService{
+public class ReservationServiceImpl implements ReservationService {
 
     @Autowired
     private ReservationRepository repository;
@@ -47,5 +47,15 @@ public class ReservationServiceImpl implements ReservationService{
     @Override
     public ReservationEntity viewReservationDetails(int idAccommodation) {
         return repository.findById(idAccommodation).orElse(null);
+    }
+
+    @Override
+    public ResponseEntity<AccommodationEntity> acceptReservationRequests(int idAccommodation) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation) {
+        return null;
     }
 }

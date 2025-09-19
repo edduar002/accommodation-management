@@ -1,33 +1,21 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.AccommodationService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AccommodationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 // IMPORTACIONES PARA SWAGGER
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @RestController
 @RequestMapping("/api/accommodations")
@@ -67,14 +55,26 @@ public class AccommodationController {
         return ResponseEntity.ok(propios);
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<AccommodationEntity> edit(@RequestParam int idAccommodation, BindingResult result){
-        return service.edit(idAccommodation);
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable int id,  @RequestBody AccommodationEntity accommodation, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<AccommodationEntity> productOptional = service.edit(id, accommodation);
+        if(productOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(productOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<AccommodationEntity> delete(@RequestParam int idAccommodation, BindingResult result){
-        return service.delete(idAccommodation);
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Optional<AccommodationEntity> productOptional = service.delete(id);
+
+        if (productOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/detail/{id}")
@@ -89,16 +89,6 @@ public class AccommodationController {
     @GetMapping("viewMetrics")
     public ResponseEntity<AccommodationEntity> viewMetrics(@RequestParam int accommodation, BindingResult result){
         return service.viewMetrics(accommodation);
-    }
-
-    @PutMapping("/acceptReservationRequests")
-    public ResponseEntity<AccommodationEntity> acceptReservationRequests(@RequestParam int idAccommodation, BindingResult result){
-        return service.acceptReservationRequests(idAccommodation);
-    }
-
-    @PutMapping("/rejectReservationRequests")
-    public ResponseEntity<AccommodationEntity> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
-        return service.rejectReservationRequests(idAccommodation);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

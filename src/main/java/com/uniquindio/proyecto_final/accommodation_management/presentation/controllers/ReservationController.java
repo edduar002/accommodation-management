@@ -1,9 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.ReservationService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ReservationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseComentEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,16 +16,6 @@ import java.util.Map;
 
 // IMPORTACIONES PARA SWAGGER
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
-import io.swagger.v3.oas.annotations.info.License;
-import io.swagger.v3.oas.annotations.servers.Server;
-import io.swagger.v3.oas.models.Components;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -86,6 +75,16 @@ public class ReservationController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(reservas);
+    }
+
+    @PutMapping("/acceptReservationRequests")
+    public ResponseEntity<AccommodationEntity> acceptReservationRequests(@RequestParam int idAccommodation, BindingResult result){
+        return service.acceptReservationRequests(idAccommodation);
+    }
+
+    @PutMapping("/rejectReservationRequests")
+    public ResponseEntity<AccommodationEntity> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
+        return service.rejectReservationRequests(idAccommodation);
     }
 
 }

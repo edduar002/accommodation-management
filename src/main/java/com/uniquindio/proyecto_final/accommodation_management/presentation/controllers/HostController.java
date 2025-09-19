@@ -1,8 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl.HostService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 // IMPORTACIONES PARA SWAGGER
 
@@ -43,8 +43,15 @@ public class HostController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<HostEntity> edit(@RequestParam int idHost, BindingResult result){
-        return service.edit(idHost);
+    public ResponseEntity<?> edit(@RequestParam int idHost, @RequestBody HostEntity host, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<HostEntity> hostOptional = service.edit(idHost, host);
+        if(hostOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(hostOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/changePassword")

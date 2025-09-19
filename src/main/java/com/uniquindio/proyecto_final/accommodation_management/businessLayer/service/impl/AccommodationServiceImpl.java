@@ -1,18 +1,15 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AccommodationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationRepository;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
@@ -36,14 +33,28 @@ public class AccommodationServiceImpl implements AccommodationService {
         return repository.ownAccommodationList(idHost);
     }
 
+    @Transactional
     @Override
-    public ResponseEntity<AccommodationEntity> edit(int idAccommodation) {
-        return null;
+    public Optional<AccommodationEntity> edit(int id, AccommodationEntity accommodation) {
+        Optional<AccommodationEntity> accommodationDb = repository.findById(id);
+        if(accommodationDb.isPresent()){
+            AccommodationEntity accommodationNew = accommodationDb.orElseThrow();
+            accommodationNew.setPrice(accommodation.getPrice());
+            return Optional.of(repository.save(accommodationNew));
+        }
+        return accommodationDb;
     }
 
+    @Transactional
     @Override
-    public ResponseEntity<AccommodationEntity> delete(int idAccommodation) {
-        return null;
+    public Optional<AccommodationEntity> delete(int id) {
+        Optional<AccommodationEntity> accommodationDb = repository.findById(id);
+        if(accommodationDb.isPresent()){
+            AccommodationEntity accommodationNew = accommodationDb.orElseThrow();
+            accommodationNew.setActive(false);
+            return Optional.of(repository.save(accommodationNew));
+        }
+        return accommodationDb;
     }
 
     @Override
@@ -53,16 +64,6 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public ResponseEntity<AccommodationEntity> viewMetrics(int accommodation) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<AccommodationEntity> acceptReservationRequests(int idAccommodation) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<AccommodationEntity> rejectReservationRequests(int idAccommodation) {
         return null;
     }
 
