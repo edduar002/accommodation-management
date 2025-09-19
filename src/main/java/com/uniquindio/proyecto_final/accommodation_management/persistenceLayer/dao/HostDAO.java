@@ -1,0 +1,22 @@
+package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao;
+
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.mapper.HostMapper;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.HostRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+@Repository
+@RequiredArgsConstructor
+public class HostDAO {
+
+    private final HostRepository hostRepository;
+    private final HostMapper hostMapper;
+
+    public HostDTO save(HostDTO dto) {
+        HostEntity entity = hostMapper.toEntity(dto);
+        HostEntity savedEntity = hostRepository.save(entity);
+        return hostMapper.toDTO(savedEntity);
+    }
+}
