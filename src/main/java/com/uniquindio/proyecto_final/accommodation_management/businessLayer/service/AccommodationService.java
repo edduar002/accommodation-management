@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -8,19 +9,19 @@ import java.util.Optional;
 
 public interface AccommodationService {
 
-    AccommodationEntity save(AccommodationEntity accommodation);
+    AccommodationDTO save(AccommodationDTO accommodation);
 
-    List<AccommodationEntity> searchAvailableAccommodations();
+    List<AccommodationDTO> searchAvailableAccommodations();
 
-    List<AccommodationEntity> ownAccommodationList(int idHost);
+    List<AccommodationDTO> ownAccommodationList(int idHost);
 
-    Optional<AccommodationEntity> edit(int idAccommodation, AccommodationEntity accommodation);
+    Optional<AccommodationDTO> edit(int idAccommodation, AccommodationDTO accommodation);
 
-    Optional<AccommodationEntity> delete(int idAccommodation);
+    Optional<AccommodationDTO> delete(int idAccommodation);
 
-    AccommodationEntity detail(int accommodation);
+    AccommodationDTO detail(int accommodation);
 
-    ResponseEntity<AccommodationEntity> viewMetrics(int accommodation);
+    ResponseEntity<AccommodationDTO> viewMetrics(int accommodation);
 
     Double averageGrades(int idAccommodation);
 

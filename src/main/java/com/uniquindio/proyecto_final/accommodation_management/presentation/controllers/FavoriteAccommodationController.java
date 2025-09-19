@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.FavoriteAccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.FavoriteAccommodationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.FavoriteAccommodationEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class FavoriteAccommodationController {
     private FavoriteAccommodationService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody FavoriteAccommodationEntity favorite, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody FavoriteAccommodationDTO favorite, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class FavoriteAccommodationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody FavoriteAccommodationEntity favorite, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody FavoriteAccommodationDTO favorite, BindingResult result){
         return create(favorite, result);
     }
 

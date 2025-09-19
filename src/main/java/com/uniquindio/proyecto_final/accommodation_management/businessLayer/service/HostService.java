@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -7,9 +8,9 @@ import java.util.Optional;
 
 public interface HostService {
 
-    HostEntity save(HostEntity host);
+    HostDTO save(HostDTO host);
 
-    Optional<HostEntity> edit(int idHost, HostEntity host);
+    Optional<HostDTO> edit(int idHost, HostDTO host);
 
-    ResponseEntity<HostEntity> changePassword(int idHost);
+    ResponseEntity<HostDTO> changePassword(int idHost);
 }

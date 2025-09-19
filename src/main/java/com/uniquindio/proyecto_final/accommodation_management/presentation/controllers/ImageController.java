@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ImageDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ImageService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ImageEntity;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class ImageController {
     private ImageService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ImageEntity image, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody ImageDTO image, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -30,7 +31,7 @@ public class ImageController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody ImageEntity image, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody ImageDTO image, BindingResult result){
         return create(image, result);
     }
 

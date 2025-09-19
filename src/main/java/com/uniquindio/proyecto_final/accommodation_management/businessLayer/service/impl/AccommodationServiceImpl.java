@@ -1,6 +1,9 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AccommodationService;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AccommodationDAO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.UserDAO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,62 +17,65 @@ import java.util.Optional;
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
 
-    @Autowired
-    private AccommodationRepository repository;
+    private final AccommodationDAO dao;
+
+    public AccommodationServiceImpl(AccommodationDAO dao) {
+        this.dao = dao;
+    }
 
     @Override
     @Transactional
-    public AccommodationEntity save(AccommodationEntity dto) {
-        return repository.save(dto);
+    public AccommodationDTO save(AccommodationDTO dto) {
+        return dao.save(dto);
     }
 
     @Override
-    public List<AccommodationEntity> searchAvailableAccommodations() {
-        return repository.searchAvailableAccommodations();
+    public List<AccommodationDTO> searchAvailableAccommodations() {
+        return dao.searchAvailableAccommodations();
     }
 
     @Override
-    public List<AccommodationEntity> ownAccommodationList(int idHost) {
-        return repository.ownAccommodationList(idHost);
+    public List<AccommodationDTO> ownAccommodationList(int idHost) {
+        return dao.ownAccommodationList(idHost);
     }
 
     @Transactional
     @Override
-    public Optional<AccommodationEntity> edit(int id, AccommodationEntity accommodation) {
-        Optional<AccommodationEntity> accommodationDb = repository.findById(id);
+    public Optional<AccommodationDTO> edit(int id, AccommodationDTO accommodation) {
+        Optional<AccommodationDTO> accommodationDb = dao.findById(id);
         if(accommodationDb.isPresent()){
-            AccommodationEntity accommodationNew = accommodationDb.orElseThrow();
+            AccommodationDTO accommodationNew = accommodationDb.orElseThrow();
             accommodationNew.setPrice(accommodation.getPrice());
-            return Optional.of(repository.save(accommodationNew));
+            return Optional.of(dao.save(accommodationNew));
         }
         return accommodationDb;
     }
 
     @Transactional
     @Override
-    public Optional<AccommodationEntity> delete(int id) {
-        Optional<AccommodationEntity> accommodationDb = repository.findById(id);
+    public Optional<AccommodationDTO> delete(int id) {
+        Optional<AccommodationDTO> accommodationDb = dao.findById(id);
         if(accommodationDb.isPresent()){
-            AccommodationEntity accommodationNew = accommodationDb.orElseThrow();
+            AccommodationDTO accommodationNew = accommodationDb.orElseThrow();
             accommodationNew.setActive(false);
-            return Optional.of(repository.save(accommodationNew));
+            return Optional.of(dao.save(accommodationNew));
         }
         return accommodationDb;
     }
 
     @Override
-    public AccommodationEntity detail(int accommodationId) {
-        return repository.findById(accommodationId).orElse(null);
+    public AccommodationDTO detail(int accommodationId) {
+        return dao.findById(accommodationId).orElse(null);
     }
 
     @Override
-    public ResponseEntity<AccommodationEntity> viewMetrics(int accommodation) {
+    public ResponseEntity<AccommodationDTO> viewMetrics(int accommodation) {
         return null;
     }
 
     @Override
     public Double averageGrades(int idAccommodation) {
-        return repository.averageGrades(idAccommodation);
+        return dao.averageGrades(idAccommodation);
     }
 
 }

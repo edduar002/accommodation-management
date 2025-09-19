@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ResponseService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseComentEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class ResponseController {
     private ResponseService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ResponseComentEntity response, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody ResponseDTO response, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class ResponseController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody ResponseComentEntity response, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody ResponseDTO response, BindingResult result){
         return create(response, result);
     }
 

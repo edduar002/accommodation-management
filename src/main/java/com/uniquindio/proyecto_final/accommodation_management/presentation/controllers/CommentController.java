@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CommentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.CommentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import jakarta.validation.Valid;
@@ -23,7 +24,7 @@ public class CommentController {
     private CommentService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody CommentEntity comment, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody CommentDTO comment, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -31,7 +32,7 @@ public class CommentController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody CommentEntity comment, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody CommentDTO comment, BindingResult result){
         return create(comment, result);
     }
 
@@ -44,13 +45,13 @@ public class CommentController {
     }
 
     @PostMapping("/respondComments/{idComment}")
-    public ResponseEntity<CommentEntity> respondComments(@PathVariable int idComment, @RequestBody CommentEntity comment, BindingResult result){
+    public ResponseEntity<CommentDTO> respondComments(@PathVariable int idComment, @RequestBody CommentEntity comment, BindingResult result){
         return service.respondComments(idComment, comment);
     }
 
     @GetMapping("/commentsList/{idAccommodation}")
-    public ResponseEntity<List<CommentEntity>> commentsList(@PathVariable("idAccommodation") int idAccommodation){
-        List<CommentEntity> comentarios = service.commentsList(idAccommodation);
+    public ResponseEntity<List<CommentDTO>> commentsList(@PathVariable("idAccommodation") int idAccommodation){
+        List<CommentDTO> comentarios = service.commentsList(idAccommodation);
         if (comentarios.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

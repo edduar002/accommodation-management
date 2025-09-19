@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.RoleEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class RoleController {
     private RoleService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody RoleEntity role, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody RoleDTO role, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class RoleController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RoleEntity role, @Valid BindingResult result){
+    public ResponseEntity<?> register(@RequestBody RoleDTO role, @Valid BindingResult result){
         return create(role, result);
     }
 

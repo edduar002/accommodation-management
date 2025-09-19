@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AdministratorEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class AdministratorController {
     private AdministratorService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody AdministratorEntity administrator, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody AdministratorDTO administrator, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class AdministratorController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody AdministratorEntity administrator, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody AdministratorDTO administrator, BindingResult result){
         return create(administrator, result);
     }
 

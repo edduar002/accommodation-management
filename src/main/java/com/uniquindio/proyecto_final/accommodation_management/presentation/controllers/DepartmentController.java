@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.DepartmentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.DepartmentEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class DepartmentController {
     private DepartmentService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody DepartmentEntity department, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody DepartmentDTO department, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class DepartmentController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody DepartmentEntity department, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody DepartmentDTO department, BindingResult result){
         return create(department, result);
     }
 

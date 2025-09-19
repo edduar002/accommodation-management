@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.QualificationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.QualificationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.QualificationEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class QualificationController {
     private QualificationService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody QualificationEntity qualification, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody QualificationDTO qualification, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class QualificationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody QualificationEntity qualification, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody QualificationDTO qualification, BindingResult result){
         return create(qualification, result);
     }
 

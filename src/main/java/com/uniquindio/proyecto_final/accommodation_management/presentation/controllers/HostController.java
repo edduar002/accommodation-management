@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
@@ -25,7 +26,7 @@ public class HostController {
     private HostService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody HostEntity host, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody HostDTO host, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class HostController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody HostEntity host, @Valid BindingResult result){
+    public ResponseEntity<?> register(@RequestBody HostDTO host, @Valid BindingResult result){
         return create(host, result);
     }
 
@@ -43,11 +44,11 @@ public class HostController {
     }
 
     @PutMapping("/edit")
-    public ResponseEntity<?> edit(@RequestParam int idHost, @RequestBody HostEntity host, BindingResult result){
+    public ResponseEntity<?> edit(@RequestParam int idHost, @RequestBody HostDTO host, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
-        Optional<HostEntity> hostOptional = service.edit(idHost, host);
+        Optional<HostDTO> hostOptional = service.edit(idHost, host);
         if(hostOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.CREATED).body(hostOptional.orElseThrow());
         }
@@ -55,7 +56,7 @@ public class HostController {
     }
 
     @PutMapping("/changePassword")
-    public ResponseEntity<HostEntity> changePassword(@RequestParam int idHost, BindingResult result){
+    public ResponseEntity<HostDTO> changePassword(@RequestParam int idHost, BindingResult result){
         return service.changePassword(idHost);
     }
 

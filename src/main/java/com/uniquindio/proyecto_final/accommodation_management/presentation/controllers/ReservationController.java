@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ReservationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
@@ -25,7 +26,7 @@ public class ReservationController {
     private ReservationService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ReservationEntity reservation, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody ReservationDTO reservation, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,18 +34,18 @@ public class ReservationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody ReservationEntity reservation, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody ReservationDTO reservation, BindingResult result){
         return create(reservation, result);
     }
 
     @PutMapping("/cancelReservations/{idReservation}")
-    public ResponseEntity<ReservationEntity> cancelReservations(@PathVariable int idReservation, BindingResult result){
+    public ResponseEntity<ReservationDTO> cancelReservations(@PathVariable int idReservation, BindingResult result){
         return service.cancelReservations(idReservation);
     }
 
     @GetMapping("/viewReservationDetails/{idAccommodation}")
-    public ResponseEntity<ReservationEntity> viewReservationDetails(@PathVariable("idAccommodation") int accommodationId) {
-        ReservationEntity detalle = service.viewReservationDetails(accommodationId);
+    public ResponseEntity<ReservationDTO> viewReservationDetails(@PathVariable("idAccommodation") int accommodationId) {
+        ReservationDTO detalle = service.viewReservationDetails(accommodationId);
         if (detalle == null) {
             return ResponseEntity.notFound().build();
         }
@@ -60,8 +61,8 @@ public class ReservationController {
     }
 
     @GetMapping("/viewAccommodationReservations/{idAccommodation}")
-    public ResponseEntity<List<ReservationEntity>> viewAccommodationReservations(@PathVariable("idAccommodation") int idAccommodation){
-        List<ReservationEntity> reservas = service.viewAccommodationReservations(idAccommodation);
+    public ResponseEntity<List<ReservationDTO>> viewAccommodationReservations(@PathVariable("idAccommodation") int idAccommodation){
+        List<ReservationDTO> reservas = service.viewAccommodationReservations(idAccommodation);
         if (reservas.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -69,8 +70,8 @@ public class ReservationController {
     }
 
     @GetMapping("/viewReservationHistory")
-    public ResponseEntity<List<ReservationEntity>> viewReservationHistory(@RequestParam int idUser){
-        List<ReservationEntity> reservas = service.viewReservationHistory(idUser);
+    public ResponseEntity<List<ReservationDTO>> viewReservationHistory(@RequestParam int idUser){
+        List<ReservationDTO> reservas = service.viewReservationHistory(idUser);
         if (reservas.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -78,12 +79,12 @@ public class ReservationController {
     }
 
     @PutMapping("/acceptReservationRequests")
-    public ResponseEntity<AccommodationEntity> acceptReservationRequests(@RequestParam int idAccommodation, BindingResult result){
+    public ResponseEntity<ReservationDTO> acceptReservationRequests(@RequestParam int idAccommodation, BindingResult result){
         return service.acceptReservationRequests(idAccommodation);
     }
 
     @PutMapping("/rejectReservationRequests")
-    public ResponseEntity<AccommodationEntity> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
+    public ResponseEntity<ReservationDTO> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
         return service.rejectReservationRequests(idAccommodation);
     }
 

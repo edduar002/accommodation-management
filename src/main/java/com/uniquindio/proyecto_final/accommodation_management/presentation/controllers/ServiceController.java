@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ServiceService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ServiceEntity;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class ServiceController {
     private ServiceService serviceService;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody ServiceEntity serviceEnt, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody ServiceDTO serviceEnt, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -33,7 +34,7 @@ public class ServiceController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody ServiceEntity serviceEnt, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody ServiceDTO serviceEnt, BindingResult result){
         return create(serviceEnt, result);
     }
 

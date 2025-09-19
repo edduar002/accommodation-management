@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CommentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CommentEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -7,9 +8,9 @@ import java.util.List;
 
 public interface CommentService {
 
-    CommentEntity save(CommentEntity comment);
+    CommentDTO save(CommentDTO comment);
 
-    List<CommentEntity> commentsList(int idAccommodation);
+    List<CommentDTO> commentsList(int idAccommodation);
 
-    ResponseEntity<CommentEntity> respondComments(int idComent, CommentEntity comment);
+    ResponseEntity<CommentDTO> respondComments(int idComent, CommentDTO comment);
 }

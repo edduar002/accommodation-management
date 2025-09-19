@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LegalDocumentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.LegalDocumentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.LegalDocumentEntity;
 import jakarta.validation.Valid;
@@ -22,7 +23,7 @@ public class LegalDocumentController {
     private LegalDocumentService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody LegalDocumentEntity document, BindingResult result){
+    public ResponseEntity<?> create(@RequestBody LegalDocumentDTO document, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -30,7 +31,7 @@ public class LegalDocumentController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody LegalDocumentEntity document, BindingResult result){
+    public ResponseEntity<?> register(@Valid @RequestBody LegalDocumentDTO document, BindingResult result){
         return create(document, result);
     }
 
