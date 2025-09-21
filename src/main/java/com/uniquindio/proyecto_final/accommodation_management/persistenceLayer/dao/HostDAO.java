@@ -7,6 +7,8 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.r
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class HostDAO {
@@ -20,10 +22,8 @@ public class HostDAO {
         return hostMapper.toDTO(savedEntity);
     }
 
-    public HostDTO findById(HostDTO dto) {
-        HostEntity entity = hostMapper.toEntity(dto);
-        HostEntity savedEntity = hostRepository.save(entity);
-        return hostMapper.toDTO(savedEntity);
+    public Optional<HostDTO> findById(int id) {
+        return hostRepository.findById(id)
+                .map(hostMapper::toDTO);
     }
-
 }

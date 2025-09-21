@@ -7,6 +7,10 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.r
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Repository
 @RequiredArgsConstructor
 public class AccommodationDAO {
@@ -20,28 +24,26 @@ public class AccommodationDAO {
         return accommodationMapper.toDTO(savedEntity);
     }
 
-    public AccommodationDTO searchAvailableAccommodations(AccommodationDTO dto) {
-        AccommodationEntity entity = accommodationMapper.toEntity(dto);
-        AccommodationEntity savedEntity = accommodationRepository.save(entity);
-        return accommodationMapper.toDTO(savedEntity);
+    public List<AccommodationDTO> searchAvailableAccommodations() {
+        List<AccommodationEntity> entities = accommodationRepository.searchAvailableAccommodations();
+        return entities.stream()
+                .map(accommodationMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public AccommodationDTO ownAccommodationList(AccommodationDTO dto) {
-        AccommodationEntity entity = accommodationMapper.toEntity(dto);
-        AccommodationEntity savedEntity = accommodationRepository.save(entity);
-        return accommodationMapper.toDTO(savedEntity);
+    public List<AccommodationDTO> ownAccommodationList(int idHost) {
+        List<AccommodationEntity> entities = accommodationRepository.ownAccommodationList(idHost);
+        return entities.stream()
+                .map(accommodationMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public AccommodationDTO findById(AccommodationDTO dto) {
-        AccommodationEntity entity = accommodationMapper.toEntity(dto);
-        AccommodationEntity savedEntity = accommodationRepository.save(entity);
-        return accommodationMapper.toDTO(savedEntity);
+    public Optional<AccommodationDTO> findById(int id) {
+        return accommodationRepository.findById(id)
+                .map(accommodationMapper::toDTO);
     }
 
-    public AccommodationDTO averageGrades(AccommodationDTO dto) {
-        AccommodationEntity entity = accommodationMapper.toEntity(dto);
-        AccommodationEntity savedEntity = accommodationRepository.save(entity);
-        return accommodationMapper.toDTO(savedEntity);
+    public Double averageGrades(int idAccommodation) {
+        return accommodationRepository.averageGrades(idAccommodation);
     }
-
 }

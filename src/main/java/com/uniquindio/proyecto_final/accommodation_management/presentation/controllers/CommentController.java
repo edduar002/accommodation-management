@@ -45,8 +45,8 @@ public class CommentController {
     }
 
     @PostMapping("/respondComments/{idComment}")
-    public ResponseEntity<CommentDTO> respondComments(@PathVariable int idComment, @RequestBody CommentEntity comment, BindingResult result){
-        return service.respondComments(idComment, comment);
+    public ResponseEntity<CommentDTO> respondComments(@PathVariable int idComment, @RequestBody CommentDTO comment, BindingResult result){
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.respondComments(idComment, comment));
     }
 
     @GetMapping("/commentsList/{idAccommodation}")

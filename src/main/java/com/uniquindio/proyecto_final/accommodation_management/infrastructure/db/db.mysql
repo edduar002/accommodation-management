@@ -198,7 +198,6 @@ CREATE TABLE reservations (
     check_out DATETIME NOT NULL,
     number_guests INT NOT NULL,
     state VARCHAR(50) NOT NULL,
-    confirmed LONGBLOB NOT NULL,
     accommodations_id INT NOT NULL,
     hosts_id INT NOT NULL,
     users_id INT NOT NULL,

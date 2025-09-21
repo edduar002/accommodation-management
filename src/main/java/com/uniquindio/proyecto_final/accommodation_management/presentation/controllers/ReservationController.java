@@ -80,12 +80,12 @@ public class ReservationController {
 
     @PutMapping("/acceptReservationRequests")
     public ResponseEntity<ReservationDTO> acceptReservationRequests(@RequestParam int idAccommodation, BindingResult result){
-        return service.acceptReservationRequests(idAccommodation);
+        return null;
     }
 
     @PutMapping("/rejectReservationRequests")
     public ResponseEntity<ReservationDTO> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
-        return service.rejectReservationRequests(idAccommodation);
+        return null;
     }
 
 }

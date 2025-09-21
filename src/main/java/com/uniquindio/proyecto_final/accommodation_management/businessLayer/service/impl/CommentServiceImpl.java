@@ -30,12 +30,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentEntity> commentsList(int idAccommodation) {
-        return dao.commentsList(idAccommodation);
+    public List<CommentDTO> commentsList(int idAccommodation) {
+        return List.of();
     }
 
     @Override
-    public ResponseEntity<CommentEntity> respondComments(int idComent, CommentEntity comment) {
+    public CommentDTO respondComments(int idComent, CommentDTO comment) {
         return null;
     }
+
 }

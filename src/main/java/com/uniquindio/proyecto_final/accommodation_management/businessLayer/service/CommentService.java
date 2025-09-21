@@ -12,5 +12,5 @@ public interface CommentService {
 
     List<CommentDTO> commentsList(int idAccommodation);
 
-    ResponseEntity<CommentDTO> respondComments(int idComent, CommentDTO comment);
+    CommentDTO respondComments(int idComent, CommentDTO comment);
 }
