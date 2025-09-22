@@ -13,14 +13,7 @@ import java.time.LocalDateTime;
 public class RoleDTO {
 
     private int id;
-    private LocalDate checkIn;
-    private LocalDate checkOut;
-    private Integer numberGuests;
-    private String state;
-    private boolean confirmed;
-    private Integer accommodationsId;
-    private Integer hostsId;
-    private Integer usersId;
+    private String name;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

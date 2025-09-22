@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.DepartmentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.DepartmentEntity;
 import jakarta.validation.Valid;
@@ -26,11 +27,20 @@ public class DepartmentController {
     private DepartmentService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody DepartmentDTO department, BindingResult result){
-        if(result.hasFieldErrors()){
+    public ResponseEntity<?> create(@Valid @RequestBody DepartmentDTO departmentDTO, BindingResult result) {
+        if (result.hasFieldErrors()) {
             return validation(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(department));
+        boolean saved = service.save(departmentDTO) != null;
+        if(saved) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Departamento creado con éxito");
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Departamento no creado");
+        }
     }
 
     @PostMapping("/register")

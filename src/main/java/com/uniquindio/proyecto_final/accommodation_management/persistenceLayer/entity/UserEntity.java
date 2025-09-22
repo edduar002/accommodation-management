@@ -12,17 +12,30 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String surname;
     private String email;
     private String password;
     private String phone;
+
     private LocalDate birthday;
+
+    @Column(name = "img_url")
     private String imgUrl;
+
+    @Column(name = "roles_id")
     private Integer rolesId;
+
+    @Column(name = "departments_id")
     private Integer departmentsId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
     private boolean active;
 
     public UserEntity() {

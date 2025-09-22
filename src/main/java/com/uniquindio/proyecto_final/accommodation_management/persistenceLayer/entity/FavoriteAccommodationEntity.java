@@ -12,11 +12,21 @@ public class FavoriteAccommodationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private boolean active;
+
+    @Column(name = "favorites_id")
     private Integer favoritesId;
+
+    @Column(name = "accommodations_id")
     private Integer accommodationsId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
 
     public FavoriteAccommodationEntity(){
 

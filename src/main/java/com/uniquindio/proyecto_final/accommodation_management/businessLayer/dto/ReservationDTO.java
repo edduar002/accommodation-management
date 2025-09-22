@@ -13,11 +13,10 @@ import java.time.LocalDateTime;
 public class ReservationDTO {
 
     private int id;
-    private LocalDate checkIn;
-    private LocalDate checkOut;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer numberGuests;
-    private String state;
-    private boolean confirmed;
+    private String status;
     private Integer accommodationsId;
     private Integer hostsId;
     private Integer usersId;

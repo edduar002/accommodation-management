@@ -5,18 +5,21 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.e
 import org.mapstruct.*;
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface FavoriteMapper {
 
+    @Mapping(target = "active", source = "active")
+    @Mapping(target = "accommodationsId", source = "accommodationsId")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
     FavoriteDTO toDTO(FavoriteEntity entity);
 
     List<FavoriteDTO> toDTOList(List<FavoriteEntity> entities);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "active", source = "active")
+    @Mapping(target = "accommodationsId", source = "accommodationsId")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     FavoriteEntity toEntity(FavoriteDTO dto);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(FavoriteDTO dto, @MappingTarget FavoriteEntity entity);
 }

@@ -5,18 +5,26 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.e
 import org.mapstruct.*;
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface AdministratorMapper {
 
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "surname", source = "surname")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "password", source = "password")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
     AdministratorDTO toDTO(AdministratorEntity entity);
 
     List<AdministratorDTO> toDTOList(List<AdministratorEntity> entities);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "name", source = "name")
+    @Mapping(target = "surname", source = "surname")
+    @Mapping(target = "email", source = "email")
+    @Mapping(target = "password", source = "password")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     AdministratorEntity toEntity(AdministratorDTO dto);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(AdministratorDTO dto, @MappingTarget AdministratorEntity entity);
 }

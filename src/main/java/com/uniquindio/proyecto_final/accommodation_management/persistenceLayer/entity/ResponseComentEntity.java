@@ -12,11 +12,21 @@ public class ResponseComentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String content;
+
+    @Column(name = "hosts_id")
     private int hostsId;
+
+    @Column(name = "comments_id")
     private int commentsId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
 
     public ResponseComentEntity() {
     }

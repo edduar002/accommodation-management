@@ -5,18 +5,21 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.e
 import org.mapstruct.*;
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface AccommodationImageMapper {
 
+    @Mapping(target = "accommodationsId", source = "accommodationsId")
+    @Mapping(target = "imagesId", source = "imagesId")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
     AccommodationImageDTO toDTO(AccommodationImageEntity entity);
 
     List<AccommodationImageDTO> toDTOList(List<AccommodationImageEntity> entities);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "accommodationsId", source = "accommodationsId")
+    @Mapping(target = "imagesId", source = "imagesId")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     AccommodationImageEntity toEntity(AccommodationImageDTO dto);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(AccommodationImageDTO dto, @MappingTarget AccommodationImageEntity entity);
 }

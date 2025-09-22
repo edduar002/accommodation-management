@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.RoleEntity;
 import jakarta.validation.Valid;
@@ -26,11 +27,20 @@ public class RoleController {
     private RoleService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody RoleDTO role, BindingResult result){
-        if(result.hasFieldErrors()){
+    public ResponseEntity<?> create(@Valid @RequestBody RoleDTO role, BindingResult result) {
+        if (result.hasFieldErrors()) {
             return validation(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(role));
+        boolean saved = service.save(role) != null;
+        if(saved) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Rol creado con éxito");
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Rol no creado");
+        }
     }
 
     @PostMapping("/register")

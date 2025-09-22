@@ -12,15 +12,31 @@ public class ReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "check_in")
     private LocalDate checkIn;
+
+    @Column(name = "check_out")
     private LocalDate checkOut;
+
+    @Column(name = "number_guests")
     private Integer numberGuests;
+
     private String state;
-    private boolean confirmed;
+
+    @Column(name = "accommodations_id")
     private Integer accommodationsId;
+
+    @Column(name = "hosts_id")
     private Integer hostsId;
+
+    @Column(name = "users_id")
     private Integer usersId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public ReservationEntity() {
@@ -64,14 +80,6 @@ public class ReservationEntity {
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean confirmed) {
-        this.confirmed = confirmed;
     }
 
     public Integer getAccommodationsId() {

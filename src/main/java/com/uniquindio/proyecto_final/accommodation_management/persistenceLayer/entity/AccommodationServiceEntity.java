@@ -12,9 +12,17 @@ public class AccommodationServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "accommodations_id")
     private int accommodationsId;
+
+    @Column(name = "services_id")
     private int servicesId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     public AccommodationServiceEntity() {

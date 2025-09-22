@@ -12,17 +12,37 @@ public class AccommodationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "detailed_description")
     private String detailedDescription;
+
     private String direction;
+
+    @Column(name = "exact_location")
     private String exactLocation;
+
     private Integer price;
+
+    @Column(name = "maximum_capacity")
     private Integer maximumCapacity;
+
+    @Column(name = "hosts_id")
     private Integer hostsId;
+
     private String available;
+
+    @Column(name = "qualifications_id")
     private Integer qualificationsId;
+
+    @Column(name = "departments_id")
     private Integer departmentsId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
     private boolean active;
 
     public AccommodationEntity() {}

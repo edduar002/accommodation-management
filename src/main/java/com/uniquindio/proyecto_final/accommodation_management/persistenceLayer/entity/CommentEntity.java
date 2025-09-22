@@ -12,11 +12,21 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String content;
+
+    @Column(name = "accommodations_id")
     private int accommodationsId;
+
+    @Column(name = "users_id")
     private int usersId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
 
     public CommentEntity() {
     }

@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.CityService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CityEntity;
 import jakarta.validation.Valid;
@@ -26,11 +27,20 @@ public class CityController {
     private CityService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody CityDTO city, BindingResult result){
-        if(result.hasFieldErrors()){
+    public ResponseEntity<?> create(@Valid @RequestBody CityDTO city, BindingResult result) {
+        if (result.hasFieldErrors()) {
             return validation(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(city));
+        boolean saved = service.save(city) != null;
+        if(saved) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Ciudad creada con éxito");
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Ciudad no creado");
+        }
     }
 
     @PostMapping("/register")

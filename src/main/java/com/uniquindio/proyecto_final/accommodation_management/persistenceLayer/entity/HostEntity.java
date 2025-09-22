@@ -12,18 +12,34 @@ public class HostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String name;
     private String surname;
     private String email;
     private String password;
-    private Integer phone;
+
+    private String phone;
+
     private LocalDate birthday;
+
+    @Column(name = "img_url")
     private String imgUrl;
+
+    @Column(name = "roles_id")
     private Integer rolesId;
+
+    @Column(name = "personal_description")
     private String personalDescription;
+
+    @Column(name = "departments_id")
     private Integer departmentsId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
     private boolean active;
 
     public HostEntity() {
@@ -69,11 +85,11 @@ public class HostEntity {
         this.password = password;
     }
 
-    public Integer getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(Integer phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 

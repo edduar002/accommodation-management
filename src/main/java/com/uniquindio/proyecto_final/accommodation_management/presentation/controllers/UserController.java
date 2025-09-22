@@ -23,11 +23,20 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@Valid @RequestBody UserDTO user, BindingResult result){
-        if(result.hasFieldErrors()){
+    public ResponseEntity<?> create(@Valid @RequestBody UserDTO user, BindingResult result) {
+        if (result.hasFieldErrors()) {
             return validation(result);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
+        boolean saved = service.save(user) != null;
+        if(saved) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body("Usuario creado con éxito");
+        }else{
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("Usuario no creado");
+        }
     }
 
     @PostMapping("/register")

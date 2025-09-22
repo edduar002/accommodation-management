@@ -12,10 +12,19 @@ public class LegalDocumentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "url_document")
     private String urlDocument;
+
+    @Column(name = "hosts_id")
     private int hostsId;
+
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
 
     public LegalDocumentEntity() {
     }

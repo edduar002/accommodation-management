@@ -5,18 +5,24 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.e
 import org.mapstruct.*;
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring")
 public interface ResponseCommentMapper {
 
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "content", source = "content")
+    @Mapping(target = "hostsId", source = "hostsId")
+    @Mapping(target = "commentsId", source = "commentsId")
+    @Mapping(target = "createdAt", source = "createdAt")
+    @Mapping(target = "updatedAt", source = "updatedAt")
     ResponseDTO toDTO(ResponseComentEntity entity);
 
     List<ResponseDTO> toDTOList(List<ResponseComentEntity> entities);
 
-    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "id", source = "id")
+    @Mapping(target = "content", source = "content")
+    @Mapping(target = "hostsId", source = "hostsId")
+    @Mapping(target = "commentsId", source = "commentsId")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     ResponseComentEntity toEntity(ResponseDTO dto);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateEntityFromDTO(ResponseDTO dto, @MappingTarget ResponseComentEntity entity);
 }
