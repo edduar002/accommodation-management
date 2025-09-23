@@ -2,12 +2,11 @@ package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name="responses")
-public class ResponseComentEntity {
+public class ResponseCommentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +26,15 @@ public class ResponseComentEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "hosts_id", insertable = false, updatable = false)
+    private HostEntity host;
 
-    public ResponseComentEntity() {
+    @ManyToOne
+    @JoinColumn(name = "comments_id", insertable = false, updatable = false)
+    private CommentEntity comment;
+
+    public ResponseCommentEntity() {
     }
 
     public int getId() {

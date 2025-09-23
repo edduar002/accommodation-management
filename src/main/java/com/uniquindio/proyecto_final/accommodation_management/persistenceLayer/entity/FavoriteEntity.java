@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="favorites")
@@ -24,6 +25,8 @@ public class FavoriteEntity {
     @Column(name = "accommodations_id")
     private Integer accommodationsId;
 
+    @OneToMany(mappedBy = "favorite")
+    private List<FavoriteAccommodationEntity> favoriteAccommodations;
 
     public FavoriteEntity(){}
 

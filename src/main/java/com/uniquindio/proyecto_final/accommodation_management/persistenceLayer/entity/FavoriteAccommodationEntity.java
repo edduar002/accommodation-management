@@ -27,6 +27,13 @@ public class FavoriteAccommodationEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "favorites_id", insertable = false, updatable = false)
+    private FavoriteEntity favorite;
+
+    @ManyToOne
+    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
+    private AccommodationEntity accommodation;
 
     public FavoriteAccommodationEntity(){
 

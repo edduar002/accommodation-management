@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.mapper;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseComentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseCommentEntity;
 import org.mapstruct.*;
 import java.util.List;
 
@@ -14,9 +14,9 @@ public interface ResponseCommentMapper {
     @Mapping(target = "commentsId", source = "commentsId")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
-    ResponseDTO toDTO(ResponseComentEntity entity);
+    ResponseDTO toDTO(ResponseCommentEntity entity);
 
-    List<ResponseDTO> toDTOList(List<ResponseComentEntity> entities);
+    List<ResponseDTO> toDTOList(List<ResponseCommentEntity> entities);
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "content", source = "content")
@@ -24,5 +24,5 @@ public interface ResponseCommentMapper {
     @Mapping(target = "commentsId", source = "commentsId")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    ResponseComentEntity toEntity(ResponseDTO dto);
+    ResponseCommentEntity toEntity(ResponseDTO dto);
 }

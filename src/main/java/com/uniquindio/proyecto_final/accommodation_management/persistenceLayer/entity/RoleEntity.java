@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="roles")
@@ -21,6 +22,11 @@ public class RoleEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "role")
+    private List<UserEntity> users;
+
+    @OneToMany(mappedBy = "role")
+    private List<HostEntity> hosts;
 
     public RoleEntity() {
     }

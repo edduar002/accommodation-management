@@ -24,6 +24,10 @@ public class CityEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "departments_id", insertable = false, updatable = false)
+    private DepartmentEntity department;
+
     public CityEntity() {
     }
 

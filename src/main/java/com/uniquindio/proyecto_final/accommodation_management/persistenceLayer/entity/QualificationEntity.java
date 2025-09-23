@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="qualifications")
@@ -22,6 +23,8 @@ public class QualificationEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "qualification")
+    private List<AccommodationEntity> accommodations;
 
     public QualificationEntity() {
     }

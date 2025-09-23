@@ -2,7 +2,6 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ResponseService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseComentEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

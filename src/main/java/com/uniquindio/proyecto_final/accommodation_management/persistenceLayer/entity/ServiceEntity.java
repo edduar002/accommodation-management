@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="services")
@@ -21,6 +22,8 @@ public class ServiceEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "service")
+    private List<AccommodationServiceEntity> accommodationServices;
 
     public ServiceEntity() {
     }

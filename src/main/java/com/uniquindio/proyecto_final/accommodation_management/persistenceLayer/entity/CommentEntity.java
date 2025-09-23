@@ -2,8 +2,8 @@ package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="comments")
@@ -27,6 +27,16 @@ public class CommentEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
+    private AccommodationEntity accommodation;
+
+    @ManyToOne
+    @JoinColumn(name = "users_id", insertable = false, updatable = false)
+    private UserEntity user;
+
+    @OneToMany(mappedBy = "comment")
+    private List<ResponseCommentEntity> responses;
 
     public CommentEntity() {
     }

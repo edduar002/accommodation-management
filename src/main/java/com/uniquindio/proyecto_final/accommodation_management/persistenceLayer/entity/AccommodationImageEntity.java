@@ -25,6 +25,14 @@ public class AccommodationImageEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
+    private AccommodationEntity accommodation;
+
+    @ManyToOne
+    @JoinColumn(name = "images_id", insertable = false, updatable = false)
+    private ImageEntity image;
+
     public AccommodationImageEntity() {
     }
 

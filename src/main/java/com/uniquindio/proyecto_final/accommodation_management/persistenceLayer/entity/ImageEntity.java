@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="images")
@@ -21,6 +22,9 @@ public class ImageEntity {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "image")
+    private List<AccommodationImageEntity> accommodationImages;
 
     public ImageEntity() {
     }

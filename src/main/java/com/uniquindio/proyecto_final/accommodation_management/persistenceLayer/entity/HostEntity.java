@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name="hosts")
@@ -41,6 +42,26 @@ public class HostEntity {
     private LocalDateTime updatedAt;
 
     private boolean active;
+
+    @ManyToOne
+    @JoinColumn(name = "roles_id", insertable = false, updatable = false)
+    private RoleEntity role;
+
+    @ManyToOne
+    @JoinColumn(name = "departments_id", insertable = false, updatable = false)
+    private DepartmentEntity department;
+
+    @OneToMany(mappedBy = "host")
+    private List<AccommodationEntity> accommodations;
+
+    @OneToMany(mappedBy = "host")
+    private List<LegalDocumentEntity> legalDocuments;
+
+    @OneToMany(mappedBy = "host")
+    private List<ResponseCommentEntity> responses;
+
+    @OneToMany(mappedBy = "host")
+    private List<ReservationEntity> reservations;
 
     public HostEntity() {
     }

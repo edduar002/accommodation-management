@@ -39,6 +39,18 @@ public class ReservationEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
+    private AccommodationEntity accommodation;
+
+    @ManyToOne
+    @JoinColumn(name = "hosts_id", insertable = false, updatable = false)
+    private HostEntity host;
+
+    @ManyToOne
+    @JoinColumn(name = "users_id", insertable = false, updatable = false)
+    private UserEntity user;
+
     public ReservationEntity() {
     }
 

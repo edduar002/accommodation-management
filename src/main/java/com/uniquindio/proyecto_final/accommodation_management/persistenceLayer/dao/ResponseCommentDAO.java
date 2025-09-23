@@ -1,7 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseComentEntity;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ResponseCommentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.mapper.ResponseCommentMapper;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.ResponseRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ public class ResponseCommentDAO {
     private final ResponseCommentMapper responseCommentMapper;
 
     public ResponseDTO save(ResponseDTO dto) {
-        ResponseComentEntity entity = responseCommentMapper.toEntity(dto);
-        ResponseComentEntity savedEntity = responseCommentRepository.save(entity);
+        ResponseCommentEntity entity = responseCommentMapper.toEntity(dto);
+        ResponseCommentEntity savedEntity = responseCommentRepository.save(entity);
         return responseCommentMapper.toDTO(savedEntity);
     }
 }

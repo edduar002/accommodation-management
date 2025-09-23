@@ -38,6 +38,14 @@ public class UserEntity {
 
     private boolean active;
 
+    @ManyToOne
+    @JoinColumn(name = "roles_id", insertable = false, updatable = false)
+    private RoleEntity role;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private DepartmentEntity department;
+
     public UserEntity() {
     }
 

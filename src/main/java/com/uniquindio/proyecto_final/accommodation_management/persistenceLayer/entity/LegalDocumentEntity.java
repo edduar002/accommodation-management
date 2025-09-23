@@ -25,6 +25,9 @@ public class LegalDocumentEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "hosts_id", insertable = false, updatable = false)
+    private HostEntity host;
 
     public LegalDocumentEntity() {
     }
