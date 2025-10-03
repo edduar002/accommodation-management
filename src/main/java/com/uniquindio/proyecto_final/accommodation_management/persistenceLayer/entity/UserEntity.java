@@ -27,8 +27,8 @@ public class UserEntity {
     @Column(name = "roles_id")
     private Integer rolesId;
 
-    @Column(name = "departments_id")
-    private Integer departmentsId;
+   // @Column(name = "departments_id")
+    //private Integer departmentsId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -43,7 +43,7 @@ public class UserEntity {
     private RoleEntity role;
 
     @ManyToOne
-    @JoinColumn(name = "department_id")
+    @JoinColumn(name = "departments_id")
     private DepartmentEntity department;
 
     public UserEntity() {
@@ -121,12 +121,20 @@ public class UserEntity {
         this.rolesId = rolesId;
     }
 
-    public Integer getDepartmentsId() {
+    /*public Integer getDepartmentsId() {
         return departmentsId;
     }
 
     public void setDepartmentsId(Integer departmentsId) {
         this.departmentsId = departmentsId;
+    }*/
+
+    public DepartmentEntity getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentEntity department) {
+        this.department = department;
     }
 
     public LocalDateTime getCreatedAt() {

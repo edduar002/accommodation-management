@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.mapper;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.DepartmentEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import org.mapstruct.*;
 import java.util.List;
@@ -17,7 +18,7 @@ public interface UserMapper {
     @Mapping(target = "birthday", source = "birthday")
     @Mapping(target = "imgUrl", source = "imgUrl")
     @Mapping(target = "rolesId", source = "rolesId")
-    @Mapping(target = "departmentsId", source = "departmentsId")
+    @Mapping(target = "departmentId", source = "department.id")
     @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
@@ -34,9 +35,19 @@ public interface UserMapper {
     @Mapping(target = "birthday", source = "birthday")
     @Mapping(target = "imgUrl", source = "imgUrl")
     @Mapping(target = "rolesId", source = "rolesId")
-    @Mapping(target = "departmentsId", source = "departmentsId")
+    @Mapping(target = "department", source = "departmentId")
     @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     UserEntity toEntity(UserDTO dto);
+
+    default DepartmentEntity map(Integer departmentId){
+        if(departmentId == null){
+            return null;
+        }
+        DepartmentEntity department = new DepartmentEntity();
+        department.setId(departmentId);
+        return department;
+    }
+
 }

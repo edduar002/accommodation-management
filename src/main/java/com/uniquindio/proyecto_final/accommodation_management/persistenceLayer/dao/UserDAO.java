@@ -14,7 +14,7 @@ public class UserDAO {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public UserDTO save(com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO dto) {
+    public UserDTO save(UserDTO dto) {
         UserEntity entity = userMapper.toEntity(dto);
         UserEntity savedEntity = userRepository.save(entity);
         return userMapper.toDTO(savedEntity);

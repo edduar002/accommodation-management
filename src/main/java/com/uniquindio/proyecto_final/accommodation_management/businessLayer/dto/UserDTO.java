@@ -21,7 +21,7 @@ public class UserDTO {
     private LocalDate birthday;
     private String imgUrl;
     private Integer rolesId;
-    private Integer departmentsId;
+    private Integer departmentId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
