@@ -28,19 +28,10 @@ public class RoleController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody RoleDTO role, BindingResult result) {
-        if (result.hasFieldErrors()) {
+        if(result.hasFieldErrors()){
             return validation(result);
         }
-        boolean saved = service.save(role) != null;
-        if(saved) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Rol creado con éxito");
-        }else{
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Rol no creado");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(role));
     }
 
     @PostMapping("/register")

@@ -28,19 +28,10 @@ public class CityController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody CityDTO city, BindingResult result) {
-        if (result.hasFieldErrors()) {
+        if(result.hasFieldErrors()){
             return validation(result);
         }
-        boolean saved = service.save(city) != null;
-        if(saved) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Ciudad creada con éxito");
-        }else{
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Ciudad no creado");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(city));
     }
 
     @PostMapping("/register")

@@ -116,7 +116,7 @@ CREATE TABLE accommodations (
     maximum_capacity INT NOT NULL,
     hosts_id INT NOT NULL,
     available CHAR(1) NOT NULL,
-    qualifications_id INT NOT NULL,
+    qualifications_id INT NULL,
     departments_id INT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
@@ -166,6 +166,17 @@ CREATE TABLE accommodation_service (
     PRIMARY KEY (id),
     FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
     FOREIGN KEY (services_id) REFERENCES services(id)
+);
+
+CREATE TABLE accommodations_images (
+    id INT AUTO_INCREMENT,
+    accommodations_id INT NOT NULL,
+    images_id INT NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id),
+    FOREIGN KEY (images_id) REFERENCES images(id)
 );
 
 CREATE TABLE comments (

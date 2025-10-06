@@ -9,9 +9,9 @@ import java.util.List;
 public interface ReservationMapper {
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "startDate", source = "checkIn")
-    @Mapping(target = "endDate", source = "checkOut")
-    @Mapping(target = "status", source = "state")
+    @Mapping(target = "checkIn", source = "checkIn")
+    @Mapping(target = "checkOut", source = "checkOut")
+    @Mapping(target = "state", source = "state")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     ReservationDTO toDTO(ReservationEntity entity);
@@ -19,9 +19,9 @@ public interface ReservationMapper {
     List<ReservationDTO> toDTOList(List<ReservationEntity> entities);
 
     @Mapping(target = "id", source = "id")
-    @Mapping(target = "checkIn", source = "startDate")
-    @Mapping(target = "checkOut", source = "endDate")
-    @Mapping(target = "state", source = "status")
+    @Mapping(target = "checkIn", source = "checkIn")
+    @Mapping(target = "checkOut", source = "checkOut")
+    @Mapping(target = "state", source = "state")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     ReservationEntity toEntity(ReservationDTO dto);

@@ -28,19 +28,10 @@ public class DepartmentController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody DepartmentDTO departmentDTO, BindingResult result) {
-        if (result.hasFieldErrors()) {
+        if(result.hasFieldErrors()){
             return validation(result);
         }
-        boolean saved = service.save(departmentDTO) != null;
-        if(saved) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Departamento creado con éxito");
-        }else{
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Departamento no creado");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(departmentDTO));
     }
 
     @PostMapping("/register")

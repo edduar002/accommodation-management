@@ -24,19 +24,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UserDTO user, BindingResult result) {
-        if (result.hasFieldErrors()) {
+        if(result.hasFieldErrors()){
             return validation(result);
         }
-        boolean saved = service.save(user) != null;
-        if(saved) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body("Usuario creado con éxito");
-        }else{
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("Usuario no creado");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
     @PostMapping("/register")

@@ -1,5 +1,9 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +17,10 @@ import java.time.LocalDateTime;
 public class ReservationDTO {
 
     private int id;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate checkIn;
+    private LocalDate checkOut;
     private Integer numberGuests;
-    private String status;
+    private String state;
     private Integer accommodationsId;
     private Integer hostsId;
     private Integer usersId;
