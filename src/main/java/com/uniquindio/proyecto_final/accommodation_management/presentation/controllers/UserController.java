@@ -1,9 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
@@ -49,7 +46,7 @@ public class UserController {
     }
 
     @PutMapping("/edit/{id}")
-        public ResponseEntity<?> edit(@PathVariable int id, @RequestBody UserDTO user, BindingResult result){
+    public ResponseEntity<?> edit(@PathVariable int id, @RequestBody UserDTO user, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
@@ -60,14 +57,26 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/changePassword")
-    public ResponseEntity<UserEntity> changePassword(@RequestBody String oldPassword, @RequestBody String newPassword, @PathVariable Long idUser){
-        return null;
+    @PutMapping("/changePassword/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordDTO dto) {
+        Optional<UserDTO> userOptional = service.changePassword(id, dto);
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.get());
+        }
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "La contraseña actual es incorrecta");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @PostMapping("/recoveryPassword")
-    public ResponseEntity<UserEntity> recoveryPassword(@RequestBody String email, @RequestBody String newPassword){
-        return null;
+    @PutMapping("/recoveryPassword/{id}")
+    public ResponseEntity<?> recoveryPassword(@PathVariable int id, @RequestBody RecoverPasswordDTO dto) {
+        Optional<UserDTO> userOptional = service.recoveryPassword(id, dto.getNewPassword());
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.get());
+        }
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Usuario no encontrado");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
@@ -14,7 +15,9 @@ public interface HostService {
 
     Optional<HostDTO> edit(int idHost, HostDTO host);
 
-    ResponseEntity<HostDTO> changePassword(int idHost);
+    Optional<HostDTO> changePassword(int id, ChangePasswordDTO user);
 
     HostDTO login(LoginDTO login);
+
+    Optional<HostDTO> recoveryPassword(int id, String newPassword);
 }

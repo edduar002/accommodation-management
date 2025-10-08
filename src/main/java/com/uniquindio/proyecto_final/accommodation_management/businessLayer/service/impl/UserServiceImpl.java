@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
@@ -44,4 +45,35 @@ public class UserServiceImpl implements UserService {
         }
         return userDb;
     }
+
+    @Transactional
+    @Override
+    public Optional<UserDTO> changePassword(int id, ChangePasswordDTO user) {
+        Optional<UserDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            UserDTO userNew = userDb.get();
+            if (userNew.getPassword().equals(user.getOldPassword())) {
+                userNew.setPassword(user.getNewPassword());
+                dao.save(userNew);
+                return Optional.of(userNew);
+            } else {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public Optional<UserDTO> recoveryPassword(int id, String newPassword) {
+        Optional<UserDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            UserDTO userNew = userDb.get();
+                userNew.setPassword(newPassword);
+                dao.save(userNew);
+                return Optional.of(userNew);
+        }
+        return Optional.empty();
+    }
+
 }

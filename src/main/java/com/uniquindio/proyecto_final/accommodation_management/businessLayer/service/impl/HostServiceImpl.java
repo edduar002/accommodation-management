@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
@@ -38,13 +39,38 @@ public class HostServiceImpl implements HostService {
         return Optional.empty();
     }
 
+    @Transactional
     @Override
-    public ResponseEntity<HostDTO> changePassword(int idHost) {
-        return null;
+    public Optional<HostDTO> changePassword(int id, ChangePasswordDTO user) {
+        Optional<HostDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            HostDTO userNew = userDb.get();
+            if (userNew.getPassword().equals(user.getOldPassword())) {
+                userNew.setPassword(user.getNewPassword());
+                dao.save(userNew);
+                return Optional.of(userNew);
+            } else {
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
     public HostDTO login(LoginDTO login) {
         return dao.login(login);
+    }
+
+    @Transactional
+    @Override
+    public Optional<HostDTO> recoveryPassword(int id, String newPassword) {
+        Optional<HostDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            HostDTO userNew = userDb.get();
+            userNew.setPassword(newPassword);
+            dao.save(userNew);
+            return Optional.of(userNew);
+        }
+        return Optional.empty();
     }
 }

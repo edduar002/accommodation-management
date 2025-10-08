@@ -1,8 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
@@ -61,14 +59,26 @@ public class HostController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/changePassword")
-    public ResponseEntity<HostDTO> changePassword(@RequestParam int idHost, BindingResult result){
-        return service.changePassword(idHost);
+    @PutMapping("/changePassword/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordDTO dto) {
+        Optional<HostDTO> hostOptional = service.changePassword(id, dto);
+        if (hostOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(hostOptional.get());
+        }
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "La contraseña actual es incorrecta");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @PostMapping("/recoveryPassword")
-    public ResponseEntity<UserEntity> recoveryPassword(@RequestBody String email, @RequestBody String newPassword, BindingResult result){
-        return null;
+    @PutMapping("/recoveryPassword/{id}")
+    public ResponseEntity<?> recoveryPassword(@PathVariable int id, @RequestBody RecoverPasswordDTO dto) {
+        Optional<HostDTO> userOptional = service.recoveryPassword(id, dto.getNewPassword());
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.get());
+        }
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "Usuario no encontrado");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {
