@@ -4,7 +4,6 @@ import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AccommodationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AccommodationDAO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.UserDAO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AccommodationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

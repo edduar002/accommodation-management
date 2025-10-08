@@ -1,6 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
@@ -38,17 +40,21 @@ public class HostController {
         return create(host, result);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserEntity> login(@RequestBody String email, @RequestBody String password, BindingResult result){
-        return null;
+    @GetMapping("/login")
+    public ResponseEntity<HostDTO> login(@RequestBody LoginDTO login){
+        HostDTO host = service.login(login);
+        if (host == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(host);
     }
 
-    @PutMapping("/edit")
-    public ResponseEntity<?> edit(@RequestParam int idHost, @RequestBody HostDTO host, BindingResult result){
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable int id, @RequestBody HostDTO host, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
-        Optional<HostDTO> hostOptional = service.edit(idHost, host);
+        Optional<HostDTO> hostOptional = service.edit(id, host);
         if(hostOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.CREATED).body(hostOptional.orElseThrow());
         }

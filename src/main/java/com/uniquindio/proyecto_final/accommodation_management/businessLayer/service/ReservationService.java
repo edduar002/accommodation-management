@@ -23,7 +23,7 @@ public interface ReservationService {
 
     List<ReservationDTO> viewReservationHistory(int idUser);
 
-    ReservationDTO acceptReservationRequests(int idAccommodation);
+    ResponseEntity<ReservationDTO> acceptReservationRequests(int idAccommodation);
 
-    ReservationDTO rejectReservationRequests(int idAccommodation);
+    ResponseEntity<ReservationDTO> rejectReservationRequests(int idAccommodation);
 }

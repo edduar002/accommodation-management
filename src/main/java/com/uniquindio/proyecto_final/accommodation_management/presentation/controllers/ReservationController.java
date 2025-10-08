@@ -39,8 +39,12 @@ public class ReservationController {
     }
 
     @PutMapping("/cancelReservations/{idReservation}")
-    public ResponseEntity<ReservationDTO> cancelReservations(@PathVariable int idReservation, BindingResult result){
-        return service.cancelReservations(idReservation);
+    public ResponseEntity<ReservationDTO> cancelReservations(@PathVariable int idReservation) {
+        ReservationDTO updatedReservation = service.cancelReservations(idReservation).getBody();
+        if (updatedReservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReservation);
     }
 
     @GetMapping("/viewReservationDetails/{idAccommodation}")
@@ -78,14 +82,22 @@ public class ReservationController {
         return ResponseEntity.ok(reservas);
     }
 
-    @PutMapping("/acceptReservationRequests")
-    public ResponseEntity<ReservationDTO> acceptReservationRequests(@RequestParam int idAccommodation, BindingResult result){
-        return null;
+    @PutMapping("/acceptReservationRequests/{idReservation}")
+    public ResponseEntity<ReservationDTO> acceptReservationRequests(@PathVariable int idReservation){
+        ReservationDTO updatedReservation = service.acceptReservationRequests(idReservation).getBody();
+        if (updatedReservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReservation);
     }
 
-    @PutMapping("/rejectReservationRequests")
-    public ResponseEntity<ReservationDTO> rejectReservationRequests(@RequestParam int idAccommodation, BindingResult result){
-        return null;
+    @PutMapping("/rejectReservationRequests/{idReservation}")
+    public ResponseEntity<ReservationDTO> rejectReservationRequests(@PathVariable int idReservation){
+        ReservationDTO updatedReservation = service.rejectReservationRequests(idReservation).getBody();
+        if (updatedReservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReservation);
     }
 
 }

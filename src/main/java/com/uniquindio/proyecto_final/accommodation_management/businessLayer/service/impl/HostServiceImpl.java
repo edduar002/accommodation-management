@@ -1,6 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.HostDAO;
 import org.springframework.http.ResponseEntity;
@@ -39,5 +41,10 @@ public class HostServiceImpl implements HostService {
     @Override
     public ResponseEntity<HostDTO> changePassword(int idHost) {
         return null;
+    }
+
+    @Override
+    public HostDTO login(LoginDTO login) {
+        return dao.login(login);
     }
 }

@@ -2,6 +2,8 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AccommodationDAO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AdministratorDAO;
@@ -24,6 +26,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     @Transactional
     public AdministratorDTO save(AdministratorDTO dto) {
         return dao.save(dto);
+    }
+
+    @Override
+    public AdministratorDTO login(LoginDTO login) {
+        return dao.login(login);
     }
 
 }

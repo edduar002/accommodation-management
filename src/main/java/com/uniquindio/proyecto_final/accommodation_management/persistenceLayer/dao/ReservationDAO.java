@@ -42,4 +42,42 @@ public class ReservationDAO {
         return reservationRepository.findById(id)
                 .map(reservationMapper::toDTO);
     }
+
+    public ReservationDTO cancelReservations(int idReservation) {
+        Optional<ReservationEntity> optional = reservationRepository.findById(idReservation);
+        if (optional.isEmpty()) {
+            return null;
+        }
+        ReservationEntity entity = optional.get();
+        entity.setState("CANCELLED");
+        entity.setUpdatedAt(java.time.LocalDateTime.now());
+        ReservationEntity updatedEntity = reservationRepository.save(entity);
+        return reservationMapper.toDTO(updatedEntity);
+    }
+
+    public ReservationDTO acceptReservationRequests(int idReservation) {
+        Optional<ReservationEntity> optional = reservationRepository.findById(idReservation);
+        if (optional.isEmpty()) {
+            return null;
+        }
+        ReservationEntity entity = optional.get();
+        entity.setState("ACEPTADA");
+        entity.setUpdatedAt(java.time.LocalDateTime.now());
+        ReservationEntity updatedEntity = reservationRepository.save(entity);
+        return reservationMapper.toDTO(updatedEntity);
+    }
+
+    public ReservationDTO rejectReservationRequests(int idReservation) {
+        Optional<ReservationEntity> optional = reservationRepository.findById(idReservation);
+        if (optional.isEmpty()) {
+            return null;
+        }
+        ReservationEntity entity = optional.get();
+        entity.setState("RECHAZADA");
+        entity.setUpdatedAt(java.time.LocalDateTime.now());
+        ReservationEntity updatedEntity = reservationRepository.save(entity);
+        return reservationMapper.toDTO(updatedEntity);
+    }
+
+
 }

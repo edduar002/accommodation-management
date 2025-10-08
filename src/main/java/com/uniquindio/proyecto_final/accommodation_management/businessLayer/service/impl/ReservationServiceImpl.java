@@ -38,7 +38,11 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ResponseEntity<ReservationDTO> cancelReservations(int idReservation) {
-        return null;
+        ReservationDTO updatedReservation = dao.cancelReservations(idReservation);
+        if (updatedReservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReservation);
     }
 
     @Override
@@ -52,12 +56,20 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ReservationDTO acceptReservationRequests(int idAccommodation) {
-        return null;
+    public ResponseEntity<ReservationDTO> acceptReservationRequests(int idReservation) {
+        ReservationDTO updatedReservation = dao.acceptReservationRequests(idReservation);
+        if (updatedReservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReservation);
     }
 
     @Override
-    public ReservationDTO rejectReservationRequests(int idAccommodation) {
-        return null;
+    public ResponseEntity<ReservationDTO> rejectReservationRequests(int idReservation) {
+        ReservationDTO updatedReservation = dao.rejectReservationRequests(idReservation);
+        if (updatedReservation == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedReservation);
     }
 }

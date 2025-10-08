@@ -1,5 +1,8 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -35,14 +39,25 @@ public class UserController {
         return create(user, result);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserEntity> login(@RequestBody String email, @RequestBody String password, BindingResult result){
-        return null;
+    @GetMapping("/login")
+    public ResponseEntity<UserDTO> login(@RequestBody LoginDTO login){
+        UserDTO user = service.login(login);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<UserEntity> edit(@RequestBody UserEntity user, BindingResult result, @PathVariable Long idUser){
-        return null;
+        public ResponseEntity<?> edit(@PathVariable int id, @RequestBody UserDTO user, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<UserDTO> userOptional = service.edit(id, user);
+        if(userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/changePassword")
