@@ -1,28 +1,60 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ServiceService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.RoleDAO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.ServiceDAO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ServiceEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.ServiceRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Implementación del servicio de negocio para gestionar {@link ServiceDTO}.
+ *
+ * <p>Esta clase delega la persistencia en {@link ServiceDAO} y no introduce
+ * reglas adicionales; su rol es orquestar la llamada al DAO.</p>
+ *
+ * <h2>Responsabilidades</h2>
+ * <ul>
+ *   <li>Guardar un servicio: {@link #save(ServiceDTO)}.</li>
+ * </ul>
+ *
+ * @since 0.0.1-SNAPSHOT
+ * @version 1.0
+ * @see ServiceDAO
+ * @see ServiceService
+ */
+@Slf4j
 @Service
 public class ServiceServiceImpl implements ServiceService {
 
     private final ServiceDAO dao;
 
+    /**
+     * Crea el servicio con su dependencia DAO.
+     * @param dao componente de acceso a datos para servicios (no nulo)
+     */
     public ServiceServiceImpl(ServiceDAO dao) {
         this.dao = dao;
     }
 
+    /**
+     * Persiste un {@link ServiceDTO}.
+     *
+     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
+     * administrada por Spring. La validación/persistencia específica se delega
+     * completamente al DAO.</p>
+     *
+     * @param dto DTO del servicio a guardar (no nulo)
+     * @return DTO persistido (normalmente con identificador asignado)
+     * @throws RuntimeException si el DAO reporta error de validación o persistencia
+     * @implSpec Delegado directo a {@link ServiceDAO#save(ServiceDTO)}.
+     */
     @Override
     @Transactional
     public ServiceDTO save(ServiceDTO dto) {
-        return dao.save(dto);
+        log.debug("Guardando servicio: {}", dto);
+        ServiceDTO saved = dao.save(dto);
+        log.info("Servicio guardado: {}", saved);
+        return saved;
     }
 }
