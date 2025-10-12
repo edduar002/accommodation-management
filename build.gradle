@@ -2,6 +2,8 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.5'
 	id 'io.spring.dependency-management' version '1.1.7'
+    id 'jacoco'
+    id 'org.sonarqube' version '6.3.1.5724'
 }
 
 group = 'com.uniquindio.proyecto-final'
@@ -52,12 +54,66 @@ dependencies {
 	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    // esto si vamos a probar JPA/repos con DB en memoria
+    testImplementation 'com.h2database:h2'
+    //Allure sin plugin: adaptador JUnit5
+    testImplementation 'io.qameta.allure:allure-junit5:2.30.0'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
+    // carpeta donde JUnit deja los resultados de Allure
+    systemProperty 'allure.results.directory', 'build/allure-results'
+    finalizedBy 'jacocoTestReport'
+    testLogging { showStandardStreams = true }
 }
 
 tasks.withType(JavaCompile) {
 	options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+sonarqube {
+    properties {
+        property "sonar.host.url", "http://localhost:9000"
+        property "sonar.projectKey", "accommodation-management"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
+
+jacoco {
+    toolVersion = '0.8.11'
+}
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+/* === Open HTML reports (JUnit & JaCoCo) === */
+def os = System.properties['os.name'].toLowerCase()
+def opener = os.contains('win') ? ['cmd','/c','start'] : (os.contains('mac') ? ['open'] : ['xdg-open'])
+
+tasks.register('openUnitTestReport', Exec) {
+    group = 'verification'
+    description = 'Genera y abre el reporte HTML de JUnit.'
+    dependsOn 'test'
+    doFirst { println 'Abriendo reporte JUnit...' }
+    commandLine opener + ["${buildDir}/reports/tests/test/index.html"]
+}
+
+tasks.register('openJacocoReport', Exec) {
+    group = 'verification'
+    description = 'Genera y abre el reporte HTML de JaCoCo (cobertura).'
+    dependsOn 'jacocoTestReport'
+    mustRunAfter 'openUnitTestReport'
+    doFirst { println 'Abriendo reporte JaCoCo...' }
+    commandLine opener + ["${buildDir}/reports/jacoco/test/html/index.html"]
+}
+
+tasks.register('openReports') {
+    group = 'verification'
+    description = 'Genera y abre los reportes de JUnit y JaCoCo.'
+    dependsOn 'openUnitTestReport', 'openJacocoReport'
 }

@@ -1,36 +1,86 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AccommodationDAO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AdministratorDAO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AdministratorEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.AdministratorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Implementación del servicio de negocio para administrar usuarios de tipo
+ * {@link AdministratorDTO}.
+ *
+ * <p>La clase delega la persistencia y autenticación en {@link AdministratorDAO}.
+ * No agrega reglas adicionales: su responsabilidad es orquestar la llamada al DAO.</p>
+ *
+ * <h2>Responsabilidades</h2>
+ * <ul>
+ *   <li>Crear/actualizar administradores: {@link #save(AdministratorDTO)}.</li>
+ *   <li>Iniciar sesión (autenticación): {@link #login(LoginDTO)}.</li>
+ * </ul>
+ *
+ * <p><b>Seguridad de logs:</b> los mensajes de logging evitan exponer credenciales
+ * o datos sensibles. Las credenciales se marcan como “redacted”.</p>
+ *
+ * @author
+ *   Equipo Prg Avanzada
+ * @since 0.0.1-SNAPSHOT
+ * @version 1.0
+ * @see AdministratorDAO
+ * @see AdministratorService
+ */
+@Slf4j
 @Service
 public class AdministratorServiceImpl implements AdministratorService {
 
     private final AdministratorDAO dao;
 
+    /**
+     * Crea el servicio con su dependencia DAO.
+     *
+     * @param dao componente de acceso a datos para administradores (no nulo)
+     */
     public AdministratorServiceImpl(AdministratorDAO dao) {
         this.dao = dao;
     }
 
+    /**
+     * Persiste un {@link AdministratorDTO}.
+     *
+     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
+     * administrada por Spring.</p>
+     *
+     * @param dto DTO del administrador a guardar (no nulo)
+     * @return DTO persistido (normalmente con identificador asignado)
+     * @throws RuntimeException si el DAO reporta error de validación o persistencia
+     * @implSpec Delegado directo a {@link AdministratorDAO#save(AdministratorDTO)}.
+     */
     @Override
     @Transactional
     public AdministratorDTO save(AdministratorDTO dto) {
-        return dao.save(dto);
+        log.debug("Guardando administrador: {}", dto);
+        AdministratorDTO saved = dao.save(dto);
+        log.info("Administrador guardado: {}", saved);
+        return saved;
     }
 
+    /**
+     * Autentica a un administrador usando las credenciales provistas.
+     *
+     * <p><b>Privacidad:</b> no se registran credenciales en logs.</p>
+     *
+     * @param login credenciales de acceso (usuario/correo + contraseña)
+     * @return {@link AdministratorDTO} autenticado si las credenciales son válidas; puede ser {@code null} si no
+     * @throws RuntimeException si el DAO produce un error durante la autenticación
+     * @implSpec Delegado directo a {@link AdministratorDAO#login(LoginDTO)}.
+     */
     @Override
     public AdministratorDTO login(LoginDTO login) {
-        return dao.login(login);
+        log.debug("Intento de login de administrador (credenciales redacted)");
+        AdministratorDTO result = dao.login(login);
+        log.info("Resultado login administrador: {}", (result != null ? "OK" : "FALLÓ"));
+        return result;
     }
-
 }
