@@ -90,3 +90,30 @@ jacocoTestReport {
         html.required = true
     }
 }
+
+/* === Open HTML reports (JUnit & JaCoCo) === */
+def os = System.properties['os.name'].toLowerCase()
+def opener = os.contains('win') ? ['cmd','/c','start'] : (os.contains('mac') ? ['open'] : ['xdg-open'])
+
+tasks.register('openUnitTestReport', Exec) {
+    group = 'verification'
+    description = 'Genera y abre el reporte HTML de JUnit.'
+    dependsOn 'test'
+    doFirst { println 'Abriendo reporte JUnit...' }
+    commandLine opener + ["${buildDir}/reports/tests/test/index.html"]
+}
+
+tasks.register('openJacocoReport', Exec) {
+    group = 'verification'
+    description = 'Genera y abre el reporte HTML de JaCoCo (cobertura).'
+    dependsOn 'jacocoTestReport'
+    mustRunAfter 'openUnitTestReport'
+    doFirst { println 'Abriendo reporte JaCoCo...' }
+    commandLine opener + ["${buildDir}/reports/jacoco/test/html/index.html"]
+}
+
+tasks.register('openReports') {
+    group = 'verification'
+    description = 'Genera y abre los reportes de JUnit y JaCoCo.'
+    dependsOn 'openUnitTestReport', 'openJacocoReport'
+}
