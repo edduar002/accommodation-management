@@ -16,7 +16,7 @@ public class CityEntity {
     private String name;
 
     @Column(name = "departments_id")
-    private int departmentsId;
+    private Integer departmentsId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -69,6 +69,18 @@ public class CityEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public DepartmentEntity getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentEntity department) {
+        this.department = department;
+    }
+
+    public void setDepartmentsId(Integer departmentsId) {
+        this.departmentsId = departmentsId;
     }
 
     @PrePersist
