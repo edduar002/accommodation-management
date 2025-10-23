@@ -36,8 +36,8 @@ public class UserController {
         return create(user, result);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<UserDTO> login(@RequestBody LoginDTO login){
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         UserDTO user = service.login(login);
         if (user == null) {
             return ResponseEntity.notFound().build();

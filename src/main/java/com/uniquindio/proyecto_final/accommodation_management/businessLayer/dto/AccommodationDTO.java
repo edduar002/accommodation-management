@@ -18,11 +18,10 @@ public class AccommodationDTO {
     private Integer price;
     private Integer maximumCapacity;
     private Integer hostsId;
-    private String available;
+    private boolean available;
     private Integer qualificationsId;
     private Integer departmentsId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
-
 }

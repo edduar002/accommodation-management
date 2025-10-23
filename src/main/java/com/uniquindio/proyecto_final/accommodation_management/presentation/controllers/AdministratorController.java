@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
@@ -37,8 +38,8 @@ public class AdministratorController {
         return create(administrator, result);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<AdministratorDTO> login(@RequestBody LoginDTO login){
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         AdministratorDTO admin = service.login(login);
         if (admin == null) {
             return ResponseEntity.notFound().build();

@@ -38,8 +38,8 @@ public class HostController {
         return create(host, result);
     }
 
-    @GetMapping("/login")
-    public ResponseEntity<HostDTO> login(@RequestBody LoginDTO login){
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         HostDTO host = service.login(login);
         if (host == null) {
             return ResponseEntity.notFound().build();

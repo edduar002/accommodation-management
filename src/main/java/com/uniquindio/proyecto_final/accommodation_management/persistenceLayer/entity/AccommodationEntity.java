@@ -30,7 +30,7 @@ public class AccommodationEntity {
     @Column(name = "hosts_id")
     private Integer hostsId;
 
-    private String available;
+    private boolean available;
 
     @Column(name = "qualifications_id")
     private Integer qualificationsId;
@@ -128,11 +128,11 @@ public class AccommodationEntity {
         this.hostsId = hostsId;
     }
 
-    public String getAvailable() {
+    public boolean getAvailable() {
         return available;
     }
 
-    public void setAvailable(String available) {
+    public void setAvailable(boolean available) {
         this.available = available;
     }
 
