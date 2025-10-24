@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.CityService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.CityDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link CityDTO}.
@@ -70,6 +72,30 @@ public class CityServiceImpl implements CityService {
         List<CityDTO> list = dao.citiesList();
         log.info("Encontrados {} ciudades", list.size());
         return list;
+    }
+
+    @Override
+    public CityDTO detail(int accommodationId) {
+        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
+        CityDTO dto = dao.findById(accommodationId).orElse(null);
+        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+        return dto;
+    }
+
+    @Transactional
+    @Override
+    public Optional<CityDTO> edit(int id, CityDTO user) {
+        log.debug("Editando usuario id={} con newName={}", id, user.getName());
+        Optional<CityDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            CityDTO userNew = userDb.orElseThrow();
+            userNew.setName(user.getName());
+            CityDTO updated = dao.save(userNew);
+            log.info("Usuario id={} actualizado (name)", id);
+            return Optional.of(updated);
+        }
+        log.warn("No se encontró usuario id={} para editar", id);
+        return userDb;
     }
 
 }

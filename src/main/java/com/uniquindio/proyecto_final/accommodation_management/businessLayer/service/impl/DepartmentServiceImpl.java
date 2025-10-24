@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.DepartmentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.DepartmentDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link DepartmentDTO}.
@@ -67,5 +69,29 @@ public class DepartmentServiceImpl implements DepartmentService {
         List<DepartmentDTO> list = dao.departmentsList();
         log.info("Encontrados {} departamentos", list.size());
         return list;
+    }
+
+    @Override
+    public DepartmentDTO detail(int accommodationId) {
+        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
+        DepartmentDTO dto = dao.findById(accommodationId).orElse(null);
+        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+        return dto;
+    }
+
+    @Transactional
+    @Override
+    public Optional<DepartmentDTO> edit(int id, DepartmentDTO user) {
+        log.debug("Editando usuario id={} con newName={}", id, user.getName());
+        Optional<DepartmentDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            DepartmentDTO userNew = userDb.orElseThrow();
+            userNew.setName(user.getName());
+            DepartmentDTO updated = dao.save(userNew);
+            log.info("Usuario id={} actualizado (name)", id);
+            return Optional.of(updated);
+        }
+        log.warn("No se encontró usuario id={} para editar", id);
+        return userDb;
     }
 }

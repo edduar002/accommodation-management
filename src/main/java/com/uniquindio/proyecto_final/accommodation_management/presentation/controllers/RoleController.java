@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.RoleEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/roles")
@@ -45,6 +47,27 @@ public class RoleController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(todos);
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<RoleDTO> detail(@PathVariable("id") int accommodationId) {
+        RoleDTO detalle = service.detail(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable int id, @RequestBody RoleDTO user, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<RoleDTO> userOptional = service.edit(id, user);
+        if(userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

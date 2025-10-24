@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.RoleDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link RoleDTO}.
@@ -67,5 +69,29 @@ public class RoleServiceImpl implements RoleService {
         List<RoleDTO> list = dao.rolesList();
         log.info("Encontrados {} roles", list.size());
         return list;
+    }
+
+    @Override
+    public RoleDTO detail(int accommodationId) {
+        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
+        RoleDTO dto = dao.findById(accommodationId).orElse(null);
+        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+        return dto;
+    }
+
+    @Transactional
+    @Override
+    public Optional<RoleDTO> edit(int id, RoleDTO user) {
+        log.debug("Editando usuario id={} con newName={}", id, user.getName());
+        Optional<RoleDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            RoleDTO userNew = userDb.orElseThrow();
+            userNew.setName(user.getName());
+            RoleDTO updated = dao.save(userNew);
+            log.info("Usuario id={} actualizado (name)", id);
+            return Optional.of(updated);
+        }
+        log.warn("No se encontró usuario id={} para editar", id);
+        return userDb;
     }
 }

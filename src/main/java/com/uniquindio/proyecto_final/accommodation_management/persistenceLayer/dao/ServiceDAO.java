@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -30,5 +31,10 @@ public class ServiceDAO {
         return entities.stream()
                 .map(serviceMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Optional<ServiceDTO> findById(int id) {
+        return serviceRepository.findById(id)
+                .map(serviceMapper::toDTO);
     }
 }

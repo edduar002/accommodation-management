@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -30,5 +31,10 @@ public class CityDAO {
         return entities.stream()
                 .map(cityMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Optional<CityDTO> findById(int id) {
+        return cityRepository.findById(id)
+                .map(cityMapper::toDTO);
     }
 }

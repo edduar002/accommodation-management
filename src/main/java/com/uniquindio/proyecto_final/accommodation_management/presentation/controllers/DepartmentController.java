@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/departments")
@@ -45,6 +46,27 @@ public class DepartmentController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(todos);
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<DepartmentDTO> detail(@PathVariable("id") int accommodationId) {
+        DepartmentDTO detalle = service.detail(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
+    }
+
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable int id, @RequestBody DepartmentDTO user, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<DepartmentDTO> userOptional = service.edit(id, user);
+        if(userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -30,5 +31,10 @@ public class DepartmentDAO {
         return entities.stream()
                 .map(departmentMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Optional<DepartmentDTO> findById(int id) {
+        return departmentRepository.findById(id)
+                .map(departmentMapper::toDTO);
     }
 }
