@@ -1,11 +1,14 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.DepartmentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.DepartmentDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link DepartmentDTO}.
@@ -56,5 +59,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentDTO saved = dao.save(dto);
         log.info("Departamento guardado: {}", saved);
         return saved;
+    }
+
+    @Override
+    public List<DepartmentDTO> departmentsList() {
+        log.debug("Buscando todos los departamentos");
+        List<DepartmentDTO> list = dao.departmentsList();
+        log.info("Encontrados {} departamentos", list.size());
+        return list;
     }
 }

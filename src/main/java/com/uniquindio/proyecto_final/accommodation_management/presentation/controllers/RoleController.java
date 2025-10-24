@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
@@ -9,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 // IMPORTACIONES PARA SWAGGER
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,6 +36,15 @@ public class RoleController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RoleDTO role, @Valid BindingResult result){
         return create(role, result);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<RoleDTO>> rolesList(){
+        List<RoleDTO> todos = service.rolesList();
+        if (todos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(todos);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

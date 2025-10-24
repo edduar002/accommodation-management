@@ -1,11 +1,14 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.CityService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.CityDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link CityDTO}.
@@ -60,4 +63,13 @@ public class CityServiceImpl implements CityService {
         log.info("Ciudad guardada: {}", saved);
         return saved;
     }
+
+    @Override
+    public List<CityDTO> citiesList() {
+        log.debug("Buscando todas las ciudades");
+        List<CityDTO> list = dao.citiesList();
+        log.info("Encontrados {} ciudades", list.size());
+        return list;
+    }
+
 }

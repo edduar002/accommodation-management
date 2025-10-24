@@ -1,11 +1,14 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ServiceService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.ServiceDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link ServiceDTO}.
@@ -56,5 +59,13 @@ public class ServiceServiceImpl implements ServiceService {
         ServiceDTO saved = dao.save(dto);
         log.info("Servicio guardado: {}", saved);
         return saved;
+    }
+
+    @Override
+    public List<ServiceDTO> servicesList() {
+        log.debug("Buscando todos los roles");
+        List<ServiceDTO> list = dao.servicesList();
+        log.info("Encontrados {} servicios", list.size());
+        return list;
     }
 }

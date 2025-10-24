@@ -1,11 +1,14 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.RoleDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link RoleDTO}.
@@ -56,5 +59,13 @@ public class RoleServiceImpl implements RoleService {
         RoleDTO saved = dao.save(dto);
         log.info("Rol guardado: {}", saved);
         return saved;
+    }
+
+    @Override
+    public List<RoleDTO> rolesList() {
+        log.debug("Buscando todos los roles");
+        List<RoleDTO> list = dao.rolesList();
+        log.info("Encontrados {} roles", list.size());
+        return list;
     }
 }
