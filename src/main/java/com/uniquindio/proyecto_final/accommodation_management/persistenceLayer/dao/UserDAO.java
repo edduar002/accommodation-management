@@ -1,8 +1,10 @@
 package com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.CityEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.mapper.UserMapper;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.repository.UserRepository;
@@ -10,7 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,6 +43,13 @@ public class UserDAO {
     public Optional<UserDTO> findById(int id) {
         return userRepository.findById(id)
                 .map(userMapper::toDTO);
+    }
+
+    public List<UserDTO> usersList() {
+        List<UserEntity> entities = userRepository.findAll();
+        return entities.stream()
+                .map(userMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
 }

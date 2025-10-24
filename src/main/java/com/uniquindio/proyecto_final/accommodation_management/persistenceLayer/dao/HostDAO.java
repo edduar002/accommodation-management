@@ -10,7 +10,9 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.r
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -39,5 +41,12 @@ public class HostDAO {
             return null;
         }
         return hostMapper.toDTO(entity);
+    }
+
+    public List<HostDTO> hostsList() {
+        List<HostEntity> entities = hostRepository.findAll();
+        return entities.stream()
+                .map(hostMapper::toDTO)
+                .collect(Collectors.toList());
     }
 }

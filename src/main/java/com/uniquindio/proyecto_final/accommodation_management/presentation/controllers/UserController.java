@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 // IMPORTACIONES PARA SWAGGER
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -55,6 +56,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<UserDTO>> usersList(){
+        List<UserDTO> todos = service.usersList();
+        if (todos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(todos);
     }
 
     @PutMapping("/changePassword/{id}")

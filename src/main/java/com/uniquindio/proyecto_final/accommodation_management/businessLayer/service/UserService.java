@@ -1,11 +1,9 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
@@ -19,5 +17,7 @@ public interface UserService {
     Optional<UserDTO> changePassword(int id, ChangePasswordDTO user);
 
     Optional<UserDTO> recoveryPassword(int id, String newPassword);
+
+    List<UserDTO> usersList();
 
 }

@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -150,5 +152,13 @@ public class UserServiceImpl implements UserService {
         }
         log.warn("No se encontró usuario id={} para recoveryPassword", id);
         return Optional.empty();
+    }
+
+    @Override
+    public List<UserDTO> usersList() {
+        log.debug("Buscando todas las ciudades");
+        List<UserDTO> list = dao.usersList();
+        log.info("Encontrados {} ciudades", list.size());
+        return list;
     }
 }

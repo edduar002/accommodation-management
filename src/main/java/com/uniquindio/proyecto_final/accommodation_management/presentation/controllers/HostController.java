@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,6 +46,15 @@ public class HostController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(host);
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<HostDTO>> hostsList(){
+        List<HostDTO> todos = service.hostsList();
+        if (todos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(todos);
     }
 
     @PutMapping("/edit/{id}")

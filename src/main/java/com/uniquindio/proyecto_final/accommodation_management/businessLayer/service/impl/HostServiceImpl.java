@@ -3,6 +3,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.HostDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -167,5 +169,13 @@ public class HostServiceImpl implements HostService {
         }
         log.warn("No se encontró host id={} para recoveryPassword", id);
         return Optional.empty();
+    }
+
+    @Override
+    public List<HostDTO> hostsList() {
+        log.debug("Buscando todas las ciudades");
+        List<HostDTO> list = dao.hostsList();
+        log.info("Encontrados {} ciudades", list.size());
+        return list;
     }
 }
