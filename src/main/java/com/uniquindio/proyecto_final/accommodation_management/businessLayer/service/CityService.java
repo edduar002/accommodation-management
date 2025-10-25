@@ -17,4 +17,6 @@ public interface CityService {
     CityDTO detail(int accommodation);
 
     Optional<CityDTO> edit(int idAccommodation, CityDTO user);
+
+    Optional<CityDTO> delete(int idAccommodation);
 }

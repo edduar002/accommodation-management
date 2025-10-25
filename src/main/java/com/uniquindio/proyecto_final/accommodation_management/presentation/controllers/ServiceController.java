@@ -69,6 +69,16 @@ public class ServiceController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Optional<ServiceDTO> productOptional = serviceService.delete(id);
+
+        if (productOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

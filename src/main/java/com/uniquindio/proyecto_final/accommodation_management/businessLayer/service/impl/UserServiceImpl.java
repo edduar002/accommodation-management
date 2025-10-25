@@ -1,9 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.UserDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -160,5 +157,21 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> list = dao.usersList();
         log.info("Encontrados {} ciudades", list.size());
         return list;
+    }
+
+    @Transactional
+    @Override
+    public Optional<UserDTO> delete(int id) {
+        log.debug("Inactivando (soft delete) alojamiento id={}", id);
+        Optional<UserDTO> accommodationDb = dao.findById(id);
+        if (accommodationDb.isPresent()) {
+            UserDTO acc = accommodationDb.orElseThrow();
+            acc.setActive(false);
+            UserDTO saved = dao.save(acc);
+            log.info("Alojamiento id={} inactivado", id);
+            return Optional.of(saved);
+        }
+        log.warn("No se encontró alojamiento id={} para inactivar", id);
+        return accommodationDb;
     }
 }

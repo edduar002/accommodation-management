@@ -16,4 +16,6 @@ public interface ServiceService {
     ServiceDTO detail(int accommodation);
 
     Optional<ServiceDTO> edit(int idAccommodation, ServiceDTO user);
+
+    Optional<ServiceDTO> delete(int idAccommodation);
 }

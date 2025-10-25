@@ -15,6 +15,8 @@ public class CityEntity {
 
     private String name;
 
+    private boolean active;
+
     @Column(name = "departments_id")
     private Integer departmentsId;
 
@@ -81,6 +83,14 @@ public class CityEntity {
 
     public void setDepartmentsId(Integer departmentsId) {
         this.departmentsId = departmentsId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @PrePersist

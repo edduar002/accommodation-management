@@ -16,4 +16,6 @@ public interface DepartmentService
     DepartmentDTO detail(int accommodation);
 
     Optional<DepartmentDTO> edit(int idAccommodation, DepartmentDTO user);
+
+    Optional<DepartmentDTO> delete(int idAccommodation);
 }

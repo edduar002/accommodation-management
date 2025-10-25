@@ -1,9 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.RoleEntity;
 import jakarta.validation.Valid;
@@ -66,6 +63,16 @@ public class RoleController {
         Optional<RoleDTO> userOptional = service.edit(id, user);
         if(userOptional.isPresent()){
             return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Optional<RoleDTO> productOptional = service.delete(id);
+
+        if (productOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
         }
         return ResponseEntity.notFound().build();
     }

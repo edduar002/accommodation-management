@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ServiceDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
@@ -93,5 +94,21 @@ public class RoleServiceImpl implements RoleService {
         }
         log.warn("No se encontró usuario id={} para editar", id);
         return userDb;
+    }
+
+    @Transactional
+    @Override
+    public Optional<RoleDTO> delete(int id) {
+        log.debug("Inactivando (soft delete) alojamiento id={}", id);
+        Optional<RoleDTO> accommodationDb = dao.findById(id);
+        if (accommodationDb.isPresent()) {
+            RoleDTO acc = accommodationDb.orElseThrow();
+            acc.setActive(false);
+            RoleDTO saved = dao.save(acc);
+            log.info("Alojamiento id={} inactivado", id);
+            return Optional.of(saved);
+        }
+        log.warn("No se encontró alojamiento id={} para inactivar", id);
+        return accommodationDb;
     }
 }

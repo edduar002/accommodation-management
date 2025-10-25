@@ -48,6 +48,16 @@ public class HostController {
         return ResponseEntity.ok(host);
     }
 
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Optional<HostDTO> productOptional = service.delete(id);
+
+        if (productOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/getAll")
     public ResponseEntity<List<HostDTO>> hostsList(){
         List<HostDTO> todos = service.hostsList();

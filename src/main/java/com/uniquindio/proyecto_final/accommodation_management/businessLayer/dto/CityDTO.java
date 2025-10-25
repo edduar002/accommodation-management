@@ -16,5 +16,6 @@ public class CityDTO {
     private int departmentsId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private boolean active;
 
 }

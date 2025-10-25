@@ -69,6 +69,16 @@ public class CityController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Optional<CityDTO> productOptional = service.delete(id);
+
+        if (productOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

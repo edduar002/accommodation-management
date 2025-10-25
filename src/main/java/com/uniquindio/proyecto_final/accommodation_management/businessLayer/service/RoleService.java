@@ -1,6 +1,7 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.RoleEntity;
 
@@ -16,4 +17,6 @@ public interface RoleService {
     RoleDTO detail(int accommodation);
 
     Optional<RoleDTO> edit(int idAccommodation, RoleDTO user);
+
+    Optional<RoleDTO> delete(int idAccommodation);
 }

@@ -94,4 +94,20 @@ public class ServiceServiceImpl implements ServiceService {
         log.warn("No se encontró usuario id={} para editar", id);
         return userDb;
     }
+
+    @Transactional
+    @Override
+    public Optional<ServiceDTO> delete(int id) {
+        log.debug("Inactivando (soft delete) alojamiento id={}", id);
+        Optional<ServiceDTO> accommodationDb = dao.findById(id);
+        if (accommodationDb.isPresent()) {
+            ServiceDTO acc = accommodationDb.orElseThrow();
+            acc.setActive(false);
+            ServiceDTO saved = dao.save(acc);
+            log.info("Alojamiento id={} inactivado", id);
+            return Optional.of(saved);
+        }
+        log.warn("No se encontró alojamiento id={} para inactivar", id);
+        return accommodationDb;
+    }
 }

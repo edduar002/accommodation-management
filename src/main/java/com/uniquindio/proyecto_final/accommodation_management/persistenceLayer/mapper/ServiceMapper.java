@@ -10,6 +10,7 @@ public interface ServiceMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     ServiceDTO toDTO(ServiceEntity entity);
@@ -18,6 +19,7 @@ public interface ServiceMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     ServiceEntity toEntity(ServiceDTO dto);

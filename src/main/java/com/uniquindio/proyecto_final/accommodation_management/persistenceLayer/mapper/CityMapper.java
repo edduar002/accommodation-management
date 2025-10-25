@@ -10,6 +10,7 @@ public interface CityMapper {
 
     @Mapping(target = "name", source = "name")
     @Mapping(target = "departmentsId", source = "departmentsId")
+    @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     CityDTO toDTO(CityEntity entity);
@@ -18,6 +19,7 @@ public interface CityMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "active", source = "active")
     @Mapping(target = "departmentsId", source = "departmentsId")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)

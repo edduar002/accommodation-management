@@ -74,6 +74,22 @@ public class CityServiceImpl implements CityService {
         return list;
     }
 
+    @Transactional
+    @Override
+    public Optional<CityDTO> delete(int id) {
+        log.debug("Inactivando (soft delete) alojamiento id={}", id);
+        Optional<CityDTO> accommodationDb = dao.findById(id);
+        if (accommodationDb.isPresent()) {
+            CityDTO acc = accommodationDb.orElseThrow();
+            acc.setActive(false);
+            CityDTO saved = dao.save(acc);
+            log.info("Alojamiento id={} inactivado", id);
+            return Optional.of(saved);
+        }
+        log.warn("No se encontró alojamiento id={} para inactivar", id);
+        return accommodationDb;
+    }
+
     @Override
     public CityDTO detail(int accommodationId) {
         log.debug("Consultando detalle de alojamiento id={}", accommodationId);

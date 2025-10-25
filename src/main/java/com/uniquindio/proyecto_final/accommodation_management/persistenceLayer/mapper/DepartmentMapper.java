@@ -9,6 +9,7 @@ import java.util.List;
 public interface DepartmentMapper {
 
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     DepartmentDTO toDTO(DepartmentEntity entity);
@@ -17,6 +18,7 @@ public interface DepartmentMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "name")
+    @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     DepartmentEntity toEntity(DepartmentDTO dto);

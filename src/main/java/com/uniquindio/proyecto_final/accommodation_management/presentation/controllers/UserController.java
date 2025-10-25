@@ -67,6 +67,16 @@ public class UserController {
         return ResponseEntity.ok(todos);
     }
 
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable int id) {
+        Optional<UserDTO> productOptional = service.delete(id);
+
+        if (productOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.OK).body(productOptional.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/changePassword/{id}")
     public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordDTO dto) {
         Optional<UserDTO> userOptional = service.changePassword(id, dto);

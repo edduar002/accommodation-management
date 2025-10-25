@@ -20,4 +20,6 @@ public interface UserService {
 
     List<UserDTO> usersList();
 
+    Optional<UserDTO> delete(int idAccommodation);
+
 }

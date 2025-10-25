@@ -94,4 +94,21 @@ public class DepartmentServiceImpl implements DepartmentService {
         log.warn("No se encontró usuario id={} para editar", id);
         return userDb;
     }
+
+    @Transactional
+    @Override
+    public Optional<DepartmentDTO> delete(int id) {
+        log.debug("Inactivando (soft delete) alojamiento id={}", id);
+        Optional<DepartmentDTO> accommodationDb = dao.findById(id);
+        if (accommodationDb.isPresent()) {
+            DepartmentDTO acc = accommodationDb.orElseThrow();
+            acc.setActive(false);
+            DepartmentDTO saved = dao.save(acc);
+            log.info("Alojamiento id={} inactivado", id);
+            return Optional.of(saved);
+        }
+        log.warn("No se encontró alojamiento id={} para inactivar", id);
+        return accommodationDb;
+    }
+
 }

@@ -1,9 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.HostDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -169,6 +166,22 @@ public class HostServiceImpl implements HostService {
         }
         log.warn("No se encontró host id={} para recoveryPassword", id);
         return Optional.empty();
+    }
+
+    @Transactional
+    @Override
+    public Optional<HostDTO> delete(int id) {
+        log.debug("Inactivando (soft delete) alojamiento id={}", id);
+        Optional<HostDTO> accommodationDb = dao.findById(id);
+        if (accommodationDb.isPresent()) {
+            HostDTO acc = accommodationDb.orElseThrow();
+            acc.setActive(false);
+            HostDTO saved = dao.save(acc);
+            log.info("Alojamiento id={} inactivado", id);
+            return Optional.of(saved);
+        }
+        log.warn("No se encontró alojamiento id={} para inactivar", id);
+        return accommodationDb;
     }
 
     @Override

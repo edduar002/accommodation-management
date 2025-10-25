@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS administrators;
 CREATE TABLE departments (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
+    active CHAR(1) NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id)
@@ -28,6 +29,7 @@ CREATE TABLE departments (
 CREATE TABLE roles (
     id INT AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
+    active CHAR(1) NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id)
@@ -36,6 +38,7 @@ CREATE TABLE roles (
 CREATE TABLE services (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
+    active CHAR(1) NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id)
@@ -131,6 +134,7 @@ CREATE TABLE cities (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
     departments_id INT NOT NULL,
+    active CHAR(1) NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id),
