@@ -27,7 +27,7 @@ public class RoleDAO {
     }
 
     public List<RoleDTO> rolesList() {
-        List<RoleEntity> entities = roleRepository.findAll();
+        List<RoleEntity> entities = roleRepository.allRoles();
         return entities.stream()
                 .map(roleMapper::toDTO)
                 .collect(Collectors.toList());

@@ -46,7 +46,7 @@ public class UserDAO {
     }
 
     public List<UserDTO> usersList() {
-        List<UserEntity> entities = userRepository.findAll();
+        List<UserEntity> entities = userRepository.allUsers();
         return entities.stream()
                 .map(userMapper::toDTO)
                 .collect(Collectors.toList());

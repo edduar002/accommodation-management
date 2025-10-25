@@ -27,7 +27,7 @@ public class ServiceDAO {
     }
 
     public List<ServiceDTO> servicesList() {
-        List<ServiceEntity> entities = serviceRepository.findAll();
+        List<ServiceEntity> entities = serviceRepository.allServices();
         return entities.stream()
                 .map(serviceMapper::toDTO)
                 .collect(Collectors.toList());

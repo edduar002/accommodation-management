@@ -44,7 +44,7 @@ public class HostDAO {
     }
 
     public List<HostDTO> hostsList() {
-        List<HostEntity> entities = hostRepository.findAll();
+        List<HostEntity> entities = hostRepository.allHosts();
         return entities.stream()
                 .map(hostMapper::toDTO)
                 .collect(Collectors.toList());

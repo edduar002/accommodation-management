@@ -27,7 +27,7 @@ public class CityDAO {
     }
 
     public List<CityDTO> citiesList() {
-        List<CityEntity> entities = cityRepository.findAll();
+        List<CityEntity> entities = cityRepository.allCities();
         return entities.stream()
                 .map(cityMapper::toDTO)
                 .collect(Collectors.toList());

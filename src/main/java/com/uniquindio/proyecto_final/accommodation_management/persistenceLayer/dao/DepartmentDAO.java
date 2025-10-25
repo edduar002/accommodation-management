@@ -27,7 +27,7 @@ public class DepartmentDAO {
     }
 
     public List<DepartmentDTO> departmentsList() {
-        List<DepartmentEntity> entities = departmentRepository.findAll();
+        List<DepartmentEntity> entities = departmentRepository.allDepartments();
         return entities.stream()
                 .map(departmentMapper::toDTO)
                 .collect(Collectors.toList());
