@@ -18,11 +18,18 @@ public class AdministratorEntity {
     private String email;
     private String password;
 
+    @Column(name = "roles_id")
+    private Integer rolesId;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "roles_id", insertable = false, updatable = false)
+    private RoleEntity role;
 
     public AdministratorEntity(){}
 
@@ -80,6 +87,14 @@ public class AdministratorEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getRolesId() {
+        return rolesId;
+    }
+
+    public void setRolesId(Integer rolesId) {
+        this.rolesId = rolesId;
     }
 
     @PrePersist

@@ -68,7 +68,9 @@ CREATE TABLE administrators (
     password VARCHAR(50) NOT NULL,
     created_at DATETIME,
     updated_at DATETIME,
-    PRIMARY KEY (id)
+    roles_id INT NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
 
 CREATE TABLE hosts (

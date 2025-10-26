@@ -18,5 +18,6 @@ public class AdministratorDTO {
     private String password;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer rolesId;
 
 }

@@ -14,6 +14,7 @@ public interface AdministratorMapper {
     @Mapping(target = "password", source = "password")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
+    @Mapping(target = "rolesId", source = "rolesId")
     AdministratorDTO toDTO(AdministratorEntity entity);
 
     List<AdministratorDTO> toDTOList(List<AdministratorEntity> entities);
@@ -25,6 +26,7 @@ public interface AdministratorMapper {
     @Mapping(target = "password", source = "password")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "rolesId", source = "rolesId")
     AdministratorEntity toEntity(AdministratorDTO dto);
 
 }
