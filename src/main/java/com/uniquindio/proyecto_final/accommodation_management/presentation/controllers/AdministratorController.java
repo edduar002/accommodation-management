@@ -1,9 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AdministratorEntity;
 import jakarta.validation.Valid;
@@ -17,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/administrators")
@@ -31,6 +29,17 @@ public class AdministratorController {
             return validation(result);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(administrator));
+    }
+
+    @PutMapping("/changePassword/{id}")
+    public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordDTO dto) {
+        Optional<AdministratorDTO> userOptional = service.changePassword(id, dto);
+        if (userOptional.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.get());
+        }
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "La contraseña actual es incorrecta");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @PostMapping("/register")

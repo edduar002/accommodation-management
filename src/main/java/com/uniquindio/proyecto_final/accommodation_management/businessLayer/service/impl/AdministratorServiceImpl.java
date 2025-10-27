@@ -1,12 +1,16 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AdministratorDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Implementación del servicio de negocio para administrar usuarios de tipo
@@ -64,6 +68,27 @@ public class AdministratorServiceImpl implements AdministratorService {
         AdministratorDTO saved = dao.save(dto);
         log.info("Administrador guardado: {}", saved);
         return saved;
+    }
+
+    @Transactional
+    @Override
+    public Optional<AdministratorDTO> changePassword(int id, ChangePasswordDTO user) {
+        log.debug("changePassword userId={} (old/new redacted)", id);
+        Optional<AdministratorDTO> userDb = dao.findById(id);
+        if (userDb.isPresent()) {
+            AdministratorDTO userNew = userDb.get();
+            if (userNew.getPassword().equals(user.getOldPassword())) {
+                userNew.setPassword(user.getNewPassword());
+                dao.save(userNew);
+                log.info("Contraseña actualizada para userId={}", id);
+                return Optional.of(userNew);
+            } else {
+                log.warn("Contraseña antigua no coincide para userId={}", id);
+                return Optional.empty();
+            }
+        }
+        log.warn("No se encontró usuario id={} para changePassword", id);
+        return Optional.empty();
     }
 
     /**

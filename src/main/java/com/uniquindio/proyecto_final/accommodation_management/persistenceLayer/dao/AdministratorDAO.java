@@ -10,6 +10,8 @@ import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.r
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class AdministratorDAO {
@@ -21,6 +23,11 @@ public class AdministratorDAO {
         AdministratorEntity entity = administratorMapper.toEntity(dto);
         AdministratorEntity savedEntity = administratorRepository.save(entity);
         return administratorMapper.toDTO(savedEntity);
+    }
+
+    public Optional<AdministratorDTO> findById(int id) {
+        return administratorRepository.findById(id)
+                .map(administratorMapper::toDTO);
     }
 
     public AdministratorDTO login(LoginDTO login) {
