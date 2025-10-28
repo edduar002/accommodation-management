@@ -77,6 +77,14 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    @Override
+    public UserDTO detail(int accommodationId) {
+        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
+        UserDTO dto = dao.findById(accommodationId).orElse(null);
+        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+        return dto;
+    }
+
     /**
      * Edita el nombre del usuario si existe.
      *

@@ -34,6 +34,15 @@ public class HostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(host));
     }
 
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<HostDTO> detail(@PathVariable("id") int accommodationId) {
+        HostDTO detalle = service.detail(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody HostDTO host, @Valid BindingResult result){
         return create(host, result);

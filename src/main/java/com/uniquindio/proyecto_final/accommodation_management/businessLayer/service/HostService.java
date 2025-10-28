@@ -15,6 +15,8 @@ public interface HostService {
 
     Optional<HostDTO> changePassword(int id, ChangePasswordDTO user);
 
+    HostDTO detail(int accommodation);
+
     HostDTO login(LoginDTO login);
 
     Optional<HostDTO> recoveryPassword(int id, String newPassword);

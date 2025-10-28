@@ -42,6 +42,27 @@ public class AdministratorController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable int id, @RequestBody AdministratorDTO user, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<AdministratorDTO> userOptional = service.edit(id, user);
+        if(userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<AdministratorDTO> detail(@PathVariable("id") int accommodationId) {
+        AdministratorDTO detalle = service.detail(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody AdministratorDTO administrator, BindingResult result){
         return create(administrator, result);

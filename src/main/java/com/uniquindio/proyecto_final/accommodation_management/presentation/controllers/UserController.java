@@ -37,6 +37,15 @@ public class UserController {
         return create(user, result);
     }
 
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<UserDTO> detail(@PathVariable("id") int accommodationId) {
+        UserDTO detalle = service.detail(accommodationId);
+        if (detalle == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(detalle);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         UserDTO user = service.login(login);

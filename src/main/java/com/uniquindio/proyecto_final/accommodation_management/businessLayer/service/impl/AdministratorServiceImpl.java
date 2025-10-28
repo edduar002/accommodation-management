@@ -1,9 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AdministratorDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ChangePasswordDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.LoginDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.UserDTO;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AdministratorDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -88,6 +85,30 @@ public class AdministratorServiceImpl implements AdministratorService {
             }
         }
         log.warn("No se encontró usuario id={} para changePassword", id);
+        return Optional.empty();
+    }
+
+    @Override
+    public AdministratorDTO detail(int accommodationId) {
+        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
+        AdministratorDTO dto = dao.findById(accommodationId).orElse(null);
+        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+        return dto;
+    }
+
+    @Override
+    @Transactional
+    public Optional<AdministratorDTO> edit(int idHost, AdministratorDTO host) {
+        log.debug("Editando host id={} con newName={}", idHost, host.getName());
+        Optional<AdministratorDTO> hostDb = dao.findById(idHost);
+        if (hostDb.isPresent()) {
+            AdministratorDTO hostNew = hostDb.orElseThrow();
+            hostNew.setName(host.getName());
+            AdministratorDTO updated = dao.save(hostNew);
+            log.info("Host id={} actualizado (name)", idHost);
+            return Optional.of(updated);
+        }
+        log.warn("No se encontró host id={} para editar", idHost);
         return Optional.empty();
     }
 

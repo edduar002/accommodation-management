@@ -67,6 +67,14 @@ public class HostServiceImpl implements HostService {
         return saved;
     }
 
+    @Override
+    public HostDTO detail(int accommodationId) {
+        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
+        HostDTO dto = dao.findById(accommodationId).orElse(null);
+        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+        return dto;
+    }
+
     /**
      * Edita el nombre del anfitrión si existe.
      *
