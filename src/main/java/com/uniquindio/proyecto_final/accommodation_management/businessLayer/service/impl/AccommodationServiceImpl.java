@@ -114,6 +114,9 @@ public class AccommodationServiceImpl implements AccommodationService {
         if (accommodationDb.isPresent()) {
             AccommodationDTO acc = accommodationDb.orElseThrow();
             acc.setPrice(accommodation.getPrice());
+            acc.setDetailedDescription(accommodation.getDetailedDescription());
+            acc.setExactLocation(accommodation.getExactLocation());
+            acc.setMaximumCapacity(accommodation.getMaximumCapacity());
             AccommodationDTO updated = dao.save(acc);
             log.info("Alojamiento id={} actualizado (price={})", id, updated.getPrice());
             return Optional.of(updated);

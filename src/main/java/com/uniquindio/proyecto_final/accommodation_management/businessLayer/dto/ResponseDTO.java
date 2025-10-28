@@ -15,6 +15,7 @@ public class ResponseDTO {
     private String content;
     private int hostsId;
     private int commentsId;
+    private LocalDateTime date;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

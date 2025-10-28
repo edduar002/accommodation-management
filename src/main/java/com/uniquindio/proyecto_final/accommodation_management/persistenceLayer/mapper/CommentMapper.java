@@ -11,6 +11,7 @@ public interface CommentMapper {
     @Mapping(target = "content", source = "content")
     @Mapping(target = "accommodationsId", source = "accommodationsId")
     @Mapping(target = "usersId", source = "usersId")
+    @Mapping(target = "date", source = "date")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     CommentDTO toDTO(CommentEntity entity);
@@ -21,6 +22,7 @@ public interface CommentMapper {
     @Mapping(target = "content", source = "content")
     @Mapping(target = "accommodationsId", source = "accommodationsId")
     @Mapping(target = "usersId", source = "usersId")
+    @Mapping(target = "date", source = "date")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     CommentEntity toEntity(CommentDTO dto);

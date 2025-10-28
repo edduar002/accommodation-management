@@ -100,6 +100,10 @@ public class UserServiceImpl implements UserService {
         if (userDb.isPresent()) {
             UserDTO userNew = userDb.orElseThrow();
             userNew.setName(user.getName());
+            userNew.setPhone(user.getPhone());
+            userNew.setEmail(user.getEmail());
+            userNew.setImgUrl(user.getImgUrl());
+            userNew.setSurname(user.getSurname());
             UserDTO updated = dao.save(userNew);
             log.info("Usuario id={} actualizado (name)", id);
             return Optional.of(updated);

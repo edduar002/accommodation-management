@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS favorite_accommodation;
 DROP TABLE IF EXISTS favorites;
 DROP TABLE IF EXISTS legal_documents;
 DROP TABLE IF EXISTS accommodations;
+DROP TABLE IF EXISTS administrators;
 DROP TABLE IF EXISTS hosts;
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cities;
@@ -15,9 +16,8 @@ DROP TABLE IF EXISTS services;
 DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS qualifications;
 DROP TABLE IF EXISTS roles;
-DROP TABLE IF EXISTS administrators;
 
-CREATE TABLE departments (
+CREATE TABLE IF NOT EXISTS departments (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
     active CHAR(1) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE departments (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE roles (
+CREATE TABLE IF NOT EXISTS roles (
     id INT AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
     active CHAR(1) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE roles (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE services (
+CREATE TABLE IF NOT EXISTS services (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
     active CHAR(1) NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE services (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE images (
+CREATE TABLE IF NOT EXISTS images (
     id INT AUTO_INCREMENT,
     img_url VARCHAR(150) NOT NULL,
     created_at DATETIME NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE images (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE qualifications (
+CREATE TABLE IF NOT EXISTS qualifications (
     id INT AUTO_INCREMENT,
     number_stars INT NOT NULL,
     created_at DATETIME NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE qualifications (
     PRIMARY KEY (id)
 );
 
-CREATE TABLE administrators (
+CREATE TABLE IF NOT EXISTS administrators (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
     surname VARCHAR(75) NOT NULL,
@@ -73,7 +73,7 @@ CREATE TABLE administrators (
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
 
-CREATE TABLE hosts (
+CREATE TABLE IF NOT EXISTS hosts (
     id INT AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
     surname VARCHAR(75) NOT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE hosts (
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT,
     name VARCHAR(150) NOT NULL,
     surname VARCHAR(75) NOT NULL,
@@ -112,7 +112,7 @@ CREATE TABLE users (
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
 
-CREATE TABLE accommodations (
+CREATE TABLE IF NOT EXISTS accommodations (
     id INT AUTO_INCREMENT,
     detailed_description LONGTEXT NOT NULL,
     direction VARCHAR(150) NOT NULL,
@@ -132,7 +132,7 @@ CREATE TABLE accommodations (
     FOREIGN KEY (qualifications_id) REFERENCES qualifications(id)
 );
 
-CREATE TABLE cities (
+CREATE TABLE IF NOT EXISTS cities (
     id INT AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
     departments_id INT NOT NULL,
@@ -143,7 +143,7 @@ CREATE TABLE cities (
     FOREIGN KEY (departments_id) REFERENCES departments(id)
 );
 
-CREATE TABLE favorites (
+CREATE TABLE IF NOT EXISTS favorites (
     id INT AUTO_INCREMENT,
     active CHAR(1) NOT NULL,
     created_at DATETIME NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE favorites (
     FOREIGN KEY (accommodations_id) REFERENCES accommodations(id)
 );
 
-CREATE TABLE legal_documents (
+CREATE TABLE IF NOT EXISTS legal_documents (
     id INT AUTO_INCREMENT,
     url_document VARCHAR(150) NOT NULL,
     hosts_id INT NOT NULL,
@@ -163,7 +163,7 @@ CREATE TABLE legal_documents (
     FOREIGN KEY (hosts_id) REFERENCES hosts(id)
 );
 
-CREATE TABLE accommodation_service (
+CREATE TABLE IF NOT EXISTS accommodation_service (
     id INT AUTO_INCREMENT,
     accommodations_id INT NOT NULL,
     services_id INT NOT NULL,
@@ -174,7 +174,7 @@ CREATE TABLE accommodation_service (
     FOREIGN KEY (services_id) REFERENCES services(id)
 );
 
-CREATE TABLE accommodations_images (
+CREATE TABLE IF NOT EXISTS accommodations_images (
     id INT AUTO_INCREMENT,
     accommodations_id INT NOT NULL,
     images_id INT NOT NULL,
@@ -185,11 +185,12 @@ CREATE TABLE accommodations_images (
     FOREIGN KEY (images_id) REFERENCES images(id)
 );
 
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
     id INT AUTO_INCREMENT,
     content TEXT NOT NULL,
     accommodations_id INT NOT NULL,
     users_id INT NOT NULL,
+    date DATETIME NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id),
@@ -197,11 +198,12 @@ CREATE TABLE comments (
     FOREIGN KEY (users_id) REFERENCES users(id)
 );
 
-CREATE TABLE responses (
+CREATE TABLE IF NOT EXISTS responses (
     id INT AUTO_INCREMENT,
     content TEXT NOT NULL,
     hosts_id INT NOT NULL,
     comments_id INT NOT NULL,
+    date DATETIME NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id),
@@ -209,7 +211,7 @@ CREATE TABLE responses (
     FOREIGN KEY (hosts_id) REFERENCES hosts(id)
 );
 
-CREATE TABLE reservations (
+CREATE TABLE IF NOT EXISTS reservations (
     id INT AUTO_INCREMENT,
     check_in DATETIME NOT NULL,
     check_out DATETIME NOT NULL,
@@ -226,7 +228,7 @@ CREATE TABLE reservations (
     FOREIGN KEY (users_id) REFERENCES users(id)
 );
 
-CREATE TABLE favorite_accommodation (
+CREATE TABLE IF NOT EXISTS favorite_accommodation (
     id INT AUTO_INCREMENT,
     active CHAR(1) NOT NULL,
     favorites_id INT NOT NULL,

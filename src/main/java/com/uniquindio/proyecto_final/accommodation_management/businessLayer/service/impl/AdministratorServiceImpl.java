@@ -104,6 +104,8 @@ public class AdministratorServiceImpl implements AdministratorService {
         if (hostDb.isPresent()) {
             AdministratorDTO hostNew = hostDb.orElseThrow();
             hostNew.setName(host.getName());
+            hostNew.setSurname(host.getSurname());
+            hostNew.setEmail(host.getEmail());
             AdministratorDTO updated = dao.save(hostNew);
             log.info("Host id={} actualizado (name)", idHost);
             return Optional.of(updated);

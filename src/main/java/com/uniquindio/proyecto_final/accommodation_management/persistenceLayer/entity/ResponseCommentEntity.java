@@ -14,6 +14,8 @@ public class ResponseCommentEntity {
 
     private String content;
 
+    private LocalDateTime date;
+
     @Column(name = "hosts_id")
     private int hostsId;
 
@@ -83,6 +85,14 @@ public class ResponseCommentEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 
     @PrePersist

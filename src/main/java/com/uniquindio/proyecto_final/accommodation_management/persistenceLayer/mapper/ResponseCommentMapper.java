@@ -12,6 +12,7 @@ public interface ResponseCommentMapper {
     @Mapping(target = "content", source = "content")
     @Mapping(target = "hostsId", source = "hostsId")
     @Mapping(target = "commentsId", source = "commentsId")
+    @Mapping(target = "date", source = "date")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     ResponseDTO toDTO(ResponseCommentEntity entity);
@@ -22,6 +23,7 @@ public interface ResponseCommentMapper {
     @Mapping(target = "content", source = "content")
     @Mapping(target = "hostsId", source = "hostsId")
     @Mapping(target = "commentsId", source = "commentsId")
+    @Mapping(target = "date", source = "date")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     ResponseCommentEntity toEntity(ResponseDTO dto);

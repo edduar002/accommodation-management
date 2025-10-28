@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CommentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.CommentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.CommentDAO;
@@ -76,7 +77,8 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDTO> commentsList(int idAccommodation) {
         log.debug("Listando comentarios de accommodationId={}", idAccommodation);
         log.warn("commentsList(int) actualmente retorna lista vacía (stub)");
-        return List.of();
+        List<CommentDTO> list = dao.commentsList(idAccommodation);
+        return list;
     }
 
     /**

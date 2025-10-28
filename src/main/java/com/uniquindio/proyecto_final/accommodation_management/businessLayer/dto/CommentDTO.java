@@ -15,6 +15,7 @@ public class CommentDTO {
     private String content;
     private int accommodationsId;
     private int usersId;
+    private LocalDateTime date;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
