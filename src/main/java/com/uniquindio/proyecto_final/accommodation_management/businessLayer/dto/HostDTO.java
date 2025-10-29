@@ -17,7 +17,7 @@ public class HostDTO {
     private String surname;
     private String email;
     private String password;
-    private Integer phone;
+    private String phone;
     private LocalDate birthday;
     private String imgUrl;
     private Integer rolesId;

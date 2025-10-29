@@ -136,6 +136,14 @@ public class AccommodationEntity {
         this.available = available;
     }
 
+    public DepartmentEntity getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentEntity department) {
+        this.department = department;
+    }
+
     public Integer getQualificationsId() {
         return qualificationsId;
     }

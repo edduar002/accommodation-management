@@ -106,6 +106,7 @@ public class CityServiceImpl implements CityService {
         if (userDb.isPresent()) {
             CityDTO userNew = userDb.orElseThrow();
             userNew.setName(user.getName());
+            userNew.setDepartmentsId(user.getDepartmentsId());
             CityDTO updated = dao.save(userNew);
             log.info("Usuario id={} actualizado (name)", id);
             return Optional.of(updated);
