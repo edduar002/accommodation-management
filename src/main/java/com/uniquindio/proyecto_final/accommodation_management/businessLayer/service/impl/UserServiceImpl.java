@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.validators.PasswordValidator;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.UserDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDTO save(UserDTO dto) {
+
+        // ✅ validar contraseña antes de guardar
+        PasswordValidator.validate(dto.getPassword());
+
         log.debug("Guardando usuario (campos sensibles redacted): {}", dto);
         UserDTO saved = dao.save(dto);
         log.info("Usuario guardado: {}", saved);
