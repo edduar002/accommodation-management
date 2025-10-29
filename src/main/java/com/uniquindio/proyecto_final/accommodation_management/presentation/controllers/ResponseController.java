@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ResponseService;
 import jakarta.validation.Valid;
@@ -7,14 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 // IMPORTACIONES PARA SWAGGER
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,6 +34,15 @@ public class ResponseController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody ResponseDTO response, BindingResult result){
         return create(response, result);
+    }
+
+    @GetMapping("/getByComment")
+    public ResponseEntity<List<ResponseDTO>> getByComment(@RequestParam int commentId){
+        List<ResponseDTO> propios = service.getByComment(commentId);
+        if (propios.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(propios);
     }
 
     private ResponseEntity<?> validation(BindingResult result) {

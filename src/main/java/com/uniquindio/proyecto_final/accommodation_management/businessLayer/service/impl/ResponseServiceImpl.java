@@ -1,11 +1,14 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ResponseDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ResponseService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.ResponseCommentDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link ResponseDTO}
@@ -37,6 +40,14 @@ public class ResponseServiceImpl implements ResponseService {
     public ResponseServiceImpl(ResponseCommentDAO dao) {
         this.dao = dao;
         log.debug("ResponseServiceImpl inicializado con DAO={}", dao.getClass().getSimpleName());
+    }
+
+    @Override
+    public List<ResponseDTO> getByComment(int idHost) {
+        log.debug("Listando alojamientos del hostId={}", idHost);
+        List<ResponseDTO> list = dao.getByComment(idHost);
+        log.info("Host {} tiene {} alojamientos", idHost, list.size());
+        return list;
     }
 
     /**
