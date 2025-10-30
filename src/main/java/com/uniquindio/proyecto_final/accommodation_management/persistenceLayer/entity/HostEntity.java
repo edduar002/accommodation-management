@@ -201,6 +201,14 @@ public class HostEntity {
         this.active = active;
     }
 
+    public DepartmentEntity getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(DepartmentEntity department) {
+        this.department = department;
+    }
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

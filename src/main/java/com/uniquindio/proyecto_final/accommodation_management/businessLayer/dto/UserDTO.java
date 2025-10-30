@@ -26,5 +26,6 @@ public class UserDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;
+    private String departmentName;
 
 }

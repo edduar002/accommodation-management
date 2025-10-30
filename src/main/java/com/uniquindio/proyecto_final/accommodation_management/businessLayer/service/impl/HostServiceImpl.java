@@ -93,6 +93,8 @@ public class HostServiceImpl implements HostService {
         Optional<HostDTO> hostDb = dao.findById(idHost);
         if (hostDb.isPresent()) {
             HostDTO hostNew = hostDb.orElseThrow();
+            hostNew.setDepartmentsId(host.getDepartmentsId());
+            hostNew.setCitiesId(host.getCitiesId());
             hostNew.setName(host.getName());
             hostNew.setEmail(host.getEmail());
             hostNew.setImgUrl(host.getImgUrl());

@@ -22,6 +22,7 @@ public interface HostMapper {
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     @Mapping(target = "active", source = "active")
+    @Mapping(target = "departmentName", expression = "java(entity.getDepartment() != null ? entity.getDepartment().getName() : null)")
     HostDTO toDTO(HostEntity entity);
 
     List<HostDTO> toDTOList(List<HostEntity> entities);

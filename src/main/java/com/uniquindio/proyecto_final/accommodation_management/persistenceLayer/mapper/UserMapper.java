@@ -23,6 +23,7 @@ public interface UserMapper {
     @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
+    @Mapping(target = "departmentName", expression = "java(entity.getDepartment() != null ? entity.getDepartment().getName() : null)")
     UserDTO toDTO(UserEntity entity);
 
     List<UserDTO> toDTOList(List<UserEntity> entities);

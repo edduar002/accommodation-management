@@ -13,6 +13,7 @@ public interface CityMapper {
     @Mapping(target = "active", source = "active")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
+    @Mapping(target = "departmentName", expression = "java(entity.getDepartment() != null ? entity.getDepartment().getName() : null)")
     CityDTO toDTO(CityEntity entity);
 
     List<CityDTO> toDTOList(List<CityEntity> entities);

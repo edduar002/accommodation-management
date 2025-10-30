@@ -105,6 +105,8 @@ public class UserServiceImpl implements UserService {
         if (userDb.isPresent()) {
             UserDTO userNew = userDb.orElseThrow();
             userNew.setName(user.getName());
+            userNew.setDepartmentId(user.getDepartmentId());
+            userNew.setCitiesId(user.getCitiesId());
             userNew.setPhone(user.getPhone());
             userNew.setEmail(user.getEmail());
             userNew.setImgUrl(user.getImgUrl());
