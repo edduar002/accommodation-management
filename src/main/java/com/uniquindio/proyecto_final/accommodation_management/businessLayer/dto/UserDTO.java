@@ -22,6 +22,7 @@ public class UserDTO {
     private String imgUrl;
     private Integer rolesId;
     private Integer departmentId;
+    private Integer citiesId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;

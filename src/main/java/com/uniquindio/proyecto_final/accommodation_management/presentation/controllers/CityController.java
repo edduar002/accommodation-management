@@ -48,6 +48,15 @@ public class CityController {
         return ResponseEntity.ok(todos);
     }
 
+    @GetMapping("/getAllForDepartment")
+    public ResponseEntity<List<CityDTO>> citiesListDepartment(@RequestParam("departmentId") int departmentId){
+        List<CityDTO> todos = service.citiesListDepartment(departmentId);
+        if (todos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(todos);
+    }
+
     @GetMapping("/getOne/{id}")
     public ResponseEntity<CityDTO> detail(@PathVariable("id") int accommodationId) {
         CityDTO detalle = service.detail(accommodationId);

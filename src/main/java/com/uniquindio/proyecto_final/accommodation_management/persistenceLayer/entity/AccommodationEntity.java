@@ -46,6 +46,13 @@ public class AccommodationEntity {
 
     private boolean active;
 
+    @Column(name = "cities_id")
+    private Integer citiesId;
+
+    @ManyToOne
+    @JoinColumn(name = "cities_id", insertable = false, updatable = false)
+    private CityEntity city;
+
     @ManyToOne
     @JoinColumn(name = "hosts_id", insertable = false, updatable = false)
     private HostEntity host;
@@ -94,6 +101,22 @@ public class AccommodationEntity {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public Integer getCitiesId() {
+        return citiesId;
+    }
+
+    public void setCitiesId(Integer citiesId) {
+        this.citiesId = citiesId;
+    }
+
+    public CityEntity getCity() {
+        return city;
+    }
+
+    public void setCity(CityEntity city) {
+        this.city = city;
     }
 
     public String getExactLocation() {

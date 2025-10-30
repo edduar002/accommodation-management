@@ -35,6 +35,9 @@ public class HostEntity {
     @Column(name = "departments_id")
     private Integer departmentsId;
 
+    @Column(name = "cities_id")
+    private Integer citiesId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -46,6 +49,26 @@ public class HostEntity {
     @ManyToOne
     @JoinColumn(name = "roles_id", insertable = false, updatable = false)
     private RoleEntity role;
+
+    public CityEntity getCity() {
+        return city;
+    }
+
+    public void setCity(CityEntity city) {
+        this.city = city;
+    }
+
+    public Integer getCitiesId() {
+        return citiesId;
+    }
+
+    public void setCitiesId(Integer citiesId) {
+        this.citiesId = citiesId;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "cities_id", insertable = false, updatable = false)
+    private CityEntity city;
 
     @ManyToOne
     @JoinColumn(name = "departments_id", insertable = false, updatable = false)

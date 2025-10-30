@@ -30,6 +30,13 @@ public class UserEntity {
    // @Column(name = "departments_id")
     //private Integer departmentsId;
 
+    @Column(name = "cities_id")
+    private Integer citiesId;
+
+    @ManyToOne
+    @JoinColumn(name = "cities_id", insertable = false, updatable = false)
+    private CityEntity city;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -83,6 +90,22 @@ public class UserEntity {
 
     public String getPassword() {
         return password;
+    }
+
+    public Integer getCitiesId() {
+        return citiesId;
+    }
+
+    public void setCitiesId(Integer citiesId) {
+        this.citiesId = citiesId;
+    }
+
+    public CityEntity getCity() {
+        return city;
+    }
+
+    public void setCity(CityEntity city) {
+        this.city = city;
     }
 
     public void setPassword(String password) {

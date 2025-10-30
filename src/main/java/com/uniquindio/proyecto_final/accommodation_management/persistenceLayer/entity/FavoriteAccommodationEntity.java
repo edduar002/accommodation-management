@@ -15,12 +15,6 @@ public class FavoriteAccommodationEntity {
 
     private boolean active;
 
-    @Column(name = "favorites_id")
-    private Integer favoritesId;
-
-    @Column(name = "accommodations_id")
-    private Integer accommodationsId;
-
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -28,11 +22,11 @@ public class FavoriteAccommodationEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "favorites_id", insertable = false, updatable = false)
+    @JoinColumn(name = "favorites_id", nullable = false)
     private FavoriteEntity favorite;
 
     @ManyToOne
-    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
+    @JoinColumn(name = "accommodations_id", nullable = false)
     private AccommodationEntity accommodation;
 
     public FavoriteAccommodationEntity(){
@@ -55,22 +49,6 @@ public class FavoriteAccommodationEntity {
         this.active = active;
     }
 
-    public Integer getFavoritesId() {
-        return favoritesId;
-    }
-
-    public void setFavoritesId(Integer favoritesId) {
-        this.favoritesId = favoritesId;
-    }
-
-    public Integer getAccommodationsId() {
-        return accommodationsId;
-    }
-
-    public void setAccommodationsId(Integer accommodationsId) {
-        this.accommodationsId = accommodationsId;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -85,6 +63,22 @@ public class FavoriteAccommodationEntity {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public FavoriteEntity getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(FavoriteEntity favorite) {
+        this.favorite = favorite;
+    }
+
+    public AccommodationEntity getAccommodation() {
+        return accommodation;
+    }
+
+    public void setAccommodation(AccommodationEntity accommodation) {
+        this.accommodation = accommodation;
     }
 
     @PrePersist

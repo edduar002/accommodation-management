@@ -26,6 +26,17 @@ CREATE TABLE IF NOT EXISTS departments (
     PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS cities (
+    id INT AUTO_INCREMENT,
+    name VARCHAR(75) NOT NULL,
+    departments_id INT NOT NULL,
+    active CHAR(1) NOT NULL,
+    created_at DATETIME NOT NULL,
+    updated_at DATETIME NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (departments_id) REFERENCES departments(id)
+);
+
 CREATE TABLE IF NOT EXISTS roles (
     id INT AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL,
@@ -85,11 +96,13 @@ CREATE TABLE IF NOT EXISTS hosts (
     roles_id INT NOT NULL,
     personal_description LONGTEXT NOT NULL,
     departments_id INT NOT NULL,
+    cities_id INT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     active CHAR(1) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (departments_id) REFERENCES departments(id),
+    FOREIGN KEY (cities_id) REFERENCES cities(id),
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
 
@@ -104,11 +117,13 @@ CREATE TABLE IF NOT EXISTS users (
     img_url LONGBLOB NOT NULL,
     roles_id INT NOT NULL,
     departments_id INT NOT NULL,
+    cities_id INT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     active CHAR(1) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (departments_id) REFERENCES departments(id),
+    FOREIGN KEY (cities_id) REFERENCES cities(id),
     FOREIGN KEY (roles_id) REFERENCES roles(id)
 );
 
@@ -123,24 +138,15 @@ CREATE TABLE IF NOT EXISTS accommodations (
     available CHAR(1) NOT NULL,
     qualifications_id INT NULL,
     departments_id INT NOT NULL,
+    cities_id INT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     active CHAR(1) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (departments_id) REFERENCES departments(id),
+    FOREIGN KEY (cities_id) REFERENCES cities(id),
     FOREIGN KEY (hosts_id) REFERENCES hosts(id),
     FOREIGN KEY (qualifications_id) REFERENCES qualifications(id)
-);
-
-CREATE TABLE IF NOT EXISTS cities (
-    id INT AUTO_INCREMENT,
-    name VARCHAR(75) NOT NULL,
-    departments_id INT NOT NULL,
-    active CHAR(1) NOT NULL,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL,
-    PRIMARY KEY (id),
-    FOREIGN KEY (departments_id) REFERENCES departments(id)
 );
 
 CREATE TABLE IF NOT EXISTS favorites (
@@ -148,9 +154,9 @@ CREATE TABLE IF NOT EXISTS favorites (
     active CHAR(1) NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
-    accommodations_id INT NOT NULL,
+    user_id INT NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (accommodations_id) REFERENCES accommodations(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
 CREATE TABLE IF NOT EXISTS legal_documents (

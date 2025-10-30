@@ -74,6 +74,14 @@ public class CityServiceImpl implements CityService {
         return list;
     }
 
+    @Override
+    public List<CityDTO> citiesListDepartment(int id) {
+        log.debug("Buscando todas las ciudades");
+        List<CityDTO> list = dao.citiesListDepartment(id);
+        log.info("Encontrados {} ciudades", list.size());
+        return list;
+    }
+
     @Transactional
     @Override
     public Optional<CityDTO> delete(int id) {

@@ -21,6 +21,7 @@ public class AccommodationDTO {
     private boolean available;
     private Integer qualificationsId;
     private Integer departmentsId;
+    private Integer citiesId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;

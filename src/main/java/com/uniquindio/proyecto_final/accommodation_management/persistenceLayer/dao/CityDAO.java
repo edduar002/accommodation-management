@@ -33,6 +33,13 @@ public class CityDAO {
                 .collect(Collectors.toList());
     }
 
+    public List<CityDTO> citiesListDepartment(int id) {
+        List<CityEntity> entities = cityRepository.citiesListDepartment(id);
+        return entities.stream()
+                .map(cityMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public Optional<CityDTO> findById(int id) {
         return cityRepository.findById(id)
                 .map(cityMapper::toDTO);

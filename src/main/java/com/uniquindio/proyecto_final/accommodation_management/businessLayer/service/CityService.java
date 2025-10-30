@@ -14,6 +14,8 @@ public interface CityService {
 
     List<CityDTO> citiesList();
 
+    List<CityDTO> citiesListDepartment(int id);
+
     CityDTO detail(int accommodation);
 
     Optional<CityDTO> edit(int idAccommodation, CityDTO user);

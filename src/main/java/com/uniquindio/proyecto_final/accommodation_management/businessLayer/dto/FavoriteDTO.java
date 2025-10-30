@@ -13,8 +13,8 @@ public class FavoriteDTO {
 
     private int id;
     private boolean active;
+    private Integer userId;
+    private Integer accommodationId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Integer accommodationsId;
-
 }

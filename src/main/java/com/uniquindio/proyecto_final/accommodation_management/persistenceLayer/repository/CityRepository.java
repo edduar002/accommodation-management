@@ -12,4 +12,7 @@ public interface CityRepository extends JpaRepository<CityEntity, Integer> {
     @Query("SELECT a FROM CityEntity a WHERE a.active = true")
     List<CityEntity> allCities();
 
+    @Query("SELECT a FROM CityEntity a WHERE a.active = true AND a.departmentsId = :departmentId")
+    List<CityEntity> citiesListDepartment(int departmentId);
+
 }

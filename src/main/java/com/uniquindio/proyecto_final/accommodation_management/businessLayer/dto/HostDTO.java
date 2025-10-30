@@ -23,6 +23,7 @@ public class HostDTO {
     private Integer rolesId;
     private String personalDescription;
     private Integer departmentsId;
+    private Integer citiesId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean active;

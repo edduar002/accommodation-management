@@ -9,8 +9,8 @@ import java.util.List;
 public interface FavoriteAccommodationMapper {
 
     @Mapping(target = "active", source = "active")
-    @Mapping(target = "favoritesId", source = "favoritesId")
-    @Mapping(target = "accommodationsId", source = "accommodationsId")
+    @Mapping(target = "favoritesId", source = "favorite.id")
+    @Mapping(target = "accommodationsId", source = "accommodation.id")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     FavoriteAccommodationDTO toDTO(FavoriteAccommodationEntity entity);
@@ -19,8 +19,8 @@ public interface FavoriteAccommodationMapper {
 
     @Mapping(target = "id", source = "id")
     @Mapping(target = "active", source = "active")
-    @Mapping(target = "favoritesId", source = "favoritesId")
-    @Mapping(target = "accommodationsId", source = "accommodationsId")
+    @Mapping(target = "favorite.id", source = "favoritesId")
+    @Mapping(target = "accommodation.id", source = "accommodationsId")
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     FavoriteAccommodationEntity toEntity(FavoriteAccommodationDTO dto);

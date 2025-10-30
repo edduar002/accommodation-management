@@ -18,6 +18,7 @@ public interface AccommodationMapper {
     @Mapping(target = "available", source = "available")
     @Mapping(target = "qualificationsId", source = "qualificationsId")
     @Mapping(target = "departmentsId", source = "departmentsId")
+    @Mapping(target = "citiesId", source = "citiesId")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
     @Mapping(target = "active", source = "active")
@@ -36,6 +37,7 @@ public interface AccommodationMapper {
     @Mapping(target = "available", source = "available")
     @Mapping(target = "qualificationsId", source = "qualificationsId")
     @Mapping(target = "departmentsId", source = "departmentsId")
+    @Mapping(target = "citiesId", source = "citiesId")
     @Mapping(target = "createdAt", ignore = true)   // se controla con @PrePersist
     @Mapping(target = "updatedAt", ignore = true)   // se controla con @PreUpdate
     @Mapping(target = "active", source = "active")
