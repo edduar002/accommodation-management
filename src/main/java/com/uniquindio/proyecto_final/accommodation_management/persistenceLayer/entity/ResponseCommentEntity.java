@@ -63,6 +63,14 @@ public class ResponseCommentEntity {
         this.hostsId = hostsId;
     }
 
+    public HostEntity getHost() {
+        return host;
+    }
+
+    public void setHost(HostEntity host) {
+        this.host = host;
+    }
+
     public int getCommentsId() {
         return commentsId;
     }

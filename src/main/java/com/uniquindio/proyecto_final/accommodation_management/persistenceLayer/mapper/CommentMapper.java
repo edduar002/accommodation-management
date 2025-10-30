@@ -14,6 +14,7 @@ public interface CommentMapper {
     @Mapping(target = "date", source = "date")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
+    @Mapping(target = "userName", expression = "java(entity.getUser() != null ? entity.getUser().getName() : null)")
     CommentDTO toDTO(CommentEntity entity);
 
     List<CommentDTO> toDTOList(List<CommentEntity> entities);

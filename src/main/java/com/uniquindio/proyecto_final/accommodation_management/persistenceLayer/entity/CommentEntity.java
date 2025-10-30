@@ -30,12 +30,12 @@ public class CommentEntity {
     private LocalDateTime updatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
-    private AccommodationEntity accommodation;
-
-    @ManyToOne
     @JoinColumn(name = "users_id", insertable = false, updatable = false)
     private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "accommodations_id", insertable = false, updatable = false)
+    private AccommodationEntity accommodation;
 
     @OneToMany(mappedBy = "comment")
     private List<ResponseCommentEntity> responses;
@@ -53,6 +53,14 @@ public class CommentEntity {
 
     public String getContent() {
         return content;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
     public void setContent(String content) {

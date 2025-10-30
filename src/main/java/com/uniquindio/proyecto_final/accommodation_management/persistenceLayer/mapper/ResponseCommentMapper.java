@@ -15,6 +15,7 @@ public interface ResponseCommentMapper {
     @Mapping(target = "date", source = "date")
     @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "updatedAt", source = "updatedAt")
+    @Mapping(target = "hostName", expression = "java(entity.getHost() != null ? entity.getHost().getName() : null)")
     ResponseDTO toDTO(ResponseCommentEntity entity);
 
     List<ResponseDTO> toDTOList(List<ResponseCommentEntity> entities);

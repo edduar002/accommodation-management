@@ -28,5 +28,6 @@ public class HostDTO {
     private LocalDateTime updatedAt;
     private boolean active;
     private String departmentName;
+    private String cityName;
 
 }
