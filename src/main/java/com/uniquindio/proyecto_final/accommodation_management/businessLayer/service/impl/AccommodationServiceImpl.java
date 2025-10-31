@@ -25,7 +25,6 @@ import java.util.Optional;
  *   <li>Editar precio: {@link #edit(int, AccommodationDTO)}.</li>
  *   <li>Inactivar (soft delete): {@link #delete(int)}.</li>
  *   <li>Detalle: {@link #detail(int)}.</li>
- *   <li>Promedio de calificaciones: {@link #averageGrades(int)}.</li>
  * </ul>
  *
  * @author
@@ -167,30 +166,5 @@ public class AccommodationServiceImpl implements AccommodationService {
         AccommodationDTO dto = dao.findById(accommodationId).orElse(null);
         log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
         return dto;
-    }
-
-    /**
-     * Punto de extensión para métricas (no implementado).
-     * @param accommodation identificador del alojamiento
-     * @return {@code null} actualmente (pendiente de implementación)
-     */
-    @Override
-    public ResponseEntity<AccommodationDTO> viewMetrics(int accommodation) {
-        log.warn("viewMetrics(accommodation={}) aún no implementado", accommodation);
-        return null;
-    }
-
-    /**
-     * Calcula el promedio de calificaciones de un alojamiento.
-     * @param idAccommodation identificador del alojamiento
-     * @return promedio (o {@code null} si no hay datos)
-     * @implSpec Delegado directo a {@link AccommodationDAO#averageGrades(int)}.
-     */
-    @Override
-    public Double averageGrades(int idAccommodation) {
-        log.debug("Calculando promedio de calificaciones para id={}", idAccommodation);
-        Double avg = dao.averageGrades(idAccommodation);
-        log.info("Promedio de calificaciones id={} = {}", idAccommodation, avg);
-        return avg;
     }
 }

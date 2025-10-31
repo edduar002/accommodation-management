@@ -78,9 +78,6 @@ public class HostEntity {
     private List<AccommodationEntity> accommodations;
 
     @OneToMany(mappedBy = "host")
-    private List<LegalDocumentEntity> legalDocuments;
-
-    @OneToMany(mappedBy = "host")
     private List<ResponseCommentEntity> responses;
 
     @OneToMany(mappedBy = "host")

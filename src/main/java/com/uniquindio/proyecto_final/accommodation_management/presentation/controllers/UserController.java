@@ -97,17 +97,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
-    @PutMapping("/recoveryPassword/{id}")
-    public ResponseEntity<?> recoveryPassword(@PathVariable int id, @RequestBody RecoverPasswordDTO dto) {
-        Optional<UserDTO> userOptional = service.recoveryPassword(id, dto.getNewPassword());
-        if (userOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.get());
-        }
-        Map<String, String> error = new HashMap<>();
-        error.put("error", "Usuario no encontrado");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
-
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

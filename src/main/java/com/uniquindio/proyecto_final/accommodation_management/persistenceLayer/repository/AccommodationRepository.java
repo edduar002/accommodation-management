@@ -18,7 +18,4 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
     @Query("SELECT a FROM AccommodationEntity a WHERE a.hostsId = :idHost")
     List<AccommodationEntity> ownAccommodationList(@Param("idHost") int idHost);
 
-    @Query("SELECT q.numberStars FROM QualificationEntity q INNER JOIN AccommodationEntity a ON a.qualificationsId = q.id WHERE a.id = :idAccommodation")
-    Double averageGrades(@Param("idAccommodation") int idAccommodation);
-
 }

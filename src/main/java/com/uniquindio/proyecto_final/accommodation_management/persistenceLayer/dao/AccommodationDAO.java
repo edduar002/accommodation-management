@@ -42,8 +42,4 @@ public class AccommodationDAO {
         return accommodationRepository.findById(id)
                 .map(accommodationMapper::toDTO);
     }
-
-    public Double averageGrades(int idAccommodation) {
-        return accommodationRepository.averageGrades(idAccommodation);
-    }
 }

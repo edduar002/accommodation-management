@@ -88,23 +88,12 @@ public class AccommodationController {
         return ResponseEntity.ok(detalle);
     }
 
-    @GetMapping("viewMetrics")
-    public ResponseEntity<AccommodationDTO> viewMetrics(@RequestParam int accommodation, BindingResult result){
-        return service.viewMetrics(accommodation);
-    }
-
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {
             errors.put(err.getField(), "El campo " + err.getField() + " no puede ser vacio " + err.getDefaultMessage());
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
-    }
-
-    @GetMapping("/averageGrades/{idAccommodation}")
-    public ResponseEntity<Double> averageGrades(@PathVariable("idAccommodation") int idAccommodation){
-        Double calificaciones = service.averageGrades(idAccommodation);
-        return ResponseEntity.ok(calificaciones);
     }
 
 }

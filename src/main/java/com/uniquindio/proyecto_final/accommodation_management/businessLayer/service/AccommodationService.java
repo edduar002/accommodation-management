@@ -21,8 +21,4 @@ public interface AccommodationService {
 
     AccommodationDTO detail(int accommodation);
 
-    ResponseEntity<AccommodationDTO> viewMetrics(int accommodation);
-
-    Double averageGrades(int idAccommodation);
-
 }

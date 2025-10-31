@@ -58,18 +58,11 @@ public class AccommodationEntity {
     private HostEntity host;
 
     @ManyToOne
-    @JoinColumn(name = "qualifications_id", insertable = false, updatable = false)
-    private QualificationEntity qualification;
-
-    @ManyToOne
     @JoinColumn(name = "departments_id", insertable = false, updatable = false)
     private DepartmentEntity department;
 
     @OneToMany(mappedBy = "accommodation")
     private List<CommentEntity> comments;
-
-    @OneToMany(mappedBy = "accommodation")
-    private List<FavoriteAccommodationEntity> favoriteAccommodations;
 
     @OneToMany(mappedBy = "accommodation")
     private List<AccommodationServiceEntity> accommodationServices;
