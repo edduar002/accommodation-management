@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AdministratorService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.email.EmailService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AdministratorEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class AdministratorController {
 
     @Autowired
     private AdministratorService service;
+
+    @Autowired
+    private EmailService emailService;
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody AdministratorDTO administrator, BindingResult result){
@@ -64,8 +68,23 @@ public class AdministratorController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody AdministratorDTO administrator, BindingResult result){
-        return create(administrator, result);
+    public ResponseEntity<?> register(@Valid @RequestBody AdministratorDTO user, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+
+        // Guardar usuario
+        AdministratorDTO savedUser = service.save(user);
+
+        // Enviar correo de bienvenida
+        try {
+            emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
+        } catch (Exception e) {
+            // Si el correo falla, solo lo logeamos, no bloqueamos el registro
+            System.out.println("Error enviando correo: " + e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PostMapping("/login")

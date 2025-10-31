@@ -26,6 +26,8 @@ public class AccommodationEntity {
 
     private String services;
 
+    private String imgUrl;
+
     @Column(name = "maximum_capacity")
     private Integer maximumCapacity;
 
@@ -105,6 +107,14 @@ public class AccommodationEntity {
 
     public CityEntity getCity() {
         return city;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     public void setCity(CityEntity city) {

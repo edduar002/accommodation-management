@@ -27,4 +27,5 @@ public class AccommodationDTO {
     private String departmentName;
     private String cityName;
     private String services;
+    private String imgUrl;
 }

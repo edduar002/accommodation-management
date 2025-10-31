@@ -16,7 +16,6 @@ public class WebConfig {
                 registry.addMapping("/**")
                         .allowedOriginPatterns("http://localhost:4200") // ✅ usar allowedOriginPatterns
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };

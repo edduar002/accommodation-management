@@ -107,6 +107,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS accommodations (
     id INT AUTO_INCREMENT,
+    img_url LONGBLOB NOT NULL,
     detailed_description LONGTEXT NOT NULL,
     direction VARCHAR(150) NOT NULL,
     exact_location VARCHAR(150) NOT NULL,

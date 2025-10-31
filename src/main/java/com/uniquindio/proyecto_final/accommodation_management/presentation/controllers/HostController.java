@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.email.EmailService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
@@ -26,6 +27,9 @@ public class HostController {
     @Autowired
     private HostService service;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping
     public ResponseEntity<?> create(@RequestBody HostDTO host, BindingResult result){
         if(result.hasFieldErrors()){
@@ -44,8 +48,23 @@ public class HostController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody HostDTO host, @Valid BindingResult result){
-        return create(host, result);
+    public ResponseEntity<?> register(@Valid @RequestBody HostDTO user, BindingResult result){
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+
+        // Guardar usuario
+        HostDTO savedUser = service.save(user);
+
+        // Enviar correo de bienvenida
+        try {
+            emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
+        } catch (Exception e) {
+            // Si el correo falla, solo lo logeamos, no bloqueamos el registro
+            System.out.println("Error enviando correo: " + e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PostMapping("/login")
