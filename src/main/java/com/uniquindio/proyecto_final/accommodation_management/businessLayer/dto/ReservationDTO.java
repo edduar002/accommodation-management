@@ -24,6 +24,7 @@ public class ReservationDTO {
     private Integer accommodationsId;
     private Integer hostsId;
     private Integer usersId;
+    private Integer calification;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

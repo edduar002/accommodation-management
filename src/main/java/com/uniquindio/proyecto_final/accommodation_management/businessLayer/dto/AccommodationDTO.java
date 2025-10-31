@@ -19,7 +19,6 @@ public class AccommodationDTO {
     private Integer maximumCapacity;
     private Integer hostsId;
     private boolean available;
-    private Integer qualificationsId;
     private Integer departmentsId;
     private Integer citiesId;
     private LocalDateTime createdAt;
@@ -27,4 +26,5 @@ public class AccommodationDTO {
     private boolean active;
     private String departmentName;
     private String cityName;
+    private String services;
 }

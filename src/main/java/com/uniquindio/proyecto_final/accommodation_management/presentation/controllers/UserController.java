@@ -2,6 +2,7 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.email.EmailService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserController {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UserDTO user, BindingResult result) {
         if(result.hasFieldErrors()){
@@ -34,8 +38,24 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserDTO user, BindingResult result){
-        return create(user, result);
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+
+        // Guardar usuario
+        UserDTO savedUser = service.save(user);
+
+        // Enviar correo de bienvenida
+        try {
+            emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
+        } catch (Exception e) {
+            // Si el correo falla, solo lo logeamos, no bloqueamos el registro
+            System.out.println("Error enviando correo: " + e.getMessage());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+
 
     @GetMapping("/getOne/{id}")
     public ResponseEntity<UserDTO> detail(@PathVariable("id") int accommodationId) {

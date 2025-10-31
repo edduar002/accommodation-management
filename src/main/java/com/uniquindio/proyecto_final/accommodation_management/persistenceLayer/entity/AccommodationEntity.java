@@ -24,6 +24,8 @@ public class AccommodationEntity {
 
     private Integer price;
 
+    private String services;
+
     @Column(name = "maximum_capacity")
     private Integer maximumCapacity;
 
@@ -31,9 +33,6 @@ public class AccommodationEntity {
     private Integer hostsId;
 
     private boolean available;
-
-    @Column(name = "qualifications_id")
-    private Integer qualificationsId;
 
     @Column(name = "departments_id")
     private Integer departmentsId;
@@ -160,14 +159,6 @@ public class AccommodationEntity {
         this.department = department;
     }
 
-    public Integer getQualificationsId() {
-        return qualificationsId;
-    }
-
-    public void setQualificationsId(Integer qualificationsId) {
-        this.qualificationsId = qualificationsId;
-    }
-
     public Integer getDepartmentsId() {
         return departmentsId;
     }
@@ -186,6 +177,14 @@ public class AccommodationEntity {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getServices() {
+        return services;
+    }
+
+    public void setServices(String services) {
+        this.services = services;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {

@@ -16,7 +16,6 @@ public interface AccommodationMapper {
     @Mapping(target = "maximumCapacity", source = "maximumCapacity")
     @Mapping(target = "hostsId", source = "hostsId")
     @Mapping(target = "available", source = "available")
-    @Mapping(target = "qualificationsId", source = "qualificationsId")
     @Mapping(target = "departmentsId", source = "departmentsId")
     @Mapping(target = "citiesId", source = "citiesId")
     @Mapping(target = "createdAt", source = "createdAt")
@@ -35,7 +34,6 @@ public interface AccommodationMapper {
     @Mapping(target = "maximumCapacity", source = "maximumCapacity")
     @Mapping(target = "hostsId", source = "hostsId")
     @Mapping(target = "available", source = "available")
-    @Mapping(target = "qualificationsId", source = "qualificationsId")
     @Mapping(target = "departmentsId", source = "departmentsId")
     @Mapping(target = "citiesId", source = "citiesId")
     @Mapping(target = "createdAt", ignore = true)   // se controla con @PrePersist

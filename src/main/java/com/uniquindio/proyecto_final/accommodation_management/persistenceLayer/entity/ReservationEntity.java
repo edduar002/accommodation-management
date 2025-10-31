@@ -24,6 +24,8 @@ public class ReservationEntity {
 
     private String state;
 
+    private int calification;
+
     @Column(name = "accommodations_id")
     private Integer accommodationsId;
 
@@ -84,6 +86,14 @@ public class ReservationEntity {
 
     public void setNumberGuests(Integer numberGuests) {
         this.numberGuests = numberGuests;
+    }
+
+    public int getCalification() {
+        return calification;
+    }
+
+    public void setCalification(int calification) {
+        this.calification = calification;
     }
 
     public String getState() {

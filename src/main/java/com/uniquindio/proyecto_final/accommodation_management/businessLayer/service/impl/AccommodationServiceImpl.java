@@ -118,6 +118,7 @@ public class AccommodationServiceImpl implements AccommodationService {
             acc.setDetailedDescription(accommodation.getDetailedDescription());
             acc.setExactLocation(accommodation.getExactLocation());
             acc.setMaximumCapacity(accommodation.getMaximumCapacity());
+            acc.setServices(accommodation.getServices());
             AccommodationDTO updated = dao.save(acc);
             log.info("Alojamiento id={} actualizado (price={})", id, updated.getPrice());
             return Optional.of(updated);

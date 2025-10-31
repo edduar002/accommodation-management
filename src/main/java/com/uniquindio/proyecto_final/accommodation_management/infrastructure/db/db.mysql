@@ -1,11 +1,7 @@
 DROP TABLE IF EXISTS accommodation_service;
-DROP TABLE IF EXISTS accommodations_images;
 DROP TABLE IF EXISTS responses;
 DROP TABLE IF EXISTS comments;
 DROP TABLE IF EXISTS reservations;
-DROP TABLE IF EXISTS favorite_accommodation;
-DROP TABLE IF EXISTS favorites;
-DROP TABLE IF EXISTS legal_documents;
 DROP TABLE IF EXISTS accommodations;
 DROP TABLE IF EXISTS administrators;
 DROP TABLE IF EXISTS hosts;
@@ -13,8 +9,6 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS cities;
 DROP TABLE IF EXISTS departments;
 DROP TABLE IF EXISTS services;
-DROP TABLE IF EXISTS images;
-DROP TABLE IF EXISTS qualifications;
 DROP TABLE IF EXISTS roles;
 
 CREATE TABLE IF NOT EXISTS departments (
@@ -120,17 +114,16 @@ CREATE TABLE IF NOT EXISTS accommodations (
     maximum_capacity INT NOT NULL,
     hosts_id INT NOT NULL,
     available CHAR(1) NOT NULL,
-    qualifications_id INT NULL,
     departments_id INT NOT NULL,
     cities_id INT NOT NULL,
+    services LONGTEXT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     active CHAR(1) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (departments_id) REFERENCES departments(id),
     FOREIGN KEY (cities_id) REFERENCES cities(id),
-    FOREIGN KEY (hosts_id) REFERENCES hosts(id),
-    FOREIGN KEY (qualifications_id) REFERENCES qualifications(id)
+    FOREIGN KEY (hosts_id) REFERENCES hosts(id)
 );
 
 CREATE TABLE IF NOT EXISTS accommodation_service (
@@ -179,6 +172,7 @@ CREATE TABLE IF NOT EXISTS reservations (
     accommodations_id INT NOT NULL,
     hosts_id INT NOT NULL,
     users_id INT NOT NULL,
+    calification INT NOT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id),
