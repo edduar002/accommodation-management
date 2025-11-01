@@ -1,3 +1,43 @@
+INSERT INTO roles (name, active, created_at, updated_at) VALUES
+('Administrador', true, NOW(), NOW()),
+('Anfitrión', true, NOW(), NOW()),
+('Usuario', true, NOW(), NOW());
+
+INSERT INTO departments (name, active, created_at, updated_at) VALUES
+('Amazonas', true, NOW(), NOW()),
+('Antioquia', true, NOW(), NOW()),
+('Arauca', true, NOW(), NOW()),
+('Atlántico', true, NOW(), NOW()),
+('Bogotá', true, NOW(), NOW()),
+('Bolívar', true, NOW(), NOW()),
+('Boyacá', true, NOW(), NOW()),
+('Caldas', true, NOW(), NOW()),
+('Caquetá', true, NOW(), NOW()),
+('Casanare', true, NOW(), NOW());
+
+-- Amazonas
+INSERT INTO cities (name, departments_id, active, created_at, updated_at) VALUES
+('Leticia', 1, true, NOW(), NOW());
+
+-- Antioquia
+INSERT INTO cities (name, departments_id, active, created_at, updated_at) VALUES
+('Medellín', 2, true, NOW(), NOW()),
+('Envigado', 2, true, NOW(), NOW()),
+('Bello', 2, true, NOW(), NOW());
+
+-- Bogotá
+INSERT INTO cities (name, departments_id, active, created_at, updated_at) VALUES
+('Bogotá D.C.', 5, true, NOW(), NOW());
+
+-- Atlántico
+INSERT INTO cities (name, departments_id, active, created_at, updated_at) VALUES
+('Barranquilla', 4, true, NOW(), NOW()),
+('Soledad', 4, true, NOW(), NOW());
+
+-- Bolívar
+INSERT INTO cities (name, departments_id, active, created_at, updated_at) VALUES
+('Cartagena', 6, true, NOW(), NOW());
+
 DROP TABLE IF EXISTS accommodation_service;
 DROP TABLE IF EXISTS responses;
 DROP TABLE IF EXISTS comments;

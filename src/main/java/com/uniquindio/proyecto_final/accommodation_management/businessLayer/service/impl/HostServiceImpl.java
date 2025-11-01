@@ -170,6 +170,7 @@ public class HostServiceImpl implements HostService {
         }
 
         HostDTO userDTO = new HostDTO();
+        userDTO.setId(user.getId());
         userDTO.setName(user.getName());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());
