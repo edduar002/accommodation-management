@@ -3,8 +3,11 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.validators.PasswordValidator;
+import com.uniquindio.proyecto_final.accommodation_management.config.JwtConfig;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.UserDAO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,6 +43,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserDAO dao;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtConfig jwtConfig;
+
     /**
      * Crea el servicio con su dependencia DAO.
      * @param dao componente de acceso a datos para usuarios (no nulo)
@@ -61,6 +69,8 @@ public class UserServiceImpl implements UserService {
         // ✅ validar contraseña antes de guardar
         PasswordValidator.validate(dto.getPassword());
 
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+
         log.debug("Guardando usuario (campos sensibles redacted): {}", dto);
         UserDTO saved = dao.save(dto);
         log.info("Usuario guardado: {}", saved);
@@ -77,10 +87,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO login(LoginDTO login) {
         log.debug("Intento de login de usuario (credenciales redacted)");
-        UserDTO result = dao.login(login);
-        log.info("Resultado login usuario: {}", (result != null ? "OK" : "FALLÓ"));
-        return result;
+
+        UserDTO user = dao.login(login);
+
+        if (user == null || !passwordEncoder.matches(login.getPassword(), user.getPassword())) {
+            log.info("Login fallido para usuario {}", login.getEmail());
+            throw new RuntimeException("Credenciales inválidas");
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setActive(user.isActive());
+
+        String token = jwtConfig.generateToken(user.getEmail());
+        userDTO.setToken(token);
+
+        log.info("Login exitoso para usuario {}", user.getName());
+        return userDTO; // <-- Devuelves el DTO correcto
     }
+
+
 
     @Override
     public UserDTO detail(int accommodationId) {

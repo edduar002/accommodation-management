@@ -27,5 +27,6 @@ public class UserDTO {
     private LocalDateTime updatedAt;
     private boolean active;
     private String departmentName;
+    private String token;
 
 }

@@ -2,9 +2,13 @@ package com.uniquindio.proyecto_final.accommodation_management.businessLayer.ser
 
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.validators.PasswordValidator;
+import com.uniquindio.proyecto_final.accommodation_management.config.JwtConfig;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.HostDAO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +43,11 @@ public class HostServiceImpl implements HostService {
 
     private final HostDAO dao;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private JwtConfig jwtConfig;
+
     /**
      * Crea el servicio con su dependencia DAO.
      * @param dao componente de acceso a datos para {@link HostDTO} (no nulo)
@@ -61,6 +70,9 @@ public class HostServiceImpl implements HostService {
     @Override
     @Transactional
     public HostDTO save(HostDTO dto) {
+        PasswordValidator.validate(dto.getPassword());
+
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         log.debug("Guardando host (campos sensibles redacted)");
         HostDTO saved = dao.save(dto);
         log.info("Host guardado");
@@ -148,10 +160,26 @@ public class HostServiceImpl implements HostService {
      */
     @Override
     public HostDTO login(LoginDTO login) {
-        log.debug("Intento de login host (credenciales redacted)");
-        HostDTO result = dao.login(login);
-        log.info("Resultado login host: {}", (result != null ? "OK" : "FALLÓ"));
-        return result;
+        log.debug("Intento de login de usuario (credenciales redacted)");
+
+        HostDTO user = dao.login(login);
+
+        if (user == null || !passwordEncoder.matches(login.getPassword(), user.getPassword())) {
+            log.info("Login fallido para usuario {}", login.getEmail());
+            throw new RuntimeException("Credenciales inválidas");
+        }
+
+        HostDTO userDTO = new HostDTO();
+        userDTO.setName(user.getName());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setActive(user.isActive());
+
+        String token = jwtConfig.generateToken(user.getEmail());
+        userDTO.setToken(token);
+
+        log.info("Login exitoso para usuario {}", user.getName());
+        return userDTO; // <-- Devuelves el DTO correcto
     }
 
     /**

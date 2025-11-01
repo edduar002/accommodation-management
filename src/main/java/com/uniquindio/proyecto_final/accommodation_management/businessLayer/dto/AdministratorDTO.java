@@ -19,5 +19,6 @@ public class AdministratorDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Integer rolesId;
+    private String token;
 
 }

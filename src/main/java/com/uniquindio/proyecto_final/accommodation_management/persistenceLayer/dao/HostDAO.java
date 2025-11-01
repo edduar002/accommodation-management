@@ -37,9 +37,6 @@ public class HostDAO {
         if (entity == null) {
             return null;
         }
-        if (!entity.getPassword().equals(login.getPassword())) {
-            return null;
-        }
         return hostMapper.toDTO(entity);
     }
 

@@ -29,5 +29,6 @@ public class HostDTO {
     private boolean active;
     private String departmentName;
     private String cityName;
+    private String token;
 
 }

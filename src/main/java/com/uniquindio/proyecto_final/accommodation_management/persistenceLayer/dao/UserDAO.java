@@ -34,11 +34,9 @@ public class UserDAO {
         if (entity == null) {
             return null;
         }
-        if (!entity.getPassword().equals(login.getPassword())) {
-            return null;
-        }
-        return userMapper.toDTO(entity);
+        return userMapper.toDTO(entity); // Solo devuelves el DTO con el hash
     }
+
 
     public Optional<UserDTO> findById(int id) {
         return userRepository.findById(id)

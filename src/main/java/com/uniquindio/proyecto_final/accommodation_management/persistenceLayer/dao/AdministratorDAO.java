@@ -35,9 +35,6 @@ public class AdministratorDAO {
         if (entity == null) {
             return null;
         }
-        if (!entity.getPassword().equals(login.getPassword())) {
-            return null;
-        }
         return administratorMapper.toDTO(entity);
     }
 }
