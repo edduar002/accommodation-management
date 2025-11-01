@@ -22,6 +22,7 @@ public interface AccommodationMapper {
     @Mapping(target = "updatedAt", source = "updatedAt")
     @Mapping(target = "active", source = "active")
     @Mapping(target = "departmentName", expression = "java(entity.getDepartment() != null ? entity.getDepartment().getName() : null)")
+    @Mapping(target = "cityName", expression = "java(entity.getCity() != null ? entity.getCity().getName() : null)")
     AccommodationDTO toDTO(AccommodationEntity entity);
 
     List<AccommodationDTO> toDTOList(List<AccommodationEntity> entities);
