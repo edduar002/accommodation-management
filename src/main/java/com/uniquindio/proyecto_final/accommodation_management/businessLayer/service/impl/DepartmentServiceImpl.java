@@ -1,8 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.DepartmentService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.DepartmentDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -13,102 +11,174 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementación del servicio de negocio para gestionar {@link DepartmentDTO}.
+ * Implementación del servicio para operaciones sobre departamentos.
  *
- * <p>La clase delega la persistencia en {@link DepartmentDAO} y no introduce reglas adicionales;
- * su rol es orquestar la llamada al DAO.</p>
- *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Guardar un departamento: {@link #save(DepartmentDTO)}.</li>
- * </ul>
- *
- * @since 0.0.1-SNAPSHOT
- * @version 1.0
- * @see DepartmentDAO
- * @see DepartmentService
+ * <p>Orquesta la interacción con {@link DepartmentDAO} sin añadir lógica adicional.</p>
  */
 @Slf4j
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private final DepartmentDAO dao;
+    // DAO encargado de la persistencia de datos de Departamentos
+    private final DepartmentDAO departmentDAO;
 
     /**
-     * Crea el servicio con su dependencia DAO.
-     * @param dao componente de acceso a datos para departamentos (no nulo)
+     * Constructor con inyección del DAO.
+     * @param departmentDAO DAO para manejar datos de departamentos
      */
-    public DepartmentServiceImpl(DepartmentDAO dao) {
-        this.dao = dao;
+    public DepartmentServiceImpl(DepartmentDAO departmentDAO) {
+        // Asignación del DAO recibido a la propiedad interna
+        this.departmentDAO = departmentDAO;
     }
 
     /**
-     * Persiste un {@link DepartmentDTO}.
+     * Guarda un nuevo departamento en la base de datos.
      *
-     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
-     * administrada por Spring. La validación/persistencia específica se delega
-     * completamente al DAO.</p>
-     *
-     * @param dto DTO del departamento a guardar (no nulo)
-     * @return DTO persistido (normalmente con identificador asignado)
-     * @throws RuntimeException si el DAO reporta error de validación o persistencia
-     * @implSpec Delegado directo a {@link DepartmentDAO#save(DepartmentDTO)}.
+     * @param departmentDTO datos del departamento a guardar
+     * @return departamento guardado con id asignado
      */
     @Override
     @Transactional
-    public DepartmentDTO save(DepartmentDTO dto) {
-        log.debug("Guardando departamento: {}", dto);
-        DepartmentDTO saved = dao.save(dto);
-        log.info("Departamento guardado: {}", saved);
-        return saved;
+    public DepartmentDTO save(DepartmentDTO departmentDTO) {
+
+        // Registro debug para trazabilidad
+        log.debug("Guardando departamento: {}", departmentDTO);
+
+        // Llamada al DAO para persistir
+        DepartmentDTO savedDepartment = departmentDAO.save(departmentDTO);
+
+        // Confirmación de guardado
+        log.info("Departamento guardado: {}", savedDepartment);
+
+        // Retorno del resultado
+        return savedDepartment;
     }
 
+    /**
+     * Obtiene la lista completa de departamentos.
+     *
+     * @return lista de departamentos
+     */
     @Override
     public List<DepartmentDTO> departmentsList() {
-        log.debug("Buscando todos los departamentos");
-        List<DepartmentDTO> list = dao.departmentsList();
-        log.info("Encontrados {} departamentos", list.size());
-        return list;
+
+        // Registro de inicio de consulta
+        log.debug("Consultando lista completa de departamentos");
+
+        // Llamada al DAO
+        List<DepartmentDTO> departmentList = departmentDAO.departmentsList();
+
+        // Registro del total encontrado
+        log.info("Encontrados {} departamentos", departmentList.size());
+
+        // Retorno de la lista
+        return departmentList;
     }
 
+    /**
+     * Busca el detalle de un departamento según su id.
+     *
+     * @param departmentId id del departamento a consultar
+     * @return departamento encontrado o null si no existe
+     */
     @Override
-    public DepartmentDTO detail(int accommodationId) {
-        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        DepartmentDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
-        return dto;
+    public DepartmentDTO detail(int departmentId) {
+
+        // Registro de la consulta
+        log.debug("Consultando detalle de departamento id={}", departmentId);
+
+        // Búsqueda en el DAO
+        DepartmentDTO departmentDTO = departmentDAO.findById(departmentId).orElse(null);
+
+        // Registro de resultado
+        log.info("Detalle departamento id={} {}", departmentId, (departmentDTO != null ? "encontrado" : "no encontrado"));
+
+        // Retorno del resultado
+        return departmentDTO;
     }
 
+    /**
+     * Edita datos básicos de un departamento.
+     *
+     * @param id id del departamento a actualizar
+     * @param departmentData nuevos datos (solo se usa el nombre)
+     * @return departamento actualizado si existe, vacío si no
+     */
+    @Override
     @Transactional
-    @Override
-    public Optional<DepartmentDTO> edit(int id, DepartmentDTO user) {
-        log.debug("Editando usuario id={} con newName={}", id, user.getName());
-        Optional<DepartmentDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            DepartmentDTO userNew = userDb.orElseThrow();
-            userNew.setName(user.getName());
-            DepartmentDTO updated = dao.save(userNew);
-            log.info("Usuario id={} actualizado (name)", id);
-            return Optional.of(updated);
+    public Optional<DepartmentDTO> edit(int id, DepartmentDTO departmentData) {
+
+        // Registro de acción
+        log.debug("Editando departamento id={} con nuevo nombre={}", id, departmentData.getName());
+
+        // Búsqueda del registro original
+        Optional<DepartmentDTO> departmentDb = departmentDAO.findById(id);
+
+        // Si existe, actualizar
+        if (departmentDb.isPresent()) {
+
+            // Obtención del registro original
+            DepartmentDTO departmentToUpdate = departmentDb.get();
+
+            // Actualización del nombre
+            departmentToUpdate.setName(departmentData.getName());
+
+            // Guardar cambios
+            DepartmentDTO updatedDepartment = departmentDAO.save(departmentToUpdate);
+
+            // Confirmación
+            log.info("Departamento id={} actualizado correctamente", id);
+
+            // Retorno del actualizado
+            return Optional.of(updatedDepartment);
         }
-        log.warn("No se encontró usuario id={} para editar", id);
-        return userDb;
+
+        // Si no existe, notificar en logs
+        log.warn("No se encontró departamento id={} para editar", id);
+
+        // Retorno del Optional vacío
+        return departmentDb;
     }
 
-    @Transactional
+    /**
+     * Realiza un soft delete (marcar como inactivo) en un departamento.
+     *
+     * @param id id del departamento a desactivar
+     * @return departamento actualizado si existe, vacío si no
+     */
     @Override
+    @Transactional
     public Optional<DepartmentDTO> delete(int id) {
-        log.debug("Inactivando (soft delete) alojamiento id={}", id);
-        Optional<DepartmentDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            DepartmentDTO acc = accommodationDb.orElseThrow();
-            acc.setActive(false);
-            DepartmentDTO saved = dao.save(acc);
-            log.info("Alojamiento id={} inactivado", id);
-            return Optional.of(saved);
-        }
-        log.warn("No se encontró alojamiento id={} para inactivar", id);
-        return accommodationDb;
-    }
 
+        // Registro de acción
+        log.debug("Inactivando departamento id={}", id);
+
+        // Búsqueda del registro original
+        Optional<DepartmentDTO> departmentDb = departmentDAO.findById(id);
+
+        // Si existe, hacer soft delete
+        if (departmentDb.isPresent()) {
+
+            // Obtener el registro existente
+            DepartmentDTO department = departmentDb.get();
+
+            // Cambiar estado a inactivo
+            department.setActive(false);
+
+            // Guardar cambios
+            DepartmentDTO updatedDepartment = departmentDAO.save(department);
+
+            // Confirmación
+            log.info("Departamento id={} inactivado correctamente", id);
+
+            // Retorno del actualizado
+            return Optional.of(updatedDepartment);
+        }
+
+        // Log cuando no se encuentra el registro
+        log.warn("No se encontró departamento id={} para inactivar", id);
+
+        // Retorno del Optional vacío
+        return departmentDb;
+    }
 }

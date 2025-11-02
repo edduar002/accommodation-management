@@ -1,7 +1,5 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.HostDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.RoleDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.RoleService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.RoleDAO;
@@ -18,96 +16,114 @@ import java.util.Optional;
  * <p>La clase delega la persistencia en {@link RoleDAO} y no introduce reglas adicionales;
  * su función es orquestar la llamada al DAO.</p>
  *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Guardar un rol: {@link #save(RoleDTO)}.</li>
- * </ul>
- *
  * @since 0.0.1-SNAPSHOT
  * @version 1.0
- * @see RoleDAO
- * @see RoleService
  */
 @Slf4j
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private final RoleDAO dao;
+    // DAO encargado del acceso a datos para roles
+    private final RoleDAO roleDAO;
 
     /**
-     * Crea el servicio con su dependencia DAO.
-     * @param dao componente de acceso a datos para roles (no nulo)
+     * Constructor que inicializa la dependencia DAO.
+     * @param roleDAO componente de acceso a datos (no nulo)
      */
-    public RoleServiceImpl(RoleDAO dao) {
-        this.dao = dao;
+    public RoleServiceImpl(RoleDAO roleDAO) {
+        this.roleDAO = roleDAO;
     }
 
     /**
-     * Persiste un {@link RoleDTO}.
+     * Guarda un rol en el sistema.
      *
-     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
-     * administrada por Spring. La validación/persistencia específica se delega
-     * completamente al DAO.</p>
+     * <p>Operación transaccional para garantizar consistencia.</p>
      *
-     * @param dto DTO del rol a guardar (no nulo)
-     * @return DTO persistido (normalmente con identificador asignado)
-     * @throws RuntimeException si el DAO reporta error de validación o persistencia
-     * @implSpec Delegado directo a {@link RoleDAO#save(RoleDTO)}.
+     * @param roleDTO DTO con la información del rol a guardar
+     * @return Rol persistido
      */
     @Override
     @Transactional
-    public RoleDTO save(RoleDTO dto) {
-        log.debug("Guardando rol: {}", dto);
-        RoleDTO saved = dao.save(dto);
-        log.info("Rol guardado: {}", saved);
-        return saved;
+    public RoleDTO save(RoleDTO roleDTO) {
+        log.debug("Guardando rol: {}", roleDTO);
+        RoleDTO savedRole = roleDAO.save(roleDTO);
+        log.info("Rol guardado: {}", savedRole);
+        return savedRole;
     }
 
+    /**
+     * Obtiene la lista completa de roles.
+     *
+     * @return Lista de roles disponibles
+     */
     @Override
     public List<RoleDTO> rolesList() {
-        log.debug("Buscando todos los roles");
-        List<RoleDTO> list = dao.rolesList();
-        log.info("Encontrados {} roles", list.size());
-        return list;
+        log.debug("Listando todos los roles");
+        List<RoleDTO> roles = roleDAO.rolesList();
+        log.info("Total roles encontrados: {}", roles.size());
+        return roles;
     }
 
+    /**
+     * Obtiene el detalle de un rol por su ID.
+     *
+     * @param roleId ID del rol
+     * @return Rol encontrado o null si no existe
+     */
     @Override
-    public RoleDTO detail(int accommodationId) {
-        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        RoleDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
-        return dto;
+    public RoleDTO detail(int roleId) {
+        log.debug("Buscando rol con id={}", roleId);
+        RoleDTO foundRole = roleDAO.findById(roleId).orElse(null);
+        log.info("Rol id={} {}", roleId, foundRole != null ? "encontrado" : "no encontrado");
+        return foundRole;
     }
 
+    /**
+     * Edita el nombre de un rol.
+     *
+     * @param id ID del rol a modificar
+     * @param roleData DTO con los nuevos datos
+     * @return Rol actualizado o vacío si no existe
+     */
     @Transactional
     @Override
-    public Optional<RoleDTO> edit(int id, RoleDTO user) {
-        log.debug("Editando usuario id={} con newName={}", id, user.getName());
-        Optional<RoleDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            RoleDTO userNew = userDb.orElseThrow();
-            userNew.setName(user.getName());
-            RoleDTO updated = dao.save(userNew);
-            log.info("Usuario id={} actualizado (name)", id);
-            return Optional.of(updated);
+    public Optional<RoleDTO> edit(int id, RoleDTO roleData) {
+        log.debug("Editando rol id={} nuevoNombre={}", id, roleData.getName());
+        Optional<RoleDTO> roleDb = roleDAO.findById(id);
+
+        if (roleDb.isPresent()) {
+            RoleDTO existingRole = roleDb.get();
+            existingRole.setName(roleData.getName());
+            RoleDTO updatedRole = roleDAO.save(existingRole);
+            log.info("Rol id={} actualizado correctamente", id);
+            return Optional.of(updatedRole);
         }
-        log.warn("No se encontró usuario id={} para editar", id);
-        return userDb;
+
+        log.warn("No se encontró rol id={} para actualización", id);
+        return roleDb;
     }
 
+    /**
+     * Inactiva un rol (soft delete).
+     *
+     * @param id ID del rol a inactivar
+     * @return Rol inactivado o vacío si no existe
+     */
     @Transactional
     @Override
     public Optional<RoleDTO> delete(int id) {
-        log.debug("Inactivando (soft delete) alojamiento id={}", id);
-        Optional<RoleDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            RoleDTO acc = accommodationDb.orElseThrow();
-            acc.setActive(false);
-            RoleDTO saved = dao.save(acc);
-            log.info("Alojamiento id={} inactivado", id);
-            return Optional.of(saved);
+        log.debug("Inactivando rol id={}", id);
+        Optional<RoleDTO> roleDb = roleDAO.findById(id);
+
+        if (roleDb.isPresent()) {
+            RoleDTO role = roleDb.get();
+            role.setActive(false);
+            RoleDTO savedRole = roleDAO.save(role);
+            log.info("Rol id={} inactivado correctamente", id);
+            return Optional.of(savedRole);
         }
-        log.warn("No se encontró alojamiento id={} para inactivar", id);
-        return accommodationDb;
+
+        log.warn("No se encontró rol id={} para inactivar", id);
+        return roleDb;
     }
 }

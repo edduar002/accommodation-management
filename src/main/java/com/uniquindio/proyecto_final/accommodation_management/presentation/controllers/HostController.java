@@ -3,8 +3,6 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.HostService;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.email.EmailService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.HostEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,19 +15,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-// IMPORTACIONES PARA SWAGGER
-
-
+/**
+ * Controlador REST para la entidad Host.
+ * Proporciona endpoints para crear, registrar, editar, eliminar, listar y autenticar hosts.
+ */
 @RestController
 @RequestMapping("/api/hosts")
 public class HostController {
 
+    // Inyección del servicio de hosts
     @Autowired
     private HostService service;
 
+    // Inyección del servicio de correo
     @Autowired
     private EmailService emailService;
 
+    /**
+     * Crea un nuevo host.
+     * @param host DTO con los datos del host.
+     * @param result resultados de validación.
+     * @return ResponseEntity con host creado o errores de validación.
+     */
+    // Endpoint POST para crear host
     @PostMapping
     public ResponseEntity<?> create(@RequestBody HostDTO host, BindingResult result){
         if(result.hasFieldErrors()){
@@ -38,6 +46,12 @@ public class HostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(host));
     }
 
+    /**
+     * Obtiene detalle de un host específico.
+     * @param accommodationId ID del host.
+     * @return ResponseEntity con host o 404 si no existe.
+     */
+    // Endpoint GET para detalle de host
     @GetMapping("/getOne/{id}")
     public ResponseEntity<HostDTO> detail(@PathVariable("id") int accommodationId) {
         HostDTO detalle = service.detail(accommodationId);
@@ -47,13 +61,20 @@ public class HostController {
         return ResponseEntity.ok(detalle);
     }
 
+    /**
+     * Registra un host y envía correo de bienvenida.
+     * @param user DTO con los datos del host.
+     * @param result resultados de validación.
+     * @return ResponseEntity con host registrado o errores de validación.
+     */
+    // Endpoint POST para registrar host
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody HostDTO user, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
 
-        // Guardar usuario
+        // Guardar host
         HostDTO savedUser = service.save(user);
 
         // Enviar correo de bienvenida
@@ -67,6 +88,12 @@ public class HostController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
+    /**
+     * Login de host.
+     * @param login DTO con email y contraseña.
+     * @return ResponseEntity con host autenticado o 404 si no existe.
+     */
+    // Endpoint POST para login de host
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         HostDTO host = service.login(login);
@@ -76,6 +103,12 @@ public class HostController {
         return ResponseEntity.ok(host);
     }
 
+    /**
+     * Marca un host como eliminado.
+     * @param id ID del host.
+     * @return ResponseEntity con host eliminado o 404 si no existe.
+     */
+    // Endpoint PUT para eliminar host
     @PutMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
         Optional<HostDTO> productOptional = service.delete(id);
@@ -86,6 +119,11 @@ public class HostController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Lista todos los hosts activos.
+     * @return ResponseEntity con lista de hosts o 204 si no hay contenido.
+     */
+    // Endpoint GET para listar todos los hosts
     @GetMapping("/getAll")
     public ResponseEntity<List<HostDTO>> hostsList(){
         List<HostDTO> todos = service.hostsList();
@@ -95,6 +133,14 @@ public class HostController {
         return ResponseEntity.ok(todos);
     }
 
+    /**
+     * Edita un host existente.
+     * @param id ID del host.
+     * @param host DTO con datos a actualizar.
+     * @param result resultados de validación.
+     * @return ResponseEntity con host actualizado, 404 o errores de validación.
+     */
+    // Endpoint PUT para editar host
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable int id, @RequestBody HostDTO host, BindingResult result){
         if(result.hasFieldErrors()){
@@ -107,6 +153,13 @@ public class HostController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Cambia la contraseña de un host.
+     * @param id ID del host.
+     * @param dto DTO con contraseña actual y nueva.
+     * @return ResponseEntity con host actualizado o error de contraseña incorrecta.
+     */
+    // Endpoint PUT para cambiar contraseña
     @PutMapping("/changePassword/{id}")
     public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordDTO dto) {
         Optional<HostDTO> hostOptional = service.changePassword(id, dto);
@@ -118,9 +171,16 @@ public class HostController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    /**
+     * Valida los campos de un BindingResult y retorna errores en formato JSON.
+     * @param result BindingResult con errores de validación.
+     * @return ResponseEntity con errores y status 400.
+     */
+    // Método privado para manejar errores de validación
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {
+            // Genera mensaje de error para cada campo
             errors.put(err.getField(), "El campo " + err.getField() + " no puede ser vacio " + err.getDefaultMessage());
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);

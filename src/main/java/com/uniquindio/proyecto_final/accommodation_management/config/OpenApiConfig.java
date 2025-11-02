@@ -1,6 +1,5 @@
 package com.uniquindio.proyecto_final.accommodation_management.config;
 
-// IMPORTACIONES NECESARIAS //
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -12,26 +11,45 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration  // Le dice a Spring que esta es una clase de configuración
-@OpenAPIDefinition(  // Define la información general de tu API
+/**
+ * Configuración de OpenAPI (Swagger) para documentar la API REST.
+ *
+ * <p>Define información general de la API, servidores disponibles, licencia,
+ * contacto y esquema de seguridad para JWT.</p>
+ *
+ * <h2>Responsabilidades</h2>
+ * <ul>
+ *     <li>Proporcionar metadatos de la API: título, versión, descripción, contacto y licencia.</li>
+ *     <li>Configurar los servidores disponibles en Swagger: desarrollo, pruebas y producción.</li>
+ *     <li>Definir esquema de seguridad JWT (Bearer Authentication) para la API.</li>
+ * </ul>
+ *
+ * <p>Esta clase permite que Swagger genere documentación interactiva de tu API
+ * accesible desde el navegador.</p>
+ *
+ * @since 1.0
+ * @version 1.0
+ */
+@Configuration
+@OpenAPIDefinition(
         info = @Info(
-                title = "Tienda Virtual API",  // Nombre que aparece en Swagger
-                version = "1.0.0",             // Versión de tu API
-                description = "API REST para la gestión completa de una tienda virtual",  // Descripción
-                contact = @Contact(  // Información de contacto del desarrollador
+                title = "Tienda Virtual API",
+                version = "1.0.0",
+                description = "API REST para la gestión completa de una tienda virtual",
+                contact = @Contact(
                         name = "Equipo de Desarrollo",
                         email = "dev@tiendavirtual.com",
                         url = "https://tiendavirtual.com"
                 ),
-                license = @License(  // Licencia del software
+                license = @License(
                         name = "MIT License",
                         url = "https://opensource.org/licenses/MIT"
                 )
         ),
-        servers = {  // Define los servidores donde está disponible tu API
+        servers = {
                 @Server(
                         url = "http://localhost:8080",
-                        description = "Servidor de Desarrollo"  // Este aparece en el dropdown de Swagger
+                        description = "Servidor de Desarrollo"
                 ),
                 @Server(
                         url = "https://api-test.tiendavirtual.com",
@@ -43,20 +61,23 @@ import org.springframework.context.annotation.Configuration;
                 )
         }
 )
-
 public class OpenApiConfig {
 
-    @Bean  // Crea un objeto que Spring va a usar para configurar OpenAPI
+    /**
+     * Configura OpenAPI con componentes adicionales, incluyendo esquema de seguridad JWT.
+     *
+     * @return objeto {@link OpenAPI} configurado para la documentación de Swagger
+     */
+    @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .components(new Components()
-                        // ESTO ES PARA AUTENTICACIÓN JWT (si la usas más adelante)
                         .addSecuritySchemes("Bearer Authentication",
                                 new SecurityScheme()
-                                        .type(SecurityScheme.Type.HTTP)  // Tipo de autenticación HTTP
-                                        .scheme("bearer")                // Esquema Bearer
-                                        .bearerFormat("JWT")             // Formato del token
-                                        .description("Ingresa tu token JWT")  // Descripción para el usuario
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                        .description("Ingresa tu token JWT")
                         )
                 );
     }

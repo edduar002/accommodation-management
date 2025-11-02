@@ -14,148 +14,165 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * Implementación del servicio de negocio para administrar usuarios de tipo
- * {@link AdministratorDTO}.
- *
- * <p>La clase delega la persistencia y autenticación en {@link AdministratorDAO}.
- * No agrega reglas adicionales: su responsabilidad es orquestar la llamada al DAO.</p>
- *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Crear/actualizar administradores: {@link #save(AdministratorDTO)}.</li>
- *   <li>Iniciar sesión (autenticación): {@link #login(LoginDTO)}.</li>
- * </ul>
- *
- * <p><b>Seguridad de logs:</b> los mensajes de logging evitan exponer credenciales
- * o datos sensibles. Las credenciales se marcan como “redacted”.</p>
- *
- * @author
- *   Equipo Prg Avanzada
- * @since 0.0.1-SNAPSHOT
- * @version 1.0
- * @see AdministratorDAO
- * @see AdministratorService
+ * Servicio de negocio para gestionar administradores.
+ * Orquesta operaciones y delega persistencia a {@link AdministratorDAO}.
  */
 @Slf4j
 @Service
 public class AdministratorServiceImpl implements AdministratorService {
 
-    private final AdministratorDAO dao;
+    // DAO de acceso a administradores en BD
+    private final AdministratorDAO administratorDAO;
 
+    // Codificador de contraseñas
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    // Configuración para generación de JWT
     @Autowired
     private JwtConfig jwtConfig;
 
     /**
-     * Crea el servicio con su dependencia DAO.
-     *
-     * @param dao componente de acceso a datos para administradores (no nulo)
+     * Constructor con inyección de DAO.
      */
-    public AdministratorServiceImpl(AdministratorDAO dao) {
-        this.dao = dao;
+    public AdministratorServiceImpl(AdministratorDAO administratorDAO) {
+        // Guardar DAO recibido
+        this.administratorDAO = administratorDAO;
     }
 
     /**
-     * Persiste un {@link AdministratorDTO}.
-     *
-     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
-     * administrada por Spring.</p>
-     *
-     * @param dto DTO del administrador a guardar (no nulo)
-     * @return DTO persistido (normalmente con identificador asignado)
-     * @throws RuntimeException si el DAO reporta error de validación o persistencia
-     * @implSpec Delegado directo a {@link AdministratorDAO#save(AdministratorDTO)}.
+     * Guarda un administrador en la BD.
      */
     @Override
     @Transactional
-    public AdministratorDTO save(AdministratorDTO dto) {
-        PasswordValidator.validate(dto.getPassword());
-
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        log.debug("Guardando administrador: {}", dto);
-        AdministratorDTO saved = dao.save(dto);
-        log.info("Administrador guardado: {}", saved);
-        return saved;
+    public AdministratorDTO save(AdministratorDTO adminDTO) {
+        // Validar fortaleza de contraseña
+        PasswordValidator.validate(adminDTO.getPassword());
+        // Encriptar contraseña antes de guardar
+        adminDTO.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
+        // Registrar acción
+        log.debug("Guardando administrador: {}", adminDTO);
+        // Persistir en la BD
+        AdministratorDTO savedAdmin = administratorDAO.save(adminDTO);
+        // Confirmar guardado
+        log.info("Administrador guardado: {}", savedAdmin);
+        // Retornar resultado
+        return savedAdmin;
     }
 
+    /**
+     * Cambia contraseña de un administrador.
+     */
     @Transactional
     @Override
-    public Optional<AdministratorDTO> changePassword(int id, ChangePasswordDTO user) {
-        log.debug("changePassword userId={} (old/new redacted)", id);
-        Optional<AdministratorDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            AdministratorDTO userNew = userDb.get();
-            if (userNew.getPassword().equals(user.getOldPassword())) {
-                userNew.setPassword(user.getNewPassword());
-                dao.save(userNew);
+    public Optional<AdministratorDTO> changePassword(int id, ChangePasswordDTO changePasswordDTO) {
+        // Registrar intento sin mostrar credenciales
+        log.debug("changePassword userId={} (credenciales ocultas)", id);
+        // Buscar el administrador en BD
+        Optional<AdministratorDTO> adminDb = administratorDAO.findById(id);
+
+        // Si existe
+        if (adminDb.isPresent()) {
+            // Obtener registro
+            AdministratorDTO admin = adminDb.get();
+            // Validar contraseña actual mediante coincidencia encriptada
+            if (passwordEncoder.matches(changePasswordDTO.getOldPassword(), admin.getPassword())) {
+                // Encriptar nueva contraseña
+                admin.setPassword(passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+                // Guardar cambios
+                administratorDAO.save(admin);
+                // Registrar éxito
                 log.info("Contraseña actualizada para userId={}", id);
-                return Optional.of(userNew);
-            } else {
-                log.warn("Contraseña antigua no coincide para userId={}", id);
-                return Optional.empty();
+                // Retornar admin actualizado
+                return Optional.of(admin);
             }
+            // Si contraseña antigua no coincide
+            log.warn("Contraseña antigua incorrecta para userId={}", id);
+            return Optional.empty();
         }
-        log.warn("No se encontró usuario id={} para changePassword", id);
-        return Optional.empty();
-    }
 
-    @Override
-    public AdministratorDTO detail(int accommodationId) {
-        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        AdministratorDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
-        return dto;
-    }
-
-    @Override
-    @Transactional
-    public Optional<AdministratorDTO> edit(int idHost, AdministratorDTO host) {
-        log.debug("Editando host id={} con newName={}", idHost, host.getName());
-        Optional<AdministratorDTO> hostDb = dao.findById(idHost);
-        if (hostDb.isPresent()) {
-            AdministratorDTO hostNew = hostDb.orElseThrow();
-            hostNew.setName(host.getName());
-            hostNew.setSurname(host.getSurname());
-            hostNew.setEmail(host.getEmail());
-            AdministratorDTO updated = dao.save(hostNew);
-            log.info("Host id={} actualizado (name)", idHost);
-            return Optional.of(updated);
-        }
-        log.warn("No se encontró host id={} para editar", idHost);
+        // Si admin no existe
+        log.warn("No se encontró userId={} para cambiar contraseña", id);
         return Optional.empty();
     }
 
     /**
-     * Autentica a un administrador usando las credenciales provistas.
-     *
-     * <p><b>Privacidad:</b> no se registran credenciales en logs.</p>
-     *
-     * @param login credenciales de acceso (usuario/correo + contraseña)
-     * @return {@link AdministratorDTO} autenticado si las credenciales son válidas; puede ser {@code null} si no
-     * @throws RuntimeException si el DAO produce un error durante la autenticación
-     * @implSpec Delegado directo a {@link AdministratorDAO#login(LoginDTO)}.
+     * Obtiene detalle de un administrador por ID.
      */
     @Override
-    public AdministratorDTO login(LoginDTO login) {
-        log.debug("Intento de login de usuario (credenciales redacted)");
+    public AdministratorDTO detail(int adminId) {
+        // Registrar consulta
+        log.debug("Consultando detalle de administrador id={}", adminId);
+        // Buscar por ID
+        AdministratorDTO admin = administratorDAO.findById(adminId).orElse(null);
+        // Registrar resultado
+        log.info("Detalle id={} {}", adminId, admin != null ? "encontrado" : "no encontrado");
+        // Retornar resultado
+        return admin;
+    }
 
-        AdministratorDTO user = dao.login(login);
+    /**
+     * Edita información básica de un administrador.
+     */
+    @Override
+    @Transactional
+    public Optional<AdministratorDTO> edit(int adminId, AdministratorDTO newAdminData) {
+        // Registrar acción
+        log.debug("Editando admin id={} con newName={}", adminId, newAdminData.getName());
+        // Buscar admin existente
+        Optional<AdministratorDTO> adminDb = administratorDAO.findById(adminId);
 
-        if (user == null || !passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            log.info("Login fallido para usuario {}", login.getEmail());
+        // Si existe, actualizar
+        if (adminDb.isPresent()) {
+            // Obtener entidad existente
+            AdministratorDTO admin = adminDb.get();
+            // Actualizar campos editables
+            admin.setName(newAdminData.getName());
+            admin.setSurname(newAdminData.getSurname());
+            admin.setEmail(newAdminData.getEmail());
+            // Guardar cambios
+            AdministratorDTO updatedAdmin = administratorDAO.save(admin);
+            // Log de éxito
+            log.info("Administrador id={} actualizado", adminId);
+            // Retornar resultado
+            return Optional.of(updatedAdmin);
+        }
+
+        // Si no existe
+        log.warn("No se encontró admin id={} para editar", adminId);
+        return Optional.empty();
+    }
+
+    /**
+     * Inicia sesión validando credenciales y generando token JWT.
+     */
+    @Override
+    public AdministratorDTO login(LoginDTO loginDTO) {
+        // Registrar intento sin exponer credenciales
+        log.debug("Intento de login (credenciales ocultas)");
+
+        // Buscar usuario por login
+        AdministratorDTO admin = administratorDAO.login(loginDTO);
+
+        // Validar credenciales
+        if (admin == null || !passwordEncoder.matches(loginDTO.getPassword(), admin.getPassword())) {
+            log.info("Login fallido para usuario {}", loginDTO.getEmail());
             throw new RuntimeException("Credenciales inválidas");
         }
 
-        AdministratorDTO userDTO = new AdministratorDTO();
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setEmail(user.getEmail());
+        // Crear objeto de respuesta sin contraseña
+        AdministratorDTO adminResponse = new AdministratorDTO();
+        adminResponse.setId(admin.getId());
+        adminResponse.setName(admin.getName());
+        adminResponse.setEmail(admin.getEmail());
 
-        String token = jwtConfig.generateToken(user.getEmail());
-        userDTO.setToken(token);
+        // Generar token JWT
+        String token = jwtConfig.generateToken(admin.getEmail());
+        adminResponse.setToken(token);
 
-        log.info("Login exitoso para usuario {}", user.getName());
-        return userDTO; // <-- Devuelves el DTO correcto
+        // Log de éxito
+        log.info("Login exitoso para usuario {}", admin.getName());
+        // Retornar DTO con token
+        return adminResponse;
     }
 }

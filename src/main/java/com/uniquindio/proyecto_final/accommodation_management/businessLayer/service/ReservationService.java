@@ -1,14 +1,14 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.AccommodationEntity;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.ReservationEntity;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Servicio encargado de gestionar reservas de alojamiento.
+ */
 public interface ReservationService {
 
     ReservationDTO save(ReservationDTO reservation);
@@ -17,13 +17,28 @@ public interface ReservationService {
 
     ResponseEntity<ReservationDTO> cancelReservations(int idReservation);
 
-    ReservationDTO viewReservationDetails(int idAccommodation);
+    /**
+     * Consulta el detalle de una reserva por su ID.
+     */
+    ReservationDTO viewReservationDetails(int idReservation);
 
+    /**
+     * Lista las reservas asociadas a un alojamiento.
+     */
     List<ReservationDTO> viewAccommodationReservations(int idAccommodation);
 
+    /**
+     * Lista el historial de reservas de un usuario.
+     */
     List<ReservationDTO> viewReservationHistory(int idUser);
 
-    ResponseEntity<ReservationDTO> acceptReservationRequests(int idAccommodation);
+    /**
+     * Acepta una solicitud de reserva.
+     */
+    ResponseEntity<ReservationDTO> acceptReservationRequests(int idReservation);
 
-    ResponseEntity<ReservationDTO> rejectReservationRequests(int idAccommodation);
+    /**
+     * Rechaza una solicitud de reserva.
+     */
+    ResponseEntity<ReservationDTO> rejectReservationRequests(int idReservation);
 }

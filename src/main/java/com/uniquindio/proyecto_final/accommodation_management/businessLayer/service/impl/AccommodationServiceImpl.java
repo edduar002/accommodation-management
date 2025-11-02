@@ -4,169 +4,168 @@ import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.AccommodationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.AccommodationDAO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementación del servicio de negocio para gestionar objetos {@link AccommodationDTO}.
- *
- * <p>Esta clase aplica reglas muy simples (actualizar precio, soft-delete) y
- * delega la persistencia en {@link AccommodationDAO}.</p>
- *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Crear alojamientos: {@link #save(AccommodationDTO)}.</li>
- *   <li>Consultar disponibles: {@link #searchAvailableAccommodations()}.</li>
- *   <li>Listar por anfitrión: {@link #ownAccommodationList(int)}.</li>
- *   <li>Editar precio: {@link #edit(int, AccommodationDTO)}.</li>
- *   <li>Inactivar (soft delete): {@link #delete(int)}.</li>
- *   <li>Detalle: {@link #detail(int)}.</li>
- * </ul>
- *
- * @author
- *   Equipo Prg Avanzada
- * @since 0.0.1-SNAPSHOT
- * @version 1.0
- * @see AccommodationDAO
- * @see AccommodationService
+ * Servicio de negocio para operaciones sobre alojamientos.
+ * Delegado de persistencia: {@link AccommodationDAO}.
  */
 @Slf4j
 @Service
 public class AccommodationServiceImpl implements AccommodationService {
 
-    private final AccommodationDAO dao;
+    // DAO para acceso a datos
+    private final AccommodationDAO accommodationDAO;
 
     /**
-     * Crea el servicio con su dependencia DAO.
-     * @param dao componente de acceso a datos (no nulo)
+     * Constructor inyectando dependencia DAO.
+     * @param accommodationDAO acceso a datos
      */
-    public AccommodationServiceImpl(AccommodationDAO dao) {
-        this.dao = dao;
+    public AccommodationServiceImpl(AccommodationDAO accommodationDAO) {
+        // Asignar DAO recibido
+        this.accommodationDAO = accommodationDAO;
     }
 
     /**
-     * Persiste un alojamiento.
-     *
-     * @param dto DTO de entrada (no nulo)
-     * @return DTO persistido (normalmente con identificador asignado)
-     * @throws RuntimeException si el DAO reporta error de validación/persistencia
-     * @implSpec Delegado directo a {@link AccommodationDAO#save(AccommodationDTO)}.
+     * Guarda un nuevo alojamiento.
+     * @param accommodationDTO datos del alojamiento a guardar
+     * @return alojamiento guardado
      */
     @Override
     @Transactional
-    public AccommodationDTO save(AccommodationDTO dto) {
-        log.debug("Guardando alojamiento: {}", dto);
-        AccommodationDTO saved = dao.save(dto);
-        log.info("Alojamiento guardado: {}", saved);
-        return saved;
+    public AccommodationDTO save(AccommodationDTO accommodationDTO) {
+        // Registrar acción en debug
+        log.debug("Guardando alojamiento: {}", accommodationDTO);
+        // Guardar alojamiento en base de datos
+        AccommodationDTO savedAccommodation = accommodationDAO.save(accommodationDTO);
+        // Confirmar guardado en logs
+        log.info("Alojamiento guardado: {}", savedAccommodation);
+        // Retornar alojamiento guardado
+        return savedAccommodation;
     }
 
     /**
-     * Obtiene una lista de alojamientos disponibles.
-     * @return lista no nula (posiblemente vacía)
-     * @implSpec Delegado directo a {@link AccommodationDAO#searchAvailableAccommodations()}.
+     * Obtiene solo alojamientos activos/disponibles.
+     * @return lista de alojamientos disponibles
      */
     @Override
     public List<AccommodationDTO> searchAvailableAccommodations() {
+        // Registrar acción
         log.debug("Buscando alojamientos disponibles");
-        List<AccommodationDTO> list = dao.searchAvailableAccommodations();
-        log.info("Encontrados {} alojamientos disponibles", list.size());
-        return list;
+        // Consultar alojamiento filtrando estado activo
+        List<AccommodationDTO> accommodations = accommodationDAO.searchAvailableAccommodations();
+        // Reportar cantidad encontrada
+        log.info("Encontrados {} alojamientos disponibles", accommodations.size());
+        // Retornar lista
+        return accommodations;
     }
 
     /**
-     * Lista los alojamientos de un anfitrión.
-     * @param idHost identificador del anfitrión
-     * @return lista no nula (posiblemente vacía)
-     * @implSpec Delegado directo a {@link AccommodationDAO#ownAccommodationList(int)}.
+     * Lista alojamientos pertenecientes a un anfitrión.
+     * @param hostId identificador del anfitrión
+     * @return lista de alojamientos
      */
     @Override
-    public List<AccommodationDTO> ownAccommodationList(int idHost) {
-        log.debug("Listando alojamientos del hostId={}", idHost);
-        List<AccommodationDTO> list = dao.ownAccommodationList(idHost);
-        log.info("Host {} tiene {} alojamientos", idHost, list.size());
-        return list;
+    public List<AccommodationDTO> ownAccommodationList(int hostId) {
+        // Registrar acción
+        log.debug("Listando alojamientos del hostId={}", hostId);
+        // Consultar alojamientos del anfitrión
+        List<AccommodationDTO> accommodations = accommodationDAO.ownAccommodationList(hostId);
+        // Registrar tamaño
+        log.info("Host {} tiene {} alojamientos", hostId, accommodations.size());
+        // Retornar lista
+        return accommodations;
     }
 
     /**
-     * Edita un alojamiento actualizando <b>solo el precio</b>.
-     *
-     * <p>Si el alojamiento no existe, se retorna {@link Optional#empty()}.</p>
-     *
-     * @param id identificador del alojamiento a editar
-     * @param accommodation datos entrantes (se usa él {@code price})
-     * @return {@link Optional} con el DTO actualizado si existe; vacío en caso contrario
-     * @implSpec
-     *   <ul>
-     *     <li>Busca por ID; si existe, copia {@code price} y guarda.</li>
-     *   </ul>
+     * Actualiza campos editables de un alojamiento.
+     * @param id id del alojamiento
+     * @param newAccommodationData datos nuevos
+     * @return Optional con alojamiento editado o vacío si no existe
      */
     @Transactional
     @Override
-    public Optional<AccommodationDTO> edit(int id, AccommodationDTO accommodation) {
-        log.debug("Editando alojamiento id={} con newPrice={}", id, accommodation.getPrice());
-        Optional<AccommodationDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            AccommodationDTO acc = accommodationDb.orElseThrow();
-            acc.setPrice(accommodation.getPrice());
-            acc.setDepartmentsId(accommodation.getDepartmentsId());
-            acc.setCitiesId(accommodation.getCitiesId());
-            acc.setDetailedDescription(accommodation.getDetailedDescription());
-            acc.setExactLocation(accommodation.getExactLocation());
-            acc.setMaximumCapacity(accommodation.getMaximumCapacity());
-            acc.setServices(accommodation.getServices());
-            acc.setImgUrl(accommodation.getImgUrl());
-            AccommodationDTO updated = dao.save(acc);
-            log.info("Alojamiento id={} actualizado (price={})", id, updated.getPrice());
-            return Optional.of(updated);
+    public Optional<AccommodationDTO> edit(int id, AccommodationDTO newAccommodationData) {
+        // Registrar acción
+        log.debug("Editando alojamiento id={} con precio={}", id, newAccommodationData.getPrice());
+        // Buscar alojamiento existente
+        Optional<AccommodationDTO> existingAccommodation = accommodationDAO.findById(id);
+
+        // Verificar existencia
+        if (existingAccommodation.isPresent()) {
+            // Obtener entidad existente
+            AccommodationDTO accommodation = existingAccommodation.get();
+            // Actualizar campos editables
+            accommodation.setPrice(newAccommodationData.getPrice());
+            accommodation.setDepartmentsId(newAccommodationData.getDepartmentsId());
+            accommodation.setCitiesId(newAccommodationData.getCitiesId());
+            accommodation.setDetailedDescription(newAccommodationData.getDetailedDescription());
+            accommodation.setExactLocation(newAccommodationData.getExactLocation());
+            accommodation.setMaximumCapacity(newAccommodationData.getMaximumCapacity());
+            accommodation.setServices(newAccommodationData.getServices());
+            accommodation.setImgUrl(newAccommodationData.getImgUrl());
+            // Guardar cambios
+            AccommodationDTO updatedAccommodation = accommodationDAO.save(accommodation);
+            // Registrar éxito
+            log.info("Alojamiento id={} actualizado", id);
+            // Retornar actualizado
+            return Optional.of(updatedAccommodation);
         }
+
+        // Si no se encontró
         log.warn("No se encontró alojamiento id={} para editar", id);
-        return accommodationDb;
+        return existingAccommodation;
     }
 
     /**
-     * Realiza un <b>soft delete</b> (establece {@code active=false}).
-     *
-     * <p>Si el alojamiento no existe, se retorna {@link Optional#empty()}.</p>
-     *
-     * @param id identificador del alojamiento a inactivar
-     * @return {@link Optional} con el DTO inactivado si existe; vacío en caso contrario
-     * @implSpec
-     *   <ul>
-     *     <li>Busca por ID; si existe, marca {@code active=false} y guarda.</li>
-     *   </ul>
+     * Inactiva un alojamiento (soft delete).
+     * @param id identificador
+     * @return Optional con entidad inactiva o vacío si no existe
      */
     @Transactional
     @Override
     public Optional<AccommodationDTO> delete(int id) {
-        log.debug("Inactivando (soft delete) alojamiento id={}", id);
-        Optional<AccommodationDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            AccommodationDTO acc = accommodationDb.orElseThrow();
-            acc.setActive(false);
-            AccommodationDTO saved = dao.save(acc);
+        // Registrar acción
+        log.debug("Inactivando alojamiento id={}", id);
+        // Buscar alojamiento existente
+        Optional<AccommodationDTO> existingAccommodation = accommodationDAO.findById(id);
+
+        // Verificar existencia
+        if (existingAccommodation.isPresent()) {
+            // Obtener alojamiento
+            AccommodationDTO accommodation = existingAccommodation.get();
+            // Cambiar estado activo a falso
+            accommodation.setActive(false);
+            // Guardar actualización
+            AccommodationDTO savedAccommodation = accommodationDAO.save(accommodation);
+            // Registrar éxito
             log.info("Alojamiento id={} inactivado", id);
-            return Optional.of(saved);
+            // Retornar resultado
+            return Optional.of(savedAccommodation);
         }
+
+        // Si no existe
         log.warn("No se encontró alojamiento id={} para inactivar", id);
-        return accommodationDb;
+        return existingAccommodation;
     }
 
     /**
-     * Obtiene el detalle de un alojamiento.
-     * @param accommodationId identificador del alojamiento
-     * @return el DTO sí existe; {@code null} en caso contrario
-     * @implSpec Delegado directo a {@link AccommodationDAO#findById(int)}.
+     * Consulta detalle de un alojamiento.
+     * @param accommodationId id del alojamiento
+     * @return dto si existe, null si no
      */
     @Override
     public AccommodationDTO detail(int accommodationId) {
+        // Registrar acción
         log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        AccommodationDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
-        return dto;
+        // Buscar alojamiento por id
+        AccommodationDTO accommodation = accommodationDAO.findById(accommodationId).orElse(null);
+        // Registrar resultado
+        log.info("Detalle id={} {}", accommodationId, accommodation != null ? "encontrado" : "no encontrado");
+        // Retornar detalle
+        return accommodation;
     }
 }

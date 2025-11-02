@@ -3,7 +3,6 @@ package com.uniquindio.proyecto_final.accommodation_management.presentation.cont
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.*;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.UserService;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.email.EmailService;
-import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.entity.UserEntity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,13 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-// IMPORTACIONES PARA SWAGGER
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Controlador REST para la gestión de usuarios en el sistema.
+ * Permite crear, registrar, listar, editar, eliminar usuarios y manejar autenticación.
+ */
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -28,6 +29,12 @@ public class UserController {
     @Autowired
     private EmailService emailService;
 
+    /**
+     * Crea un nuevo usuario.
+     * @param user DTO con los datos del usuario.
+     * @param result resultados de validación.
+     * @return ResponseEntity con el usuario creado o errores de validación.
+     */
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody UserDTO user, BindingResult result) {
         if(result.hasFieldErrors()){
@@ -36,27 +43,35 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(user));
     }
 
+    /**
+     * Registra un usuario con envío de correo de bienvenida.
+     * @param user DTO con los datos del usuario.
+     * @param result resultados de validación.
+     * @return ResponseEntity con el usuario registrado o errores de validación.
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserDTO user, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
 
-        // Guardar usuario
         UserDTO savedUser = service.save(user);
 
         // Enviar correo de bienvenida
         try {
             emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
         } catch (Exception e) {
-            // Si el correo falla, solo lo logeamos, no bloqueamos el registro
             System.out.println("Error enviando correo: " + e.getMessage());
         }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-
+    /**
+     * Obtiene el detalle de un usuario por su ID.
+     * @param accommodationId ID del usuario.
+     * @return ResponseEntity con el usuario o 404 si no existe.
+     */
     @GetMapping("/getOne/{id}")
     public ResponseEntity<UserDTO> detail(@PathVariable("id") int accommodationId) {
         UserDTO detalle = service.detail(accommodationId);
@@ -66,6 +81,11 @@ public class UserController {
         return ResponseEntity.ok(detalle);
     }
 
+    /**
+     * Inicia sesión con correo y contraseña.
+     * @param login DTO con email y password.
+     * @return ResponseEntity con el usuario autenticado o 404 si no existe.
+     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO login) {
         UserDTO user = service.login(login);
@@ -75,6 +95,13 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    /**
+     * Edita un usuario existente.
+     * @param id ID del usuario.
+     * @param user DTO con los datos actualizados.
+     * @param result resultados de validación.
+     * @return ResponseEntity con el usuario editado o 404 si no existe.
+     */
     @PutMapping("/edit/{id}")
     public ResponseEntity<?> edit(@PathVariable int id, @RequestBody UserDTO user, BindingResult result){
         if(result.hasFieldErrors()){
@@ -87,6 +114,10 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Lista todos los usuarios activos.
+     * @return ResponseEntity con lista de usuarios o 204 si no hay contenido.
+     */
     @GetMapping("/getAll")
     public ResponseEntity<List<UserDTO>> usersList(){
         List<UserDTO> todos = service.usersList();
@@ -96,6 +127,11 @@ public class UserController {
         return ResponseEntity.ok(todos);
     }
 
+    /**
+     * Elimina un usuario (soft delete).
+     * @param id ID del usuario.
+     * @return ResponseEntity con el usuario eliminado o 404 si no existe.
+     */
     @PutMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable int id) {
         Optional<UserDTO> productOptional = service.delete(id);
@@ -106,6 +142,12 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    /**
+     * Cambia la contraseña de un usuario.
+     * @param id ID del usuario.
+     * @param dto DTO con contraseña actual y nueva.
+     * @return ResponseEntity con el usuario actualizado o error si la contraseña es incorrecta.
+     */
     @PutMapping("/changePassword/{id}")
     public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordDTO dto) {
         Optional<UserDTO> userOptional = service.changePassword(id, dto);
@@ -117,6 +159,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
+    /**
+     * Valida los campos de un BindingResult y retorna errores en formato JSON.
+     * @param result BindingResult con errores de validación.
+     * @return ResponseEntity con errores y status 400.
+     */
     private ResponseEntity<?> validation(BindingResult result) {
         Map<String, String> errors = new HashMap<>();
         result.getFieldErrors().forEach(err -> {

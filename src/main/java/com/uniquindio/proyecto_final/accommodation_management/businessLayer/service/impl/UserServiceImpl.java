@@ -16,210 +16,182 @@ import java.util.Optional;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link UserDTO}.
- *
- * <p>Aplica reglas simples (editar nombre, cambio/recuperación de contraseña) y
- * delega persistencia/autenticación en {@link UserDAO}.</p>
- *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Crear usuarios: {@link #save(UserDTO)}.</li>
- *   <li>Login: {@link #login(LoginDTO)}.</li>
- *   <li>Editar nombre: {@link #edit(int, UserDTO)}.</li>
- *   <li>Cambiar contraseña: {@link #changePassword(int, ChangePasswordDTO)}.</li>
- *   <li>Recuperar contraseña: {@link #recoveryPassword(int, String)}.</li>
- * </ul>
- *
- * <p><b>Seguridad de logs:</b> nunca se registran contraseñas ni credenciales.</p>
- *
- * @since 0.0.1-SNAPSHOT
- * @version 1.0
- * @see UserDAO
- * @see UserService
  */
 @Slf4j
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserDAO dao;
+    // DAO encargado de la persistencia de usuarios
+    private final UserDAO userDAO;
 
+    // Codificador seguro de contraseñas
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    // Configuración del sistema de tokens JWT
     @Autowired
     private JwtConfig jwtConfig;
 
-    /**
-     * Crea el servicio con su dependencia DAO.
-     * @param dao componente de acceso a datos para usuarios (no nulo)
-     */
-    public UserServiceImpl(UserDAO dao) {
-        this.dao = dao;
+    // Constructor con inyección del DAO
+    public UserServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
-    /**
-     * Persiste un {@link UserDTO}.
-     *
-     * @param dto DTO del usuario (no nulo)
-     * @return DTO persistido
-     * @implSpec Delegado directo a {@link UserDAO#save(UserDTO)}.
-     */
+    // Guarda un usuario en la BD
     @Override
     public UserDTO save(UserDTO dto) {
 
-        // ✅ validar contraseña antes de guardar
+        // Validar la contraseña antes de encriptarla
         PasswordValidator.validate(dto.getPassword());
 
+        // Encriptar contraseña
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        log.debug("Guardando usuario (campos sensibles redacted): {}", dto);
-        UserDTO saved = dao.save(dto);
-        log.info("Usuario guardado: {}", saved);
+        log.debug("Guardando usuario (sin exponer contraseña): {}", dto.getEmail());
+        UserDTO saved = userDAO.save(dto);
+        log.info("Usuario guardado con id={}", saved.getId());
         return saved;
     }
 
-    /**
-     * Autentica a un usuario.
-     *
-     * @param login credenciales (usuario/correo y contraseña)
-     * @return {@link UserDTO} autenticado o {@code null} si no
-     * @implSpec Delegado directo a {@link UserDAO#login(LoginDTO)}.
-     */
+    // Login y generación de token
     @Override
     public UserDTO login(LoginDTO login) {
-        log.debug("Intento de login de usuario (credenciales redacted)");
+        log.debug("Intento de login usuario={}", login.getEmail());
 
-        UserDTO user = dao.login(login);
+        UserDTO user = userDAO.login(login);
 
         if (user == null || !passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            log.info("Login fallido para usuario {}", login.getEmail());
+            log.warn("Login fallido usuario={}", login.getEmail());
             throw new RuntimeException("Credenciales inválidas");
         }
 
+        // Crear DTO sin exponer la contraseña
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
         userDTO.setName(user.getName());
+        userDTO.setSurname(user.getSurname());
         userDTO.setEmail(user.getEmail());
         userDTO.setPhone(user.getPhone());
         userDTO.setActive(user.isActive());
+        userDTO.setImgUrl(user.getImgUrl());
 
+        // Generar token
         String token = jwtConfig.generateToken(user.getEmail());
         userDTO.setToken(token);
 
-        log.info("Login exitoso para usuario {}", user.getName());
-        return userDTO; // <-- Devuelves el DTO correcto
+        log.info("Login exitoso usuario={}", user.getEmail());
+        return userDTO;
     }
 
-
-
+    // Obtiene detalle por ID
     @Override
-    public UserDTO detail(int accommodationId) {
-        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        UserDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
+    public UserDTO detail(int userId) {
+        log.debug("Consultando detalle usuario id={}", userId);
+        UserDTO dto = userDAO.findById(userId).orElse(null);
+        log.info("Detalle usuario id={} {}", userId, dto != null ? "encontrado" : "no encontrado");
         return dto;
     }
 
-    /**
-     * Edita el nombre del usuario si existe.
-     *
-     * @param id identificador del usuario
-     * @param user DTO con el nuevo nombre (se usa {@code getName()})
-     * @return {@link Optional} con el DTO actualizado si existe; vacío si no
-     */
+    // Editar usuario
     @Transactional
     @Override
-    public Optional<UserDTO> edit(int id, UserDTO user) {
-        log.debug("Editando usuario id={} con newName={}", id, user.getName());
-        Optional<UserDTO> userDb = dao.findById(id);
+    public Optional<UserDTO> edit(int id, UserDTO newData) {
+        log.debug("Editando usuario id={}", id);
+        Optional<UserDTO> userDb = userDAO.findById(id);
+
         if (userDb.isPresent()) {
-            UserDTO userNew = userDb.orElseThrow();
-            userNew.setName(user.getName());
-            userNew.setDepartmentId(user.getDepartmentId());
-            userNew.setCitiesId(user.getCitiesId());
-            userNew.setPhone(user.getPhone());
-            userNew.setEmail(user.getEmail());
-            userNew.setImgUrl(user.getImgUrl());
-            userNew.setSurname(user.getSurname());
-            UserDTO updated = dao.save(userNew);
-            log.info("Usuario id={} actualizado (name)", id);
+            UserDTO user = userDb.get();
+            user.setName(newData.getName());
+            user.setSurname(newData.getSurname());
+            user.setEmail(newData.getEmail());
+            user.setPhone(newData.getPhone());
+            user.setDepartmentId(newData.getDepartmentId());
+            user.setCitiesId(newData.getCitiesId());
+            user.setImgUrl(newData.getImgUrl());
+
+            UserDTO updated = userDAO.save(user);
+            log.info("Usuario id={} actualizado correctamente", id);
             return Optional.of(updated);
         }
-        log.warn("No se encontró usuario id={} para editar", id);
-        return userDb;
-    }
 
-    /**
-     * Cambia la contraseña si la antigua coincide.
-     *
-     * @param id identificador del usuario
-     * @param user DTO con contraseña antigua y nueva
-     * @return {@link Optional} con el DTO actualizado si procede; vacío si no coincide o no existe
-     */
-    @Transactional
-    @Override
-    public Optional<UserDTO> changePassword(int id, ChangePasswordDTO user) {
-        log.debug("changePassword userId={} (old/new redacted)", id);
-        Optional<UserDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            UserDTO userNew = userDb.get();
-            if (userNew.getPassword().equals(user.getOldPassword())) {
-                userNew.setPassword(user.getNewPassword());
-                dao.save(userNew);
-                log.info("Contraseña actualizada para userId={}", id);
-                return Optional.of(userNew);
-            } else {
-                log.warn("Contraseña antigua no coincide para userId={}", id);
-                return Optional.empty();
-            }
-        }
-        log.warn("No se encontró usuario id={} para changePassword", id);
+        log.warn("Usuario id={} no encontrado para editar", id);
         return Optional.empty();
     }
 
-    /**
-     * Recupera la contraseña estableciendo un nuevo valor si el usuario existe.
-     *
-     * @param id identificador del usuario
-     * @param newPassword nueva contraseña (no se registra en logs)
-     * @return {@link Optional} con el DTO actualizado si existe; vacío si no existe
-     */
+    // Cambiar contraseña del usuario
+    @Transactional
+    @Override
+    public Optional<UserDTO> changePassword(int id, ChangePasswordDTO changePassDTO) {
+        log.debug("Solicitando cambio de contraseña userId={}", id);
+        Optional<UserDTO> userDb = userDAO.findById(id);
+
+        if (userDb.isPresent()) {
+            UserDTO user = userDb.get();
+
+            // Validar coincidencia con la contraseña guardada
+            if (!passwordEncoder.matches(changePassDTO.getOldPassword(), user.getPassword())) {
+                log.warn("Contraseña antigua incorrecta userId={}", id);
+                return Optional.empty();
+            }
+
+            PasswordValidator.validate(changePassDTO.getNewPassword());
+            user.setPassword(passwordEncoder.encode(changePassDTO.getNewPassword()));
+
+            userDAO.save(user);
+            log.info("Contraseña actualizada userId={}", id);
+            return Optional.of(user);
+        }
+
+        log.warn("Usuario no encontrado userId={}", id);
+        return Optional.empty();
+    }
+
+    // Recuperación de contraseña
     @Transactional
     @Override
     public Optional<UserDTO> recoveryPassword(int id, String newPassword) {
-        log.debug("recoveryPassword userId={} (newPassword redacted)", id);
-        Optional<UserDTO> userDb = dao.findById(id);
+        log.debug("Recuperando contraseña userId={}", id);
+        Optional<UserDTO> userDb = userDAO.findById(id);
+
         if (userDb.isPresent()) {
-            UserDTO userNew = userDb.get();
-            userNew.setPassword(newPassword);
-            dao.save(userNew);
-            log.info("Contraseña recuperada/actualizada para userId={}", id);
-            return Optional.of(userNew);
+            PasswordValidator.validate(newPassword);
+            UserDTO user = userDb.get();
+            user.setPassword(passwordEncoder.encode(newPassword));
+            userDAO.save(user);
+            log.info("Contraseña restablecida userId={}", id);
+            return Optional.of(user);
         }
-        log.warn("No se encontró usuario id={} para recoveryPassword", id);
+
+        log.warn("No se encontró usuario para recuperar contraseña userId={}", id);
         return Optional.empty();
     }
 
+    // Listar todos los usuarios
     @Override
     public List<UserDTO> usersList() {
-        log.debug("Buscando todas las ciudades");
-        List<UserDTO> list = dao.usersList();
-        log.info("Encontrados {} ciudades", list.size());
+        log.debug("Listando todos los usuarios");
+        List<UserDTO> list = userDAO.usersList();
+        log.info("Total usuarios encontrados={}", list.size());
         return list;
     }
 
+    // Soft delete del usuario
     @Transactional
     @Override
     public Optional<UserDTO> delete(int id) {
-        log.debug("Inactivando (soft delete) alojamiento id={}", id);
-        Optional<UserDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            UserDTO acc = accommodationDb.orElseThrow();
-            acc.setActive(false);
-            UserDTO saved = dao.save(acc);
-            log.info("Alojamiento id={} inactivado", id);
+        log.debug("Desactivando usuario id={}", id);
+        Optional<UserDTO> userDb = userDAO.findById(id);
+
+        if (userDb.isPresent()) {
+            UserDTO user = userDb.get();
+            user.setActive(false);
+            UserDTO saved = userDAO.save(user);
+            log.info("Usuario id={} desactivado correctamente", id);
             return Optional.of(saved);
         }
-        log.warn("No se encontró alojamiento id={} para inactivar", id);
-        return accommodationDb;
+
+        log.warn("Usuario id={} no encontrado para desactivar", id);
+        return Optional.empty();
     }
 }

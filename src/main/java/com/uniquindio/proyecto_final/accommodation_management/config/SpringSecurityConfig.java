@@ -12,15 +12,54 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuración de seguridad de Spring Security.
+ *
+ * <p>Define la seguridad de la API REST, incluyendo:</p>
+ * <ul>
+ *     <li>Protección CSRF deshabilitada.</li>
+ *     <li>Configuración de CORS para permitir solicitudes desde Angular u otras fuentes permitidas.</li>
+ *     <li>Autorización de endpoints específicos para acceso público.</li>
+ *     <li>Uso de JWT para autenticación sin estado (stateless).</li>
+ *     <li>Definición del codificador de contraseñas {@link BCryptPasswordEncoder}.</li>
+ * </ul>
+ *
+ * <p>Se integra con {@link JwtAuthenticationFilter} para validar tokens JWT en cada petición.</p>
+ *
+ * @since 1.0
+ * @version 1.0
+ */
 @Configuration
 public class SpringSecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
+    /**
+     * Constructor que inyecta el filtro de autenticación JWT.
+     *
+     * @param jwtAuthFilter filtro personalizado para validar tokens JWT
+     */
     public SpringSecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
+    /**
+     * Configura la cadena de filtros de seguridad de Spring.
+     *
+     * <p>Incluye:</p>
+     * <ul>
+     *     <li>Deshabilitar CSRF.</li>
+     *     <li>Configurar CORS con dominios, métodos y cabeceras permitidas.</li>
+     *     <li>Permitir acceso público a endpoints específicos.</li>
+     *     <li>Forzar autenticación en los demás endpoints.</li>
+     *     <li>Configurar sesiones como stateless.</li>
+     *     <li>Agregar el filtro JWT antes del filtro de autenticación estándar.</li>
+     * </ul>
+     *
+     * @param http objeto {@link HttpSecurity} proporcionado por Spring
+     * @return la cadena de filtros {@link SecurityFilterChain} configurada
+     * @throws Exception si ocurre un error en la configuración
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -43,7 +82,6 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/administrators/**").permitAll()
                         .requestMatchers("/api/reservations/**").permitAll()
                         .requestMatchers("/api/hosts/**").permitAll()
-                        .requestMatchers("/api/reservations/**").permitAll()
                         .requestMatchers("/api/responses/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -53,13 +91,24 @@ public class SpringSecurityConfig {
         return http.build();
     }
 
-
+    /**
+     * Proporciona el {@link AuthenticationManager} de Spring para autenticación programática.
+     *
+     * @param config configuración de autenticación proporcionada por Spring
+     * @return {@link AuthenticationManager} listo para usar
+     * @throws Exception si falla la creación
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config)
             throws Exception {
         return config.getAuthenticationManager();
     }
 
+    /**
+     * Bean para codificar contraseñas usando {@link BCryptPasswordEncoder}.
+     *
+     * @return un {@link PasswordEncoder} de tipo BCrypt
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

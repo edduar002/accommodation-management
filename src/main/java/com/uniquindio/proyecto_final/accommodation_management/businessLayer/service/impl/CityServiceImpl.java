@@ -1,8 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.AccommodationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.CityDTO;
-import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.CityService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.CityDAO;
 import lombok.extern.slf4j.Slf4j;
@@ -13,114 +11,141 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementación del servicio de negocio para gestionar {@link CityDTO}.
- *
- * <p>La clase delega la persistencia en {@link CityDAO} y no introduce reglas adicionales;
- * su función es orquestar la llamada al DAO.</p>
- *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Guardar una ciudad: {@link #save(CityDTO)}.</li>
- * </ul>
- *
- * @author
- *   Equipo Prg Avanzada
- * @since 0.0.1-SNAPSHOT
- * @version 1.0
- * @see CityDAO
- * @see CityService
+ * Servicio de negocio para gestión de ciudades.
+ * Delegado de persistencia: {@link CityDAO}.
  */
 @Slf4j
 @Service
 public class CityServiceImpl implements CityService {
 
-    private final CityDAO dao;
+    // DAO para acceso a datos de ciudades
+    private final CityDAO cityDAO;
 
     /**
-     * Crea el servicio con su dependencia DAO.
-     *
-     * @param dao componente de acceso a datos para ciudades (no nulo)
+     * Constructor con inyección de DAO.
+     * @param cityDAO DAO de ciudades
      */
-    public CityServiceImpl(CityDAO dao) {
-        this.dao = dao;
+    public CityServiceImpl(CityDAO cityDAO) {
+        this.cityDAO = cityDAO;
     }
 
     /**
-     * Persiste una ciudad.
-     *
-     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
-     * administrada por Spring. La validación/persistencia específica se delega
-     * completamente al DAO.</p>
-     *
-     * @param dto DTO de la ciudad a guardar (no nulo)
-     * @return DTO persistido (normalmente con identificador asignado)
-     * @throws RuntimeException si el DAO reporta error de validación o persistencia
-     * @implSpec Delegado directo a {@link CityDAO#save(CityDTO)}.
+     * Guarda una ciudad en la base de datos.
      */
     @Override
     @Transactional
-    public CityDTO save(CityDTO dto) {
-        log.debug("Guardando ciudad: {}", dto);
-        CityDTO saved = dao.save(dto);
-        log.info("Ciudad guardada: {}", saved);
-        return saved;
+    public CityDTO save(CityDTO cityDTO) {
+        // Registrar acción
+        log.debug("Guardando ciudad: {}", cityDTO);
+        // Guardar en base de datos
+        CityDTO savedCity = cityDAO.save(cityDTO);
+        // Confirmar guardado
+        log.info("Ciudad guardada: {}", savedCity);
+        // Retornar resultado
+        return savedCity;
     }
 
+    /**
+     * Obtiene todas las ciudades activas.
+     */
     @Override
     public List<CityDTO> citiesList() {
+        // Registrar búsqueda
         log.debug("Buscando todas las ciudades");
-        List<CityDTO> list = dao.citiesList();
-        log.info("Encontrados {} ciudades", list.size());
-        return list;
+        // Consultar lista completa
+        List<CityDTO> cities = cityDAO.citiesList();
+        // Registrar cantidad
+        log.info("Se encontraron {} ciudades", cities.size());
+        // Retornar lista
+        return cities;
     }
 
+    /**
+     * Obtiene todas las ciudades pertenecientes a un departamento.
+     */
     @Override
-    public List<CityDTO> citiesListDepartment(int id) {
-        log.debug("Buscando todas las ciudades");
-        List<CityDTO> list = dao.citiesListDepartment(id);
-        log.info("Encontrados {} ciudades", list.size());
-        return list;
+    public List<CityDTO> citiesListDepartment(int departmentId) {
+        // Registrar búsqueda
+        log.debug("Buscando ciudades del departamento id={}", departmentId);
+        // Consultar ciudades del departamento
+        List<CityDTO> cities = cityDAO.citiesListDepartment(departmentId);
+        // Registrar cantidad
+        log.info("Se encontraron {} ciudades en el departamento id={}", cities.size(), departmentId);
+        // Retornar lista
+        return cities;
     }
 
+    /**
+     * Inactiva una ciudad (soft delete).
+     */
     @Transactional
     @Override
-    public Optional<CityDTO> delete(int id) {
-        log.debug("Inactivando (soft delete) alojamiento id={}", id);
-        Optional<CityDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            CityDTO acc = accommodationDb.orElseThrow();
-            acc.setActive(false);
-            CityDTO saved = dao.save(acc);
-            log.info("Alojamiento id={} inactivado", id);
-            return Optional.of(saved);
+    public Optional<CityDTO> delete(int cityId) {
+        // Registrar acción
+        log.debug("Inactivando ciudad id={}", cityId);
+        // Buscar ciudad
+        Optional<CityDTO> cityDb = cityDAO.findById(cityId);
+
+        // Si existe, modificar estado
+        if (cityDb.isPresent()) {
+            CityDTO city = cityDb.get();
+            // Desactivar ciudad
+            city.setActive(false);
+            // Guardar actualización
+            CityDTO updatedCity = cityDAO.save(city);
+            // Registrar éxito
+            log.info("Ciudad id={} inactivada", cityId);
+            // Retornar resultado
+            return Optional.of(updatedCity);
         }
-        log.warn("No se encontró alojamiento id={} para inactivar", id);
-        return accommodationDb;
+
+        // Si no existe
+        log.warn("No se encontró ciudad id={} para inactivar", cityId);
+        return cityDb;
     }
 
+    /**
+     * Obtiene detalle de una ciudad.
+     */
     @Override
-    public CityDTO detail(int accommodationId) {
-        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        CityDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
-        return dto;
+    public CityDTO detail(int cityId) {
+        // Registrar consulta
+        log.debug("Consultando detalle de ciudad id={}", cityId);
+        // Buscar por ID
+        CityDTO city = cityDAO.findById(cityId).orElse(null);
+        // Registrar resultado
+        log.info("Detalle ciudad id={} {}", cityId, city != null ? "encontrado" : "no encontrado");
+        // Retornar resultado
+        return city;
     }
 
+    /**
+     * Edita nombre y departamento de una ciudad.
+     */
     @Transactional
     @Override
-    public Optional<CityDTO> edit(int id, CityDTO user) {
-        log.debug("Editando usuario id={} con newName={}", id, user.getName());
-        Optional<CityDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            CityDTO userNew = userDb.orElseThrow();
-            userNew.setName(user.getName());
-            userNew.setDepartmentsId(user.getDepartmentsId());
-            CityDTO updated = dao.save(userNew);
-            log.info("Usuario id={} actualizado (name)", id);
-            return Optional.of(updated);
-        }
-        log.warn("No se encontró usuario id={} para editar", id);
-        return userDb;
-    }
+    public Optional<CityDTO> edit(int cityId, CityDTO newCityData) {
+        // Registrar acción
+        log.debug("Editando ciudad id={} con newName={}", cityId, newCityData.getName());
+        // Buscar ciudad existente
+        Optional<CityDTO> cityDb = cityDAO.findById(cityId);
 
+        // Si existe, actualizar
+        if (cityDb.isPresent()) {
+            CityDTO city = cityDb.get();
+            // Actualizar valores modificables
+            city.setName(newCityData.getName());
+            city.setDepartmentsId(newCityData.getDepartmentsId());
+            // Guardar cambios
+            CityDTO updatedCity = cityDAO.save(city);
+            // Registrar éxito
+            log.info("Ciudad id={} actualizada", cityId);
+            // Retornar actualizada
+            return Optional.of(updatedCity);
+        }
+
+        // Si no existe
+        log.warn("No se encontró ciudad id={} para editar", cityId);
+        return cityDb;
+    }
 }

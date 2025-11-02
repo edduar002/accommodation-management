@@ -7,7 +7,6 @@ import com.uniquindio.proyecto_final.accommodation_management.config.JwtConfig;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.HostDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,221 +15,237 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Implementación del servicio de negocio para la gestión de {@link HostDTO}.
+ * Servicio de negocio para gestionar operaciones sobre anfitriones (Hosts).
  *
- * <p>Aplica reglas simples (edición de nombre, cambio/recuperación de contraseña) y
- * delega la persistencia y autenticación en {@link HostDAO}.</p>
- *
- * <h2>Responsabilidades</h2>
- * <ul>
- *   <li>Crear anfitriones: {@link #save(HostDTO)}.</li>
- *   <li>Editar nombre: {@link #edit(int, HostDTO)}.</li>
- *   <li>Cambiar contraseña: {@link #changePassword(int, ChangePasswordDTO)}.</li>
- *   <li>Login: {@link #login(LoginDTO)}.</li>
- *   <li>Recuperar contraseña: {@link #recoveryPassword(int, String)}.</li>
- * </ul>
- *
- * <p><b>Seguridad de logs:</b> nunca se registran contraseñas ni credenciales en claro.</p>
- *
- * @since 0.0.1-SNAPSHOT
- * @version 1.0
- * @see HostDAO
- * @see HostService
+ * <p>Aplica reglas simples relacionadas con actualización de datos y manejo de contraseñas,
+ * delegando la persistencia en {@link HostDAO}.</p>
  */
 @Slf4j
 @Service
 public class HostServiceImpl implements HostService {
 
-    private final HostDAO dao;
+    // DAO responsable de persistencia de anfitriones
+    private final HostDAO hostDAO;
 
+    // Codificador para contraseñas
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    // Configuración para emisión de JWT
     @Autowired
     private JwtConfig jwtConfig;
 
     /**
-     * Crea el servicio con su dependencia DAO.
-     * @param dao componente de acceso a datos para {@link HostDTO} (no nulo)
+     * Constructor con inyección del DAO.
      */
-    public HostServiceImpl(HostDAO dao) {
-        this.dao = dao;
+    public HostServiceImpl(HostDAO hostDAO) {
+        this.hostDAO = hostDAO;
     }
 
     /**
-     * Persiste un {@link HostDTO}.
-     *
-     * <p><b>Transaccional:</b> la operación se ejecuta dentro de una transacción
-     * administrada por Spring.</p>
-     *
-     * @param dto DTO del anfitrión a guardar (no nulo)
-     * @return DTO persistido (normalmente con identificador asignado)
-     * @throws RuntimeException si el DAO reporta error de validación o persistencia
-     * @implSpec Delegado directo a {@link HostDAO#save(HostDTO)}.
+     * Guarda un nuevo anfitrión después de validar y encriptar contraseña.
      */
     @Override
     @Transactional
-    public HostDTO save(HostDTO dto) {
-        PasswordValidator.validate(dto.getPassword());
+    public HostDTO save(HostDTO hostDTO) {
 
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-        log.debug("Guardando host (campos sensibles redacted)");
-        HostDTO saved = dao.save(dto);
-        log.info("Host guardado");
-        return saved;
-    }
+        // Validación de política de contraseña
+        PasswordValidator.validate(hostDTO.getPassword());
 
-    @Override
-    public HostDTO detail(int accommodationId) {
-        log.debug("Consultando detalle de alojamiento id={}", accommodationId);
-        HostDTO dto = dao.findById(accommodationId).orElse(null);
-        log.info("Detalle id={} {}", accommodationId, (dto != null ? "encontrado" : "no encontrado"));
-        return dto;
+        // Encriptación
+        hostDTO.setPassword(passwordEncoder.encode(hostDTO.getPassword()));
+
+        // Registro seguro
+        log.debug("Guardando host (datos sensibles ocultos)");
+
+        // Persistencia
+        HostDTO savedHost = hostDAO.save(hostDTO);
+
+        // Confirmación
+        log.info("Host guardado correctamente");
+        return savedHost;
     }
 
     /**
-     * Edita el nombre del anfitrión si existe.
-     *
-     * @param idHost identificador del anfitrión
-     * @param host DTO con el nuevo nombre (se usa {@code getName()})
-     * @return {@link Optional} con el DTO actualizado si existe; vacío si no existe
-     * @implSpec
-     * <ul>
-     *   <li>Busca por ID; si existe, copia {@code name} y guarda.</li>
-     * </ul>
+     * Obtiene el detalle de un host por su ID.
+     */
+    @Override
+    public HostDTO detail(int hostId) {
+
+        // Consulta en DAO
+        log.debug("Consultando detalle de host id={}", hostId);
+        HostDTO hostDTO = hostDAO.findById(hostId).orElse(null);
+
+        // Registro del resultado
+        log.info("Detalle host id={} {}", hostId, (hostDTO != null ? "encontrado" : "no encontrado"));
+        return hostDTO;
+    }
+
+    /**
+     * Edita los datos básicos del anfitrión.
      */
     @Override
     @Transactional
-    public Optional<HostDTO> edit(int idHost, HostDTO host) {
-        log.debug("Editando host id={} con newName={}", idHost, host.getName());
-        Optional<HostDTO> hostDb = dao.findById(idHost);
+    public Optional<HostDTO> edit(int hostId, HostDTO hostData) {
+
+        log.debug("Editando host id={} (nuevos datos básicos)", hostId);
+
+        Optional<HostDTO> hostDb = hostDAO.findById(hostId);
+
         if (hostDb.isPresent()) {
-            HostDTO hostNew = hostDb.orElseThrow();
-            hostNew.setDepartmentsId(host.getDepartmentsId());
-            hostNew.setCitiesId(host.getCitiesId());
-            hostNew.setName(host.getName());
-            hostNew.setEmail(host.getEmail());
-            hostNew.setImgUrl(host.getImgUrl());
-            hostNew.setSurname(host.getSurname());
-            HostDTO updated = dao.save(hostNew);
-            log.info("Host id={} actualizado (name)", idHost);
-            return Optional.of(updated);
+
+            // Host encontrado
+            HostDTO hostToUpdate = hostDb.get();
+
+            // Se actualizan campos permitidos
+            hostToUpdate.setDepartmentsId(hostData.getDepartmentsId());
+            hostToUpdate.setCitiesId(hostData.getCitiesId());
+            hostToUpdate.setName(hostData.getName());
+            hostToUpdate.setSurname(hostData.getSurname());
+            hostToUpdate.setEmail(hostData.getEmail());
+            hostToUpdate.setImgUrl(hostData.getImgUrl());
+
+            // Guardar
+            HostDTO updatedHost = hostDAO.save(hostToUpdate);
+
+            // Confirmación
+            log.info("Host id={} actualizado correctamente", hostId);
+            return Optional.of(updatedHost);
         }
-        log.warn("No se encontró host id={} para editar", idHost);
+
+        log.warn("No se encontró host id={} para editar", hostId);
         return Optional.empty();
     }
 
     /**
-     * Cambia la contraseña si la antigua coincide.
-     *
-     * @param id identificador del anfitrión
-     * @param user DTO con contraseña antigua y nueva
-     * @return {@link Optional} con el DTO actualizado si procede; vacío si no coincide o no existe
-     * @implSpec
-     * <ul>
-     *   <li>Busca por ID; si existe y {@code oldPassword} coincide, cambia a {@code newPassword} y guarda.</li>
-     * </ul>
+     * Cambia la contraseña de un host verificando primero la contraseña anterior.
      */
     @Transactional
     @Override
-    public Optional<HostDTO> changePassword(int id, ChangePasswordDTO user) {
-        log.debug("changePassword hostId={} (old/new redacted)", id);
-        Optional<HostDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            HostDTO userNew = userDb.get();
-            if (userNew.getPassword().equals(user.getOldPassword())) {
-                userNew.setPassword(user.getNewPassword());
-                dao.save(userNew);
-                log.info("Contraseña actualizada para hostId={}", id);
-                return Optional.of(userNew);
-            } else {
-                log.warn("Contraseña antigua no coincide para hostId={}", id);
-                return Optional.empty();
+    public Optional<HostDTO> changePassword(int hostId, ChangePasswordDTO passwordData) {
+
+        log.debug("changePassword hostId={} (contraseñas ocultas)", hostId);
+
+        Optional<HostDTO> hostDb = hostDAO.findById(hostId);
+
+        if (hostDb.isPresent()) {
+
+            HostDTO host = hostDb.get();
+
+            // Comparación de contraseña anterior
+            if (passwordEncoder.matches(passwordData.getOldPassword(), host.getPassword())) {
+
+                // Validar la nueva contraseña
+                PasswordValidator.validate(passwordData.getNewPassword());
+
+                // Encriptar y guardar
+                host.setPassword(passwordEncoder.encode(passwordData.getNewPassword()));
+                hostDAO.save(host);
+
+                log.info("Contraseña actualizada correctamente para hostId={}", hostId);
+                return Optional.of(host);
             }
+
+            log.warn("Contraseña anterior incorrecta para hostId={}", hostId);
+            return Optional.empty();
         }
-        log.warn("No se encontró host id={} para changePassword", id);
+
+        log.warn("No se encontró host id={} para changePassword", hostId);
         return Optional.empty();
     }
 
     /**
-     * Auténtica a un anfitrión usando las credenciales provistas.
-     *
-     * @param login credenciales (usuario/correo y contraseña)
-     * @return {@link HostDTO} autenticado si procede; puede ser {@code null} si no
-     * @implSpec Delegado directo a {@link HostDAO#login(LoginDTO)}.
+     * Autentica al host y genera JWT si la contraseña es correcta.
      */
     @Override
-    public HostDTO login(LoginDTO login) {
-        log.debug("Intento de login de usuario (credenciales redacted)");
+    public HostDTO login(LoginDTO loginDTO) {
 
-        HostDTO user = dao.login(login);
+        log.debug("Intento de login (credenciales protegidas)");
 
-        if (user == null || !passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            log.info("Login fallido para usuario {}", login.getEmail());
+        HostDTO host = hostDAO.login(loginDTO);
+
+        if (host == null || !passwordEncoder.matches(loginDTO.getPassword(), host.getPassword())) {
+            log.info("Login fallido para {}", loginDTO.getEmail());
             throw new RuntimeException("Credenciales inválidas");
         }
 
-        HostDTO userDTO = new HostDTO();
-        userDTO.setId(user.getId());
-        userDTO.setName(user.getName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setPhone(user.getPhone());
-        userDTO.setActive(user.isActive());
+        // Preparar DTO seguro para la respuesta
+        HostDTO responseDTO = new HostDTO();
+        responseDTO.setId(host.getId());
+        responseDTO.setName(host.getName());
+        responseDTO.setSurname(host.getSurname());
+        responseDTO.setEmail(host.getEmail());
+        responseDTO.setPhone(host.getPhone());
+        responseDTO.setActive(host.isActive());
 
-        String token = jwtConfig.generateToken(user.getEmail());
-        userDTO.setToken(token);
+        // Generar token
+        responseDTO.setToken(jwtConfig.generateToken(host.getEmail()));
 
-        log.info("Login exitoso para usuario {}", user.getName());
-        return userDTO; // <-- Devuelves el DTO correcto
+        log.info("Login exitoso para host {}", host.getName());
+        return responseDTO;
     }
 
     /**
-     * Recupera la contraseña estableciendo un nuevo valor si el host existe.
-     *
-     * @param id identificador del anfitrión
-     * @param newPassword nueva contraseña (no se registra en logs)
-     * @return {@link Optional} con el DTO actualizado si existe; vacío si no existe
-     * @implSpec
-     * <ul>
-     *   <li>Busca por ID; si existe, asigna {@code newPassword} y guarda.</li>
-     * </ul>
+     * Establece una nueva contraseña para el host (recuperación).
      */
     @Transactional
     @Override
-    public Optional<HostDTO> recoveryPassword(int id, String newPassword) {
-        log.debug("recoveryPassword hostId={} (newPassword redacted)", id);
-        Optional<HostDTO> userDb = dao.findById(id);
-        if (userDb.isPresent()) {
-            HostDTO userNew = userDb.get();
-            userNew.setPassword(newPassword);
-            dao.save(userNew);
-            log.info("Contraseña recuperada/actualizada para hostId={}", id);
-            return Optional.of(userNew);
+    public Optional<HostDTO> recoveryPassword(int hostId, String newPassword) {
+
+        log.debug("recoveryPassword hostId={} (contraseña oculta)", hostId);
+
+        Optional<HostDTO> hostDb = hostDAO.findById(hostId);
+
+        if (hostDb.isPresent()) {
+
+            HostDTO host = hostDb.get();
+            host.setPassword(passwordEncoder.encode(newPassword));
+            hostDAO.save(host);
+
+            log.info("Contraseña recuperada para hostId={}", hostId);
+            return Optional.of(host);
         }
-        log.warn("No se encontró host id={} para recoveryPassword", id);
+
+        log.warn("No se encontró host id={} para recoveryPassword", hostId);
         return Optional.empty();
     }
 
+    /**
+     * Marca un host como inactivo (soft delete).
+     */
     @Transactional
     @Override
-    public Optional<HostDTO> delete(int id) {
-        log.debug("Inactivando (soft delete) alojamiento id={}", id);
-        Optional<HostDTO> accommodationDb = dao.findById(id);
-        if (accommodationDb.isPresent()) {
-            HostDTO acc = accommodationDb.orElseThrow();
-            acc.setActive(false);
-            HostDTO saved = dao.save(acc);
-            log.info("Alojamiento id={} inactivado", id);
+    public Optional<HostDTO> delete(int hostId) {
+
+        log.debug("Inactivando host id={}", hostId);
+
+        Optional<HostDTO> hostDb = hostDAO.findById(hostId);
+
+        if (hostDb.isPresent()) {
+
+            HostDTO host = hostDb.get();
+            host.setActive(false);
+            HostDTO saved = hostDAO.save(host);
+
+            log.info("Host id={} inactivado correctamente", hostId);
             return Optional.of(saved);
         }
-        log.warn("No se encontró alojamiento id={} para inactivar", id);
-        return accommodationDb;
+
+        log.warn("No se encontró host id={} para inactivar", hostId);
+        return Optional.empty();
     }
 
+    /**
+     * Obtiene todos los anfitriones.
+     */
     @Override
     public List<HostDTO> hostsList() {
-        log.debug("Buscando todas las ciudades");
-        List<HostDTO> list = dao.hostsList();
-        log.info("Encontrados {} ciudades", list.size());
-        return list;
+
+        log.debug("Consultando lista completa de hosts");
+
+        List<HostDTO> hosts = hostDAO.hostsList();
+
+        log.info("Encontrados {} hosts", hosts.size());
+        return hosts;
     }
 }
