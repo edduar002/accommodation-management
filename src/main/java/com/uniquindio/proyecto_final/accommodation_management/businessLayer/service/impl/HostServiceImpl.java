@@ -104,6 +104,8 @@ public class HostServiceImpl implements HostService {
             hostToUpdate.setSurname(hostData.getSurname());
             hostToUpdate.setEmail(hostData.getEmail());
             hostToUpdate.setImgUrl(hostData.getImgUrl());
+            hostToUpdate.setPhone(hostData.getPhone());
+            hostToUpdate.setPersonalDescription(hostData.getPersonalDescription());
 
             // Guardar
             HostDTO updatedHost = hostDAO.save(hostToUpdate);
@@ -177,6 +179,7 @@ public class HostServiceImpl implements HostService {
         responseDTO.setEmail(host.getEmail());
         responseDTO.setPhone(host.getPhone());
         responseDTO.setActive(host.isActive());
+        responseDTO.setImgUrl(host.getImgUrl());
 
         // Generar token
         responseDTO.setToken(jwtConfig.generateToken(host.getEmail()));

@@ -46,6 +46,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+
+        // Ignorar rutas públicas (sin token)
+        if (path.startsWith("/api/hosts/register") ||
+                path.startsWith("/api/users/register") ||
+                path.startsWith("/api/administrators/register") ||
+                path.startsWith("/api/auth/login") ||
+                path.startsWith("/api/images/upload")) {
+
+            // Continuar sin validar JWT
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         // Obtiene el encabezado Authorization
         String authHeader = request.getHeader("Authorization");
         String username = null;

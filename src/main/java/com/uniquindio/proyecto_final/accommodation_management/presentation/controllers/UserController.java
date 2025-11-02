@@ -55,16 +55,26 @@ public class UserController {
             return validation(result);
         }
 
-        UserDTO savedUser = service.save(user);
-
-        // Enviar correo de bienvenida
         try {
-            emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
-        } catch (Exception e) {
-            System.out.println("Error enviando correo: " + e.getMessage());
-        }
+            // Guardar usuario
+            UserDTO savedUser = service.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+            // Enviar correo de bienvenida
+            try {
+                emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
+            } catch (Exception e) {
+                System.out.println("Error enviando correo: " + e.getMessage());
+            }
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Duplicate entry: correo ya registrado"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Ocurrió un error inesperado"));
+        }
     }
 
     /**

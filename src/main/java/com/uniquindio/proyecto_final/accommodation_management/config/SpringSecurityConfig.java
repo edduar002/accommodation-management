@@ -82,6 +82,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/api/administrators/**").permitAll()
                         .requestMatchers("/api/reservations/**").permitAll()
                         .requestMatchers("/api/hosts/**").permitAll()
+                        .requestMatchers("/api/roles/**").permitAll()
                         .requestMatchers("/api/responses/**").permitAll()
                         .anyRequest().authenticated()
                 )

@@ -67,25 +67,35 @@ public class HostController {
      * @param result resultados de validación.
      * @return ResponseEntity con host registrado o errores de validación.
      */
-    // Endpoint POST para registrar host
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody HostDTO user, BindingResult result){
         if(result.hasFieldErrors()){
             return validation(result);
         }
 
-        // Guardar host
-        HostDTO savedUser = service.save(user);
-
-        // Enviar correo de bienvenida
         try {
-            emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
-        } catch (Exception e) {
-            // Si el correo falla, solo lo logeamos, no bloqueamos el registro
-            System.out.println("Error enviando correo: " + e.getMessage());
-        }
+            // Guardar host
+            HostDTO savedUser = service.save(user);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+            // Enviar correo de bienvenida
+            try {
+                emailService.enviarCorreoBienvenida(savedUser.getEmail(), savedUser.getName());
+            } catch (Exception e) {
+                // Si el correo falla, solo lo logeamos, no bloqueamos el registro
+                System.out.println("Error enviando correo: " + e.getMessage());
+            }
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            // Captura duplicados de llave única (correo ya registrado)
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "Duplicate entry: correo ya registrado"));
+        } catch (Exception e) {
+            // Error genérico
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "Ocurrió un error inesperado"));
+        }
     }
 
     /**
