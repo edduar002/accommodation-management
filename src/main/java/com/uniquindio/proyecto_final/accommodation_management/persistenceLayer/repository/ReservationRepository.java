@@ -20,7 +20,13 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
      * @return lista de reservas del usuario.
      */
     // Consulta que selecciona reservas filtradas por ID de usuario
-    @Query("SELECT r FROM ReservationEntity r WHERE r.usersId = :idUser")
+    @Query("""
+    SELECT r
+    FROM ReservationEntity r
+    JOIN FETCH r.accommodation a
+    JOIN FETCH a.city c
+    WHERE r.usersId = :idUser
+""")
     List<ReservationEntity> viewReservationHistory(@Param("idUser") int idUser);
 
     /**
@@ -29,7 +35,13 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
      * @return lista de reservas del anfitrion.
      */
     // Consulta que selecciona reservas filtradas por ID de host
-    @Query("SELECT r FROM ReservationEntity r WHERE r.hostsId = :idHost")
+    @Query("""
+    SELECT r
+    FROM ReservationEntity r
+    JOIN FETCH r.accommodation a
+    JOIN FETCH a.city c
+    WHERE r.hostsId = :idHost
+""")
     List<ReservationEntity> viewReservations(@Param("idHost") int idHost);
 
 }

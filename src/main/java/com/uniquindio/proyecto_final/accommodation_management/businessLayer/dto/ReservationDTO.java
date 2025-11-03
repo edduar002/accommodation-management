@@ -44,4 +44,13 @@ public class ReservationDTO {
     // Fecha de la última actualización de la reserva
     private LocalDateTime updatedAt;
 
+    // URL o ruta de la imagen principal del alojamiento
+    private String imgUrl;
+
+    // Nombre de la ciudad (para visualización)
+    private String cityName;
+
+    // Descripción detallada del alojamiento
+    private String detailedDescription;
+
 }

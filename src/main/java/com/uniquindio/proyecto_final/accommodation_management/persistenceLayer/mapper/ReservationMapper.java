@@ -29,6 +29,12 @@ public interface ReservationMapper {
     @Mapping(target = "createdAt", source = "createdAt")
     // Mapea la fecha de actualización
     @Mapping(target = "updatedAt", source = "updatedAt")
+    // Mapea la imagen del alojamiento
+    @Mapping(target = "imgUrl", expression = "java(entity.getAccommodation() != null ? entity.getAccommodation().getImgUrl() : null)")
+    // Mapea la descripcion del alojamiento
+    @Mapping(target = "detailedDescription", expression = "java(entity.getAccommodation() != null ? entity.getAccommodation().getDetailedDescription() : null)")
+    // Mapea la ciudad del alojamiento
+    @Mapping(target = "cityName", expression = "java(entity.getAccommodation() != null && entity.getAccommodation().getCity() != null ? entity.getAccommodation().getCity().getName() : null)")
     ReservationDTO toDTO(ReservationEntity entity);
 
     /**
