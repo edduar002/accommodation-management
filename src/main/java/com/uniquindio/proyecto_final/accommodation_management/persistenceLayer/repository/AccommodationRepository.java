@@ -29,4 +29,16 @@ public interface AccommodationRepository extends JpaRepository<AccommodationEnti
     // Consulta que selecciona alojamientos pertenecientes a un host específico
     @Query("SELECT a FROM AccommodationEntity a WHERE a.hostsId = :idHost")
     List<AccommodationEntity> ownAccommodationList(@Param("idHost") int idHost);
+
+    /**
+     * Obtiene el promedio de calificaciones de un alojamiento específico.
+     * @param accommodationId ID del alojamiento.
+     * @return promedio de calificaciones (0 si no tiene reservas con calificación).
+     */
+    @Query("""
+        SELECT COALESCE(AVG(r.calification), 0) 
+        FROM ReservationEntity r
+        WHERE r.accommodationsId = :accommodationId
+    """)
+    Double findAverageCalificationByAccommodationId(@Param("accommodationId") int accommodationId);
 }

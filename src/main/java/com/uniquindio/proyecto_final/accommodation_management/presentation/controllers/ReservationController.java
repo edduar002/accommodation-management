@@ -78,6 +78,24 @@ public class ReservationController {
     }
 
     /**
+     * Cambia la calificacion de una reserva existente.
+     *
+     * @param idReservation ID de la reserva a actualizar.
+     * @return ResponseEntity con la reserva actualizada o 404 si no existe.
+     */
+    @PutMapping("/saveRating/{idReservation}")
+    public ResponseEntity<?> saveRating(@PathVariable int idReservation, @RequestBody ReservationDTO reservation, BindingResult result) {
+        if(result.hasFieldErrors()){
+            return validation(result);
+        }
+        Optional<ReservationDTO> userOptional = service.saveRating(idReservation, reservation);
+        if(userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
      * Obtiene los detalles de una reserva específica.
      *
      * @param accommodationId ID de la reserva a consultar.

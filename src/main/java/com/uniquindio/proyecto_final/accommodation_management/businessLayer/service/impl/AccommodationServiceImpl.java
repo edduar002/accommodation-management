@@ -29,6 +29,24 @@ public class AccommodationServiceImpl implements AccommodationService {
         this.accommodationDAO = accommodationDAO;
     }
 
+    @Override
+    public Double getAverageCalification(int accommodationId) {
+        log.debug("Obteniendo promedio de calificaciones para alojamiento id={}", accommodationId);
+
+        // Invocar DAO para calcular promedio
+        Double average = accommodationDAO.getAverageCalification(accommodationId);
+
+        // Retornar 0.0 si no hay calificaciones
+        if (average == null) {
+            log.info("No hay calificaciones para alojamiento id={}", accommodationId);
+            return 0.0;
+        }
+
+        log.info("Promedio de calificaciones para alojamiento id={} = {}", accommodationId, average);
+        return average;
+    }
+
+
     /**
      * Guarda un nuevo alojamiento.
      * @param accommodationDTO datos del alojamiento a guardar

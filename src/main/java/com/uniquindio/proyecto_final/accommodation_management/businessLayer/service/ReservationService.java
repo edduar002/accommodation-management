@@ -59,4 +59,13 @@ public interface ReservationService {
      * @return Lista de ReservationDTO o lista vacía si no hay reservas.
      */
     List<ReservationDTO> viewReservations(int idHost);
+
+    /**
+     * Cambia la calificion de una reserva de forma genérica.
+     * Método utilizado por el controlador en /changeStatus/{idReservation}.
+     *
+     * @param idReservation ID de la reserva a actualizar.
+     * @return ResponseEntity con la reserva actualizada o null si no existe.
+     */
+    Optional<ReservationDTO> saveRating(int idReservation, ReservationDTO user);
 }

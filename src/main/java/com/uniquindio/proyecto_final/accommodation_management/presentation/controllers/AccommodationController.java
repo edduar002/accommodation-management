@@ -84,6 +84,20 @@ public class AccommodationController {
         return ResponseEntity.ok(propios);
     }
 
+    // Endpoint GET para obtener el promedio de calificaciones de un alojamiento
+    @GetMapping("/averageCalification/{id}")
+    public ResponseEntity<Double> getAverageCalification(@PathVariable("id") int accommodationId) {
+        try {
+            Double average = service.getAverageCalification(accommodationId);
+            return ResponseEntity.ok(average);
+        } catch (Exception e) {
+            // Si ocurre algún error, devolvemos 500 y mensaje en consola
+            System.err.println("Error al obtener promedio de calificaciones: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(0.0);
+        }
+    }
+
+
     /**
      * Edita un alojamiento existente.
      * @param id ID del alojamiento.

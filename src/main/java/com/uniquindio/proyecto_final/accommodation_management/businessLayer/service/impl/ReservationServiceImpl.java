@@ -124,6 +124,49 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     /**
+     * Cambia la calificacion de una reserva de forma genérica.
+     * Si la reserva no existe, retorna 404 Not Found.
+     *
+     * @param idReservation ID de la reserva
+     * @return ResponseEntity con la reserva actualizada o 404 si no existe
+     */
+    @Override
+    @Transactional
+    public Optional<ReservationDTO> saveRating(int idReservation, ReservationDTO departmentData) {
+
+        // Registro de acción
+        log.debug("Editando reserva id={} con nuevo estado={}", idReservation, departmentData.getState());
+
+        // Búsqueda del registro original
+        Optional<ReservationDTO> departmentDb = reservationDAO.findById(idReservation);
+
+        // Si existe, actualizar
+        if (departmentDb.isPresent()) {
+
+            // Obtención del registro original
+            ReservationDTO departmentToUpdate = departmentDb.get();
+
+            // Actualización del nombre
+            departmentToUpdate.setCalification(departmentData.getCalification());
+
+            // Guardar cambios
+            ReservationDTO updatedDepartment = reservationDAO.save(departmentToUpdate);
+
+            // Confirmación
+            log.info("Reserva id={} actualizada correctamente", idReservation);
+
+            // Retorno del actualizado
+            return Optional.of(updatedDepartment);
+        }
+
+        // Si no existe, notificar en logs
+        log.warn("No se encontró departamento id={} para editar", idReservation);
+
+        // Retorno del Optional vacío
+        return departmentDb;
+    }
+
+    /**
      * Lista todas las reservas asociadas a un anfitrión.
      * Retorna una lista vacía si no hay reservas.
      *

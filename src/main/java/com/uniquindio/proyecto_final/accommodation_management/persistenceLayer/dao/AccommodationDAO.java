@@ -44,6 +44,15 @@ public class AccommodationDAO {
     }
 
     /**
+     * Obtiene el promedio de calificaciones de un alojamiento.
+     * @param accommodationId ID del alojamiento
+     * @return promedio de calificaciones o null si no hay calificaciones
+     */
+    public Double getAverageCalification(int accommodationId) {
+        return accommodationRepository.findAverageCalificationByAccommodationId(accommodationId);
+    }
+
+    /**
      * Obtiene todos los alojamientos disponibles.
      *
      * @return lista de {@link AccommodationDTO} disponibles

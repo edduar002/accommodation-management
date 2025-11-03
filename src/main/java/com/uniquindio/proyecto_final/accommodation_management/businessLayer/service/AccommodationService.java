@@ -20,6 +20,14 @@ public interface AccommodationService {
     AccommodationDTO save(AccommodationDTO accommodation);
 
     /**
+     * Obtiene el promedio de calificaciones de un alojamiento específico.
+     *
+     * @param accommodationId ID del alojamiento.
+     * @return Promedio de calificaciones como Double.
+     */
+    Double getAverageCalification(int accommodationId);
+
+    /**
      * Busca y retorna todos los alojamientos que se encuentran disponibles.
      * Dependiendo de tu lógica, esto generalmente significa:
      * - active = true
