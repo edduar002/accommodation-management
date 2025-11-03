@@ -54,9 +54,9 @@ public interface ReservationMapper {
     // Mapea el estado de la reserva
     @Mapping(target = "state", source = "state")
     // Ignora la fecha de creación
-    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "createdAt")
     // Ignora la fecha de actualización
-    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "updatedAt")
     ReservationEntity toEntity(ReservationDTO dto);
 
 }

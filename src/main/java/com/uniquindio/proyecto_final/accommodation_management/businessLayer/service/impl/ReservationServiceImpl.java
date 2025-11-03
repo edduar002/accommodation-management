@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.impl;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ReservationService;
 import com.uniquindio.proyecto_final.accommodation_management.persistenceLayer.dao.ReservationDAO;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Implementación del servicio de negocio para gestionar {@link ReservationDTO}.
@@ -22,12 +24,14 @@ public class ReservationServiceImpl implements ReservationService {
 
     // DAO para operaciones sobre reservas
     private final ReservationDAO dao;
+    private final ReservationDAO reservationDAO;
 
     /**
      * Constructor con inyección por parámetros.
      */
-    public ReservationServiceImpl(ReservationDAO dao) {
+    public ReservationServiceImpl(ReservationDAO dao, ReservationDAO reservationDAO) {
         this.dao = dao;
+        this.reservationDAO = reservationDAO;
     }
 
     /**
@@ -85,27 +89,38 @@ public class ReservationServiceImpl implements ReservationService {
      */
     @Override
     @Transactional
-    public ResponseEntity<ReservationDTO> changeStatus(int idReservation) {
-        log.debug("Cambiando estado de reserva id={}", idReservation);
+    public Optional<ReservationDTO> changeStatus(int idReservation, ReservationDTO departmentData) {
 
-        ReservationDTO dto = dao.findById(idReservation).orElse(null);
-        if (dto == null) {
-            log.warn("Reserva id={} no encontrada para cambiar estado", idReservation);
-            return ResponseEntity.notFound().build();
+        // Registro de acción
+        log.debug("Editando reserva id={} con nuevo estado={}", idReservation, departmentData.getState());
+
+        // Búsqueda del registro original
+        Optional<ReservationDTO> departmentDb = reservationDAO.findById(idReservation);
+
+        // Si existe, actualizar
+        if (departmentDb.isPresent()) {
+
+            // Obtención del registro original
+            ReservationDTO departmentToUpdate = departmentDb.get();
+
+            // Actualización del nombre
+            departmentToUpdate.setState(departmentData.getState());
+
+            // Guardar cambios
+            ReservationDTO updatedDepartment = reservationDAO.save(departmentToUpdate);
+
+            // Confirmación
+            log.info("Reserva id={} actualizada correctamente", idReservation);
+
+            // Retorno del actualizado
+            return Optional.of(updatedDepartment);
         }
 
-        String nuevoEstado = switch (dto.getState()) {
-            case "Pendiente" -> "Aprobado";
-            case "Aprobado" -> "Realizado";
-            case "Realizado" -> "Pendiente";
-            default -> "Pendiente";
-        };
-        dto.setState(nuevoEstado);
+        // Si no existe, notificar en logs
+        log.warn("No se encontró departamento id={} para editar", idReservation);
 
-        dao.save(dto);
-        log.info("Estado de reserva id={} actualizado a '{}'", idReservation, nuevoEstado);
-
-        return ResponseEntity.ok(dto);
+        // Retorno del Optional vacío
+        return departmentDb;
     }
 
     /**

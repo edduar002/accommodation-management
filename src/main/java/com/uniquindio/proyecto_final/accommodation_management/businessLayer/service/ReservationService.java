@@ -1,10 +1,12 @@
 package com.uniquindio.proyecto_final.accommodation_management.businessLayer.service;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Interfaz de servicio para la gestión de reservas de alojamiento.
@@ -47,7 +49,7 @@ public interface ReservationService {
      * @param idReservation ID de la reserva a actualizar.
      * @return ResponseEntity con la reserva actualizada o null si no existe.
      */
-    ResponseEntity<ReservationDTO> changeStatus(int idReservation);
+    Optional<ReservationDTO> changeStatus(int idReservation, ReservationDTO user);
 
     /**
      * Lista todas las reservas de un anfitrión.

@@ -44,19 +44,6 @@ public class ReservationDAO {
     }
 
     /**
-     * Obtiene todas las reservas de un alojamiento específico.
-     *
-     * @param idAccommodation ID del alojamiento
-     * @return Lista de {@link ReservationDTO} de ese alojamiento
-     */
-    public List<ReservationDTO> viewAccommodationReservations(int idAccommodation) {
-        List<ReservationEntity> entities = reservationRepository.viewAccommodationReservations(idAccommodation);
-        return entities.stream()
-                .map(reservationMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    /**
      * Obtiene el historial de reservas de un usuario.
      *
      * @param idUser ID del usuario

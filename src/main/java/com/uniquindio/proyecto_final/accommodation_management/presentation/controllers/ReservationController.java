@@ -1,5 +1,6 @@
 package com.uniquindio.proyecto_final.accommodation_management.presentation.controllers;
 
+import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.DepartmentDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.dto.ReservationDTO;
 import com.uniquindio.proyecto_final.accommodation_management.businessLayer.service.ReservationService;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Controlador REST para la gestión de reservas.
@@ -64,13 +66,15 @@ public class ReservationController {
      * @return ResponseEntity con la reserva actualizada o 404 si no existe.
      */
     @PutMapping("/changeStatus/{idReservation}")
-    public ResponseEntity<ReservationDTO> changeStatus(@PathVariable int idReservation) {
-        ReservationDTO updatedReservation = service.changeStatus(idReservation).getBody();
-        if (updatedReservation == null) {
-            // Si no se encuentra la reserva, retorna 404 Not Found
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> changeStatus(@PathVariable int idReservation, @RequestBody ReservationDTO reservation, BindingResult result) {
+        if(result.hasFieldErrors()){
+            return validation(result);
         }
-        return ResponseEntity.ok(updatedReservation);
+        Optional<ReservationDTO> userOptional = service.changeStatus(idReservation, reservation);
+        if(userOptional.isPresent()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(userOptional.orElseThrow());
+        }
+        return ResponseEntity.notFound().build();
     }
 
     /**

@@ -15,15 +15,6 @@ import java.util.List;
 public interface ReservationRepository extends JpaRepository<ReservationEntity, Integer> {
 
     /**
-     * Obtiene todas las reservas de un alojamiento específico.
-     * @param idAccommodation ID del alojamiento.
-     * @return lista de reservas del alojamiento.
-     */
-    // Consulta que selecciona reservas filtradas por ID de alojamiento
-    @Query("SELECT r FROM ReservationEntity r WHERE r.accommodationsId = :idAccommodation")
-    List<ReservationEntity> viewAccommodationReservations(@Param("idAccommodation") int idAccommodation);
-
-    /**
      * Obtiene el historial de reservas de un usuario específico.
      * @param idUser ID del usuario.
      * @return lista de reservas del usuario.
