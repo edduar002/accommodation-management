@@ -70,15 +70,6 @@ dependencies {
 
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-    systemProperty 'spring.profiles.active', 'test'
-    // carpeta donde JUnit deja los resultados de Allure
-    systemProperty 'allure.results.directory', 'build/allure-results'
-    finalizedBy 'jacocoTestReport'
-    testLogging { showStandardStreams = true }
-}
-
 tasks.withType(JavaCompile) {
 	options.annotationProcessorPath = configurations.annotationProcessor
 }
