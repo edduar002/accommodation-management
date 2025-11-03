@@ -7,38 +7,54 @@ import java.time.LocalDate;
 import java.util.List;
 
 /**
- * Servicio encargado de gestionar reservas de alojamiento.
+ * Interfaz de servicio para la gestión de reservas de alojamiento.
+ * Define los métodos que implementarán las clases de servicio para crear,
+ * consultar, aceptar, rechazar, cancelar y listar reservas.
  */
 public interface ReservationService {
 
+    /**
+     * Guarda una nueva reserva en el sistema.
+     * Método utilizado por el controlador para crear o registrar reservas.
+     *
+     * @param reservation DTO con los datos de la reserva a guardar.
+     * @return Objeto ReservationDTO con la reserva registrada.
+     */
     ReservationDTO save(ReservationDTO reservation);
 
-    ResponseEntity<ReservationDTO> makeReservations(LocalDate checkIn, LocalDate checkOut);
-
-    ResponseEntity<ReservationDTO> cancelReservations(int idReservation);
-
     /**
-     * Consulta el detalle de una reserva por su ID.
+     * Consulta los detalles de una reserva específica.
+     * Método utilizado por el controlador en /viewReservationDetails/{idReservation}.
+     *
+     * @param idReservation ID de la reserva a consultar.
+     * @return ReservationDTO con los detalles de la reserva.
      */
     ReservationDTO viewReservationDetails(int idReservation);
 
     /**
-     * Lista las reservas asociadas a un alojamiento.
-     */
-    List<ReservationDTO> viewAccommodationReservations(int idAccommodation);
-
-    /**
-     * Lista el historial de reservas de un usuario.
+     * Lista el historial de reservas realizadas por un usuario.
+     * Método utilizado por el controlador en /viewReservationHistory.
+     *
+     * @param idUser ID del usuario.
+     * @return Lista de ReservationDTO con el historial de reservas del usuario.
      */
     List<ReservationDTO> viewReservationHistory(int idUser);
 
     /**
-     * Acepta una solicitud de reserva.
+     * Cambia el estado de una reserva de forma genérica.
+     * Método utilizado por el controlador en /changeStatus/{idReservation}.
+     *
+     * @param idReservation ID de la reserva a actualizar.
+     * @return ResponseEntity con la reserva actualizada o null si no existe.
      */
-    ResponseEntity<ReservationDTO> acceptReservationRequests(int idReservation);
+    ResponseEntity<ReservationDTO> changeStatus(int idReservation);
 
     /**
-     * Rechaza una solicitud de reserva.
+     * Lista todas las reservas de un anfitrión.
+     * Método utilizado por el controlador en /viewReservations.
+     *
+     * @param idHost ID del anfitrión.
+     * @return Lista de ReservationDTO o lista vacía si no hay reservas.
      */
-    ResponseEntity<ReservationDTO> rejectReservationRequests(int idReservation);
+    List<ReservationDTO> viewReservations(int idHost);
 }

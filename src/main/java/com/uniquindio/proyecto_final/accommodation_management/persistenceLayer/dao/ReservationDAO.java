@@ -70,6 +70,19 @@ public class ReservationDAO {
     }
 
     /**
+     * Obtiene el historial de reservas de un anfitrion.
+     *
+     * @param idHost ID del anfitrion
+     * @return Lista de {@link ReservationDTO} del historial de reservas
+     */
+    public List<ReservationDTO> viewReservations(int idHost) {
+        List<ReservationEntity> entities = reservationRepository.viewReservations(idHost);
+        return entities.stream()
+                .map(reservationMapper::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Busca una reserva por su ID.
      *
      * @param id ID de la reserva
@@ -80,48 +93,4 @@ public class ReservationDAO {
                 .map(reservationMapper::toDTO);
     }
 
-    /**
-     * Cancela una reserva existente.
-     *
-     * @param idReservation ID de la reserva a cancelar
-     * @return DTO actualizado de la reserva o {@code null} si no existe
-     */
-    public ReservationDTO cancelReservations(int idReservation) {
-        Optional<ReservationEntity> optional = reservationRepository.findById(idReservation);
-        if (optional.isEmpty()) return null;
-        ReservationEntity entity = optional.get();
-        entity.setState("CANCELLED");
-        entity.setUpdatedAt(java.time.LocalDateTime.now());
-        return reservationMapper.toDTO(reservationRepository.save(entity));
-    }
-
-    /**
-     * Acepta una solicitud de reserva.
-     *
-     * @param idReservation ID de la reserva a aceptar
-     * @return DTO actualizado de la reserva o {@code null} si no existe
-     */
-    public ReservationDTO acceptReservationRequests(int idReservation) {
-        Optional<ReservationEntity> optional = reservationRepository.findById(idReservation);
-        if (optional.isEmpty()) return null;
-        ReservationEntity entity = optional.get();
-        entity.setState("ACEPTADA");
-        entity.setUpdatedAt(java.time.LocalDateTime.now());
-        return reservationMapper.toDTO(reservationRepository.save(entity));
-    }
-
-    /**
-     * Rechaza una solicitud de reserva.
-     *
-     * @param idReservation ID de la reserva a rechazar
-     * @return DTO actualizado de la reserva o {@code null} si no existe
-     */
-    public ReservationDTO rejectReservationRequests(int idReservation) {
-        Optional<ReservationEntity> optional = reservationRepository.findById(idReservation);
-        if (optional.isEmpty()) return null;
-        ReservationEntity entity = optional.get();
-        entity.setState("RECHAZADA");
-        entity.setUpdatedAt(java.time.LocalDateTime.now());
-        return reservationMapper.toDTO(reservationRepository.save(entity));
-    }
 }

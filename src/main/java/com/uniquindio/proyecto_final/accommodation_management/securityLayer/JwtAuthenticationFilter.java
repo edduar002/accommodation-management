@@ -53,7 +53,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 path.startsWith("/api/users/register") ||
                 path.startsWith("/api/administrators/register") ||
                 path.startsWith("/api/auth/login") ||
-                path.startsWith("/api/images/upload")) {
+                path.startsWith("/api/images/upload") ||
+                path.startsWith("/api/reservations/register")) {
 
             // Continuar sin validar JWT
             filterChain.doFilter(request, response);

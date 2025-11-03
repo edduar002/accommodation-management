@@ -32,4 +32,13 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
     @Query("SELECT r FROM ReservationEntity r WHERE r.usersId = :idUser")
     List<ReservationEntity> viewReservationHistory(@Param("idUser") int idUser);
 
+    /**
+     * Obtiene el historial de reservas de un anfitrion específico.
+     * @param idHost ID del anfitrion.
+     * @return lista de reservas del anfitrion.
+     */
+    // Consulta que selecciona reservas filtradas por ID de host
+    @Query("SELECT r FROM ReservationEntity r WHERE r.hostsId = :idHost")
+    List<ReservationEntity> viewReservations(@Param("idHost") int idHost);
+
 }

@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,140 +27,99 @@ public class ReservationServiceImpl implements ReservationService {
      * Constructor con inyección por parámetros.
      */
     public ReservationServiceImpl(ReservationDAO dao) {
-        // Asignar dependencia DAO
         this.dao = dao;
     }
 
+    /**
+     * Guarda una nueva reserva en la base de datos.
+     * Registra logs de depuración y éxito.
+     *
+     * @param dto Objeto ReservationDTO a guardar
+     * @return Reserva guardada
+     */
     @Override
     @Transactional
     public ReservationDTO save(ReservationDTO dto) {
-        // Registrar intento de guardado
         log.debug("Guardando reserva: {}", dto);
-
-        // Guardar en BD delegando al DAO
         ReservationDTO saved = dao.save(dto);
-
-        // Log de éxito
         log.info("Reserva guardada: {}", saved);
-
-        // Retornar reserva guardada
         return saved;
     }
 
-    @Override
-    public List<ReservationDTO> viewAccommodationReservations(int idAccommodation) {
-        // Registrar consulta
-        log.debug("Consultando reservas de accommodationId={}", idAccommodation);
-
-        // Obtener reservas desde el DAO
-        List<ReservationDTO> list = dao.viewAccommodationReservations(idAccommodation);
-
-        // Log cantidad encontrada
-        log.info("Encontradas {} reservas para accommodationId={}", list.size(), idAccommodation);
-
-        // Retornar lista
-        return list;
-    }
-
-    @Override
-    public ResponseEntity<ReservationDTO> makeReservations(LocalDate checkIn, LocalDate checkOut) {
-        // Avisar que aún no está implementado
-        log.warn("makeReservations(checkIn={}, checkOut={}) aún no implementado", checkIn, checkOut);
-
-        // Retornar null temporalmente
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<ReservationDTO> cancelReservations(int idReservation) {
-        // Log de intento de cancelación
-        log.debug("Cancelando reserva id={}", idReservation);
-
-        // Delegar cancelación en el DAO
-        ReservationDTO updatedReservation = dao.cancelReservations(idReservation);
-
-        // Si no existe, responder 404
-        if (updatedReservation == null) {
-            log.warn("No se encontró reserva id={} para cancelar", idReservation);
-            return ResponseEntity.notFound().build();
-        }
-
-        // Log de éxito
-        log.info("Reserva id={} cancelada", idReservation);
-
-        // Responder con la reserva modificada
-        return ResponseEntity.ok(updatedReservation);
-    }
-
+    /**
+     * Obtiene el historial de reservas de un usuario específico.
+     * Consulta al DAO y retorna la lista de reservas encontradas.
+     *
+     * @param idUser ID del usuario
+     * @return Lista de ReservationDTO con el historial de reservas
+     */
     @Override
     public List<ReservationDTO> viewReservationHistory(int idUser) {
-        // Registrar consulta
         log.debug("Consultando historial de reservas de userId={}", idUser);
-
-        // Obtener historial desde DAO
         List<ReservationDTO> list = dao.viewReservationHistory(idUser);
-
-        // Log cantidad encontrada
         log.info("Historial para userId={} → {} reservas", idUser, list.size());
-
-        // Retornar historial
         return list;
     }
 
+    /**
+     * Consulta el detalle de una reserva específica por su ID.
+     *
+     * @param idReservation ID de la reserva
+     * @return ReservationDTO con los detalles o null si no existe
+     */
     @Override
     public ReservationDTO viewReservationDetails(int idReservation) {
-        // Registrar consulta
         log.debug("Detalle de reserva id={}", idReservation);
-
-        // Buscar en base de datos
         ReservationDTO dto = dao.findById(idReservation).orElse(null);
-
-        // Log según resultado
         log.info("Detalle reserva id={} {}", idReservation, (dto != null ? "encontrado" : "no encontrado"));
-
-        // Retornar detalle o null
         return dto;
     }
 
+    /**
+     * Cambia el estado de una reserva de forma genérica.
+     * Si la reserva no existe, retorna 404 Not Found.
+     * Ejemplo de alternancia de estados: Pendiente → Aprobado → Realizado → Pendiente.
+     *
+     * @param idReservation ID de la reserva
+     * @return ResponseEntity con la reserva actualizada o 404 si no existe
+     */
     @Override
-    public ResponseEntity<ReservationDTO> acceptReservationRequests(int idReservation) {
-        // Registrar intento de aceptación
-        log.debug("Aceptando solicitud de reserva id={}", idReservation);
+    @Transactional
+    public ResponseEntity<ReservationDTO> changeStatus(int idReservation) {
+        log.debug("Cambiando estado de reserva id={}", idReservation);
 
-        // Delegar al DAO
-        ReservationDTO updatedReservation = dao.acceptReservationRequests(idReservation);
-
-        // Si no existe → responder 404
-        if (updatedReservation == null) {
-            log.warn("No se encontró reserva id={} para aceptar", idReservation);
+        ReservationDTO dto = dao.findById(idReservation).orElse(null);
+        if (dto == null) {
+            log.warn("Reserva id={} no encontrada para cambiar estado", idReservation);
             return ResponseEntity.notFound().build();
         }
 
-        // Log de éxito
-        log.info("Reserva id={} aceptada", idReservation);
+        String nuevoEstado = switch (dto.getState()) {
+            case "Pendiente" -> "Aprobado";
+            case "Aprobado" -> "Realizado";
+            case "Realizado" -> "Pendiente";
+            default -> "Pendiente";
+        };
+        dto.setState(nuevoEstado);
 
-        // Retornar respuesta exitosa
-        return ResponseEntity.ok(updatedReservation);
+        dao.save(dto);
+        log.info("Estado de reserva id={} actualizado a '{}'", idReservation, nuevoEstado);
+
+        return ResponseEntity.ok(dto);
     }
 
+    /**
+     * Lista todas las reservas asociadas a un anfitrión.
+     * Retorna una lista vacía si no hay reservas.
+     *
+     * @param idHost ID del anfitrión
+     * @return Lista de ReservationDTO
+     */
     @Override
-    public ResponseEntity<ReservationDTO> rejectReservationRequests(int idReservation) {
-        // Registrar intento de rechazo
-        log.debug("Rechazando solicitud de reserva id={}", idReservation);
-
-        // Delegar operación en el DAO
-        ReservationDTO updatedReservation = dao.rejectReservationRequests(idReservation);
-
-        // Si no existe → responder 404
-        if (updatedReservation == null) {
-            log.warn("No se encontró reserva id={} para rechazar", idReservation);
-            return ResponseEntity.notFound().build();
-        }
-
-        // Log de éxito
-        log.info("Reserva id={} rechazada", idReservation);
-
-        // Responder con entidad actualizada
-        return ResponseEntity.ok(updatedReservation);
+    public List<ReservationDTO> viewReservations(int idHost) {
+        log.debug("Listando reservas para hostId={}", idHost);
+        List<ReservationDTO> list = dao.viewReservations(idHost);
+        log.info("HostId={} → {} reservas encontradas", idHost, list.size());
+        return list;
     }
 }

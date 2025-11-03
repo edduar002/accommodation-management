@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS reservations (
     accommodations_id INT NOT NULL,
     hosts_id INT NOT NULL,
     users_id INT NOT NULL,
-    calification INT NOT NULL,
+    calification INT NULL,
     created_at DATETIME NOT NULL,
     updated_at DATETIME NOT NULL,
     PRIMARY KEY (id),
