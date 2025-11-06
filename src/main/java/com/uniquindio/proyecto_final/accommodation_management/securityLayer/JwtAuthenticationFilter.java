@@ -50,6 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Ignorar rutas públicas (sin token)
         if (path.startsWith("/api/hosts/register") ||
+                path.startsWith("/api/departments") ||
                 path.startsWith("/api/users/register") ||
                 path.startsWith("/api/administrators/register") ||
                 path.startsWith("/api/auth/login") ||
