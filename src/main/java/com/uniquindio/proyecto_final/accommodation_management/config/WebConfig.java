@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @since 1.0
  * @version 1.0
  */
-@Configuration
+//@Configuration
 public class WebConfig {
 
     /**
