@@ -2,12 +2,14 @@ package com.uniquindio.proyecto_final.accommodation_management;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * Clase principal de la aplicación Spring Boot de gestión de alojamientos.
  * Contiene el método main que inicia la aplicación.
  */
 @SpringBootApplication
+@EnableAsync
 public class AccommodationManagementApplication {
 
 	/**

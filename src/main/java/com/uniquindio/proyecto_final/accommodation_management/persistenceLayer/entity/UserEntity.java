@@ -21,6 +21,7 @@ public class UserEntity {
     // Información personal del usuario
     private String name;
     private String surname;
+    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String phone;
