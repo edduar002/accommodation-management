@@ -26,6 +26,7 @@ public class HostEntity {
     private String surname;
 
     /** Correo electrónico del host */
+    @Column(unique = true, nullable = false)
     private String email;
 
     /** Contraseña del host (almacenada como hash) */

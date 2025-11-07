@@ -25,6 +25,7 @@ public class AdministratorEntity {
     private String surname;
 
     /** Correo electrónico del administrador */
+    @Column(unique = true, nullable = false)
     private String email;
 
     /** Contraseña del administrador (almacenada de forma segura en hash) */
